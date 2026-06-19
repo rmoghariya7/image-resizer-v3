@@ -11,6 +11,16 @@ const ImageResizerToolComponent = dynamic(
   { loading: () => <ToolSkeleton />, ssr: false },
 )
 
+// Compress presets use SizeFirstTool — shows a size picker so users can
+// switch target sizes without navigating away.
+const SizeFirstToolComponent = dynamic(
+  () =>
+    import('@/features/image-resizer/components/SizeFirstTool').then(m => ({
+      default: m.SizeFirstTool,
+    })),
+  { loading: () => <ToolSkeleton />, ssr: false },
+)
+
 interface Props {
   toolKey: ToolKey
   preset: Preset
@@ -19,6 +29,9 @@ interface Props {
 export function ToolSection({ toolKey, preset }: Props) {
   switch (toolKey) {
     case 'image-resizer':
+      if (preset.kind === 'compress') {
+        return <SizeFirstToolComponent defaultPresetKey={preset.key} />
+      }
       return <ImageResizerToolComponent preset={preset} />
     default:
       return <ToolComingSoon />

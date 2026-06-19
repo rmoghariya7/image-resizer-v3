@@ -1,31 +1,31 @@
-import Link from 'next/link'
-import { getAllGoals } from '@/registry/goals'
-import { GoalSearchBar, type GoalSearchItem } from './GoalSearchBar'
+import Link from "next/link";
+import { getAllGoals } from "@/registry/goals";
+import { GoalSearchBar, type GoalSearchItem } from "./GoalSearchBar";
 
 const SIZE_QUICK_LINKS = [
-  { label: 'Under 15 KB', href: '/compress-image-under-15kb' },
-  { label: 'Under 20 KB', href: '/compress-image-under-20kb' },
-  { label: 'Under 50 KB', href: '/compress-image-under-50kb' },
-  { label: 'Under 100 KB', href: '/compress-image-under-100kb' },
-  { label: 'Passport Photo', href: '/goals/passport-photo-maker' },
-  { label: 'UPSC Photo', href: '/goals/upsc-photo-resizer' },
-]
+  { label: "Under 15 KB", href: "/goals/compress-image-to-15kb" },
+  { label: "Under 20 KB", href: "/goals/compress-image-to-20kb" },
+  { label: "Under 50 KB", href: "/goals/compress-image-to-50kb" },
+  { label: "Under 100 KB", href: "/goals/compress-image-to-100kb" },
+  { label: "Passport Photo", href: "/goals/passport-photo-maker" },
+  { label: "UPSC Photo", href: "/goals/upsc-photo-resizer" },
+];
 
 const TRUST_BADGES = [
-  'No uploads',
-  'No sign-up',
-  'Free forever',
-  'Mobile-friendly',
-]
+  "No uploads",
+  "No sign-up",
+  "Free forever",
+  "Mobile-friendly",
+];
 
 export function HeroSection() {
-  const searchGoals: GoalSearchItem[] = getAllGoals().map(g => ({
+  const searchGoals: GoalSearchItem[] = getAllGoals().map((g) => ({
     slug: g.slug,
     title: g.title,
     shortTitle: g.shortTitle,
     category: g.category,
     tags: g.tags,
-  }))
+  }));
 
   return (
     <section
@@ -36,19 +36,21 @@ export function HeroSection() {
         <div className="mx-auto max-w-3xl text-center">
           {/* Eyebrow */}
           <p className="mb-6 text-xs font-semibold uppercase tracking-[0.15em] text-primary">
-            JPEG &nbsp;·&nbsp; PNG &nbsp;·&nbsp; WebP &nbsp;·&nbsp; Browser-based &nbsp;·&nbsp; Free
+            JPEG &nbsp;·&nbsp; PNG &nbsp;·&nbsp; WebP &nbsp;·&nbsp;
+            Browser-based &nbsp;·&nbsp; Free
           </p>
 
           {/* Headline */}
           <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-            Compress images to{' '}
+            Compress images to{" "}
             <span className="text-primary">the exact size you need</span>
           </h1>
 
           {/* Subline */}
           <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
             Pick a target size. Upload your image. Download the compressed
-            file&thinsp;—&thinsp;all in your browser, nothing uploaded to any server.
+            file&thinsp;—&thinsp;all in your browser, nothing uploaded to any
+            server.
           </p>
 
           {/* Search bar */}
@@ -62,7 +64,7 @@ export function HeroSection() {
             aria-label="Popular size targets"
           >
             <span className="text-xs text-muted-foreground">Popular:</span>
-            {SIZE_QUICK_LINKS.map(link => (
+            {SIZE_QUICK_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -78,8 +80,11 @@ export function HeroSection() {
             className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2"
             aria-label="Trust signals"
           >
-            {TRUST_BADGES.map(badge => (
-              <span key={badge} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            {TRUST_BADGES.map((badge) => (
+              <span
+                key={badge}
+                className="flex items-center gap-1.5 text-xs text-muted-foreground"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -100,5 +105,5 @@ export function HeroSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

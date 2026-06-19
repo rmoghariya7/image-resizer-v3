@@ -21,9 +21,12 @@ const FOOTER_LINKS = [
   {
     heading: 'Compress Image',
     links: [
+      { label: 'Compress to 15 KB', href: '/goals/compress-image-to-15kb' },
       { label: 'Compress to 20 KB', href: '/goals/compress-image-to-20kb' },
+      { label: 'Compress to 25 KB', href: '/goals/compress-image-to-25kb' },
       { label: 'Compress to 50 KB', href: '/goals/compress-image-to-50kb' },
       { label: 'Compress to 100 KB', href: '/goals/compress-image-to-100kb' },
+      { label: 'Compress to 200 KB', href: '/goals/compress-image-to-200kb' },
     ],
   },
   {

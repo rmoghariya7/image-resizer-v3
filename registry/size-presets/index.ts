@@ -316,15 +316,13 @@ export function getRelatedSizes(current: SizeTarget, count = 4): SizeTarget[] {
 
 // ─── Quick action sizes (shown after upload) ──────────────────────────────────
 // The 6 most commonly searched sizes for the quick-action buttons.
+// Resolved by stable sizeParam keys so re-ordering SIZE_TARGETS_LIST is safe.
 
-export const QUICK_ACTION_SIZES: readonly SizeTarget[] = [
-  SIZE_TARGETS_LIST[0],   // 15KB
-  SIZE_TARGETS_LIST[1],   // 20KB
-  SIZE_TARGETS_LIST[2],   // 25KB
-  SIZE_TARGETS_LIST[5],   // 50KB
-  SIZE_TARGETS_LIST[7],   // 100KB
-  SIZE_TARGETS_LIST[9],   // 200KB
-]
+const QUICK_PARAMS = ['15kb', '20kb', '25kb', '50kb', '100kb', '200kb'] as const
+
+export const QUICK_ACTION_SIZES: readonly SizeTarget[] = QUICK_PARAMS
+  .map(p => BY_PARAM.get(p))
+  .filter((t): t is SizeTarget => t !== undefined)
 
 // ─── Content generation ───────────────────────────────────────────────────────
 

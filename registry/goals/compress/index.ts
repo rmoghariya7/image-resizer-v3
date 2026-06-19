@@ -1,5 +1,5 @@
-import { compress20kbGoal } from './compress-20kb'
-import { compress50kbGoal } from './compress-50kb'
-import { compress100kbGoal } from './compress-100kb'
+import { ALL_COMPRESS_GOALS } from './generator'
 
-export const compressGoals = Object.freeze([compress20kbGoal, compress50kbGoal, compress100kbGoal])
+export { compressGoalSlug, generateCompressGoal, ALL_COMPRESS_GOALS } from './generator'
+
+export const compressGoals = ALL_COMPRESS_GOALS

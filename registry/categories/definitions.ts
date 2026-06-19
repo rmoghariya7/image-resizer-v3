@@ -94,9 +94,9 @@ export const categoryDefinitions: readonly CategoryDefinition[] = Object.freeze(
   {
     slug: 'compress',
     name: 'Compress Image',
-    description: 'Compress images to a specific file size target — 20 KB, 50 KB, or 100 KB',
+    description: 'Compress any image to a specific file size — 15 KB to 1 MB — instantly in your browser',
     metaDescription:
-      'Compress any image to 20 KB, 50 KB, or 100 KB instantly in your browser. No quality settings — just upload, compress, and download.',
+      'Compress any image to an exact file size target — 15 KB, 20 KB, 50 KB, 100 KB, and more. Free, browser-based, no uploads, no sign-up.',
     keywords: [
       'compress image',
       'reduce image size',
@@ -104,34 +104,38 @@ export const categoryDefinitions: readonly CategoryDefinition[] = Object.freeze(
       'compress jpg',
       'compress png',
       'reduce file size',
+      'compress image online free',
     ],
     faqs: [
       {
-        question: 'Which compression target should I choose?',
+        question: 'Which file size target should I choose?',
         answer:
-          'Use 20 KB for signature uploads and strict government portals, 50 KB for Aadhaar / PAN / Voter ID, and 100 KB for passport applications and most scholarship portals.',
+          'Use 15–20 KB for strict government exam portals (UPSC, NDA), 50 KB for Aadhaar / PAN / Voter ID, 100 KB for passport applications, and 200 KB or more for job portals and social media profile photos.',
       },
       {
         question: 'Does compressing to a small file size damage image quality?',
         answer:
-          'Some quality reduction is unavoidable at low file sizes. The algorithm always finds the highest quality that fits within the target — so the result is as good as it can be.',
+          'Some quality reduction is unavoidable at very small sizes. The tool always finds the highest quality that still fits within the target — so the result is as sharp as it can be.',
       },
       {
         question: 'Can I compress a PNG without converting it to JPEG?',
         answer:
-          'For the 50 KB and 100 KB targets, the format is preserved. For the 20 KB target, conversion to JPEG may be required if the PNG cannot reach the target at minimum quality.',
+          'For targets of 75 KB and above, PNG format is preserved. For smaller targets, conversion to JPEG may be needed since JPEG compression is far more efficient for photographs.',
       },
     ],
     subcategories: [
       {
         slug: 'file-size-targets',
         name: 'By File Size Target',
-        description: 'Compress images to common government-portal file size limits',
+        description: 'Compress images to any common file size limit — from 15 KB to 1 MB',
         parentCategory: 'compress',
         goalSlugs: [
+          'compress-image-to-15kb',
           'compress-image-to-20kb',
+          'compress-image-to-25kb',
           'compress-image-to-50kb',
           'compress-image-to-100kb',
+          'compress-image-to-200kb',
         ],
       },
     ],
