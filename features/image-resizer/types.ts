@@ -24,7 +24,8 @@ export type WorkerRequest = {
 
 export type WorkerResponse =
   | { type: 'PROGRESS'; id: string; percent: number }
-  | { type: 'SUCCESS'; id: string; blob: Blob; sizeKB: number }
+  // sizeKB: one decimal precision (e.g. 14.7). targetKB: present for compress presets.
+  | { type: 'SUCCESS'; id: string; blob: Blob; sizeKB: number; targetKB?: number }
   | { type: 'ERROR'; id: string; message: string }
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
@@ -32,7 +33,10 @@ export type WorkerResponse =
 export type ProcessedResult = {
   blob: Blob
   objectUrl: string
+  /** One-decimal-place KB (e.g. 14.7). Validates the actual Blob size — never derived from filename. */
   sizeKB: number
+  /** Present for compress presets. Used to show target vs. actual comparison. */
+  targetKB?: number
   filename: string
   mimeType: string
 }

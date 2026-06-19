@@ -92,7 +92,10 @@ export function useSizeFirstResizer(): UseSizeFirstResizerReturn {
             const result: ProcessedResult = {
               blob: msg.blob,
               objectUrl: resultUrl,
+              // sizeKB from worker is the validated Blob size (one decimal place).
+              // Never derived from filename.
               sizeKB: msg.sizeKB,
+              targetKB: msg.targetKB,
               filename: buildFilename(prev.activePresetKey, msg.blob.type),
               mimeType: msg.blob.type,
             }

@@ -2,7 +2,6 @@ import { processImagePreset, processCompressPreset } from './processor'
 import type { WorkerRequest, WorkerResponse } from '../types'
 
 // ─── Typed worker self ────────────────────────────────────────────────────────
-// Cast to a structural type — avoids needing the webworker lib in tsconfig.
 
 type WorkerSelf = {
   postMessage: (msg: WorkerResponse) => void
@@ -31,8 +30,13 @@ async function handleMessage(request: WorkerRequest): Promise<void> {
       blob = await processCompressPreset(bitmap, preset, originalMime, onProgress)
     }
 
-    const sizeKB = Math.round(blob.size / 1024)
-    post({ type: 'SUCCESS', id, blob, sizeKB })
+    // One-decimal-place precision: validates the actual Blob size (not filename).
+    const sizeKB = parseFloat((blob.size / 1024).toFixed(1))
+
+    // targetKB is only meaningful for compress presets.
+    const targetKB = preset.kind === 'compress' ? preset.targetKB : undefined
+
+    post({ type: 'SUCCESS', id, blob, sizeKB, targetKB })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Processing failed unexpectedly.'
     post({ type: 'ERROR', id, message })

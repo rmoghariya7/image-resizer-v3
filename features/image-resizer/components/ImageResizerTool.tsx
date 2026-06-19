@@ -33,11 +33,20 @@ export function ImageResizerTool({ preset }: Props) {
 
   if (state.status === 'done') {
     return (
-      <ResultPanel
-        original={state.original}
-        result={state.result}
-        onReset={reset}
-      />
+      <div>
+        <ResultPanel original={state.original} result={state.result} />
+        <div className="bg-gray-50 px-4 pb-12 sm:px-6">
+          <div className="mx-auto max-w-2xl">
+            <button
+              type="button"
+              onClick={reset}
+              className="w-full rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-500 shadow-sm transition-colors hover:border-gray-300 hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              Process another image
+            </button>
+          </div>
+        </div>
+      </div>
     )
   }
 
@@ -89,7 +98,7 @@ export function ImageResizerTool({ preset }: Props) {
               <button
                 type="button"
                 onClick={reset}
-                className="mt-1 text-xs text-red-600 underline underline-offset-2 hover:text-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600"
+                className="mt-1 text-xs text-red-600 underline underline-offset-2 hover:text-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Try again
               </button>
