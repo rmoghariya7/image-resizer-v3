@@ -90,7 +90,7 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
     return (
       <section
         aria-label="Choose compression target"
-        className="bg-gray-50 px-4 py-12 sm:px-6 sm:py-16"
+        className="bg-gray-50 px-4 py-4 sm:px-6 sm:py-16"
       >
         <div className="mx-auto max-w-2xl space-y-3">
           {/* File info */}
@@ -155,7 +155,7 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
     return (
       <section
         aria-label="Compressing image"
-        className="bg-gray-50 px-4 py-12 sm:px-6 sm:py-16"
+        className="bg-gray-50 px-4 py-4 sm:px-6 sm:py-16"
       >
         <div className="mx-auto max-w-2xl">
           <div className="relative flex flex-col items-center justify-center rounded-2xl border border-border bg-white px-6 py-14 shadow-sm">

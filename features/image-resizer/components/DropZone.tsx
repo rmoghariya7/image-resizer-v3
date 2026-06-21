@@ -41,7 +41,7 @@ export function DropZone({
         : 'border-gray-300 bg-white hover:border-gray-400'
 
   return (
-    <section aria-label="Image upload" className="bg-gray-50 px-4 py-12 sm:px-6 sm:py-16">
+    <section aria-label="Image upload" className="bg-gray-50 px-4 py-4 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-2xl">
         {/* Drop area */}
         <div
@@ -52,7 +52,7 @@ export function DropZone({
           aria-disabled={disabled}
           className={[
             'relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed',
-            'px-6 py-14 text-center shadow-sm transition-colors duration-150',
+            'px-6 py-8 text-center shadow-sm transition-colors duration-150 sm:py-14',
             disabled ? 'cursor-default opacity-60' : 'cursor-pointer',
             areaStyles,
           ].join(' ')}

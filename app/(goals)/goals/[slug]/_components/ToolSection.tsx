@@ -40,7 +40,7 @@ export function ToolSection({ toolKey, preset }: Props) {
 
 function ToolSkeleton() {
   return (
-    <section aria-label="Loading tool" className="bg-gray-50 px-4 py-12 sm:px-6 sm:py-16">
+    <section aria-label="Loading tool" className="bg-gray-50 px-4 py-6 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-2xl">
         <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-white px-8 py-16 text-center shadow-sm">
           <div className="mb-5 h-14 w-14 animate-pulse rounded-full bg-gray-200" />
@@ -58,7 +58,7 @@ function ToolSkeleton() {
 
 function ToolComingSoon() {
   return (
-    <section aria-label="Tool not yet available" className="bg-gray-50 px-4 py-12 sm:px-6 sm:py-16">
+    <section aria-label="Tool not yet available" className="bg-gray-50 px-4 py-6 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-2xl">
         <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-white px-8 py-16 text-center shadow-sm">
           <p className="text-sm font-medium text-gray-500">This tool is coming soon.</p>
