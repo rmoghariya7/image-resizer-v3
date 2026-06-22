@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback, useMemo, type ElementType } from 'react'
 import { useRouter } from 'next/navigation'
-import { FileImage, FolderOpen, Wrench, ArrowRight } from 'lucide-react'
+import { GraduationCap, CreditCard, Minimize2, PenLine, FolderOpen, Wrench } from 'lucide-react'
 import {
   Command,
   CommandDialog,
@@ -13,9 +13,10 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command'
+import { cn } from '@/lib/utils'
 import { useSearch } from '../context'
 import { filterSearchIndex } from '../search-index'
-import type { SearchIndex, GoalSearchItem, CategorySearchItem, ToolSearchItem } from '../types'
+import type { GoalSearchItem, CategorySearchItem, ToolSearchItem } from '../types'
 import type { GoalCategory } from '@/types/registry'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -35,11 +36,20 @@ const CATEGORY_LABELS: Record<GoalCategory, string> = {
   signature: 'Signature',
 }
 
-const CATEGORY_COLORS: Record<GoalCategory, string> = {
+const CATEGORY_BADGE_STYLE: Record<GoalCategory, string> = {
   exam: 'bg-violet-100 text-violet-700',
   'id-documents': 'bg-blue-100 text-blue-700',
   compress: 'bg-amber-100 text-amber-700',
   signature: 'bg-emerald-100 text-emerald-700',
+}
+
+type IconConfig = { Icon: ElementType; bg: string; text: string }
+
+const CATEGORY_ICON_STYLE: Record<GoalCategory, IconConfig> = {
+  exam: { Icon: GraduationCap, bg: 'bg-violet-100', text: 'text-violet-600' },
+  'id-documents': { Icon: CreditCard, bg: 'bg-blue-100', text: 'text-blue-600' },
+  compress: { Icon: Minimize2, bg: 'bg-amber-100', text: 'text-amber-600' },
+  signature: { Icon: PenLine, bg: 'bg-emerald-100', text: 'text-emerald-600' },
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -51,20 +61,40 @@ function GoalResultItem({
   item: GoalSearchItem
   onSelect: (href: string) => void
 }) {
+  const iconCfg = CATEGORY_ICON_STYLE[item.category]
+  const { Icon } = iconCfg
+
   return (
     <CommandItem
       value={item.slug}
       onSelect={() => onSelect(item.href)}
-      className="gap-2.5"
+      className="gap-3 py-2.5"
     >
-      <FileImage className="size-4 shrink-0 text-muted-foreground" />
-      <span className="flex-1 truncate font-medium">{item.label}</span>
+      <div
+        className={cn('flex h-8 w-8 shrink-0 items-center justify-center rounded-lg', iconCfg.bg)}
+        aria-hidden="true"
+      >
+        <Icon className={cn('size-4', iconCfg.text)} />
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <span className="truncate text-sm font-medium leading-tight text-foreground">
+          {item.label}
+        </span>
+        {item.description && (
+          <span className="mt-0.5 truncate text-xs text-muted-foreground">
+            {item.description}
+          </span>
+        )}
+      </div>
       <span
-        className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium leading-none ${CATEGORY_COLORS[item.category]}`}
+        className={cn(
+          'hidden shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold sm:inline-flex',
+          CATEGORY_BADGE_STYLE[item.category],
+        )}
+        aria-hidden="true"
       >
         {CATEGORY_LABELS[item.category]}
       </span>
-      <ArrowRight className="size-3 shrink-0 text-muted-foreground/40" />
     </CommandItem>
   )
 }
@@ -80,13 +110,24 @@ function CategoryResultItem({
     <CommandItem
       value={item.slug}
       onSelect={() => onSelect(item.href)}
-      className="gap-2.5"
+      className="gap-3 py-2.5"
     >
-      <FolderOpen className="size-4 shrink-0 text-muted-foreground" />
-      <span className="flex-1 truncate font-medium">{item.label}</span>
-      <span className="max-w-40 truncate text-xs text-muted-foreground">
-        {item.description}
-      </span>
+      <div
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted"
+        aria-hidden="true"
+      >
+        <FolderOpen className="size-4 text-muted-foreground" />
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <span className="truncate text-sm font-medium leading-tight text-foreground">
+          {item.label}
+        </span>
+        {item.description && (
+          <span className="mt-0.5 truncate text-xs text-muted-foreground">
+            {item.description}
+          </span>
+        )}
+      </div>
     </CommandItem>
   )
 }
@@ -102,25 +143,32 @@ function ToolResultItem({
     <CommandItem
       value={item.key}
       onSelect={() => onSelect(item.href)}
-      className="gap-2.5"
+      className="gap-3 py-2.5"
     >
-      <Wrench className="size-4 shrink-0 text-muted-foreground" />
-      <span className="flex-1 truncate font-medium">{item.label}</span>
-      <span className="max-w-40 truncate text-xs text-muted-foreground">
-        {item.description}
-      </span>
+      <div
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted"
+        aria-hidden="true"
+      >
+        <Wrench className="size-4 text-muted-foreground" />
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <span className="truncate text-sm font-medium leading-tight text-foreground">
+          {item.label}
+        </span>
+        {item.description && (
+          <span className="mt-0.5 truncate text-xs text-muted-foreground">
+            {item.description}
+          </span>
+        )}
+      </div>
     </CommandItem>
   )
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-interface Props {
-  index: SearchIndex
-}
-
-export function GlobalSearch({ index }: Props) {
-  const { open, setOpen } = useSearch()
+export function GlobalSearch() {
+  const { open, setOpen, index } = useSearch()
   const router = useRouter()
   const [query, setQuery] = useState('')
 
@@ -153,9 +201,8 @@ export function GlobalSearch({ index }: Props) {
     [router, setOpen],
   )
 
-  // Popular goals (shown when no query)
   const popularGoals = useMemo(
-    () => index.goals.filter((g) => POPULAR_SLUGS.includes(g.slug)),
+    () => index.goals.filter(g => POPULAR_SLUGS.includes(g.slug)),
     [index.goals],
   )
 
@@ -166,9 +213,7 @@ export function GlobalSearch({ index }: Props) {
   )
 
   const displayGoals = isSearching ? (filtered?.goals ?? []) : popularGoals
-  const displayCategories = isSearching
-    ? (filtered?.categories ?? [])
-    : [...index.categories]
+  const displayCategories = isSearching ? (filtered?.categories ?? []) : [...index.categories]
   const displayTools = isSearching ? (filtered?.tools ?? []) : []
 
   const hasResults =
@@ -188,19 +233,15 @@ export function GlobalSearch({ index }: Props) {
           value={query}
           onValueChange={setQuery}
         />
-        <CommandList className="max-h-80">
+        <CommandList className="max-h-95">
           {isSearching && !hasResults && (
-            <CommandEmpty>No results for "{query}"</CommandEmpty>
+            <CommandEmpty>No results for &ldquo;{query}&rdquo;</CommandEmpty>
           )}
 
           {displayGoals.length > 0 && (
             <CommandGroup heading={isSearching ? 'Goals' : 'Popular goals'}>
-              {displayGoals.map((item) => (
-                <GoalResultItem
-                  key={item.slug}
-                  item={item}
-                  onSelect={navigate}
-                />
+              {displayGoals.map(item => (
+                <GoalResultItem key={item.slug} item={item} onSelect={navigate} />
               ))}
             </CommandGroup>
           )}
@@ -211,12 +252,8 @@ export function GlobalSearch({ index }: Props) {
 
           {displayCategories.length > 0 && (
             <CommandGroup heading="Categories">
-              {displayCategories.map((item) => (
-                <CategoryResultItem
-                  key={item.slug}
-                  item={item}
-                  onSelect={navigate}
-                />
+              {displayCategories.map(item => (
+                <CategoryResultItem key={item.slug} item={item} onSelect={navigate} />
               ))}
             </CommandGroup>
           )}
@@ -225,30 +262,32 @@ export function GlobalSearch({ index }: Props) {
             <>
               <CommandSeparator />
               <CommandGroup heading="Tools">
-                {displayTools.map((item) => (
-                  <ToolResultItem
-                    key={item.key}
-                    item={item}
-                    onSelect={navigate}
-                  />
+                {displayTools.map(item => (
+                  <ToolResultItem key={item.key} item={item} onSelect={navigate} />
                 ))}
               </CommandGroup>
             </>
           )}
         </CommandList>
 
-        {/* Footer hint */}
+        {/* Footer keyboard hints */}
         <div className="flex items-center gap-3 border-t border-border/60 px-3 py-2">
           <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <kbd className="rounded border border-border bg-muted px-1 font-mono text-[10px]">↑↓</kbd>
+            <kbd className="rounded border border-border bg-muted px-1 font-mono text-[10px]">
+              ↑↓
+            </kbd>
             navigate
           </span>
           <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <kbd className="rounded border border-border bg-muted px-1 font-mono text-[10px]">↵</kbd>
+            <kbd className="rounded border border-border bg-muted px-1 font-mono text-[10px]">
+              ↵
+            </kbd>
             open
           </span>
           <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <kbd className="rounded border border-border bg-muted px-1 font-mono text-[10px]">esc</kbd>
+            <kbd className="rounded border border-border bg-muted px-1 font-mono text-[10px]">
+              esc
+            </kbd>
             close
           </span>
         </div>

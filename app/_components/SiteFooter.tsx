@@ -70,13 +70,24 @@ export function SiteFooter() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
+        <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-border pt-8 sm:flex-row sm:items-center">
           <Link href="/" className="text-sm font-semibold text-foreground">
             Presetly
           </Link>
-          <p className="text-xs text-muted-foreground">
-            All processing is done in your browser. No uploads. No sign-up. Free.
-          </p>
+          <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <Link href="/about" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
+              About
+            </Link>
+            <Link href="/contact" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
+              Contact
+            </Link>
+            <Link href="/privacy-policy" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
+              Terms
+            </Link>
+          </nav>
         </div>
       </div>
     </footer>

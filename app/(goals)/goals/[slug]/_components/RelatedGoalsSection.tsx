@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getCategory } from '@/registry/categories'
+import { buildGoalHref } from '@/lib/recommendations/engine'
 import type { GoalDefinition } from '@/types/registry'
 
 interface Props {
@@ -29,8 +30,8 @@ export function RelatedGoalsSection({ goals }: Props) {
             return (
               <li key={goal.slug}>
                 <Link
-                  href={`/goals/${goal.slug}`}
-                  className="group flex flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all hover:border-indigo-300 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500"
+                  href={buildGoalHref(goal)}
+                  className="group flex flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all hover:border-indigo-300 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                 >
                   <span className="text-xs font-medium uppercase tracking-wider text-indigo-500">
                     {categoryName}

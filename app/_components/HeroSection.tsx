@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { getAllGoals, getGoal } from "@/registry/goals";
+import { getGoal } from "@/registry/goals";
 import { buildGoalHref } from "@/lib/recommendations/engine";
-import { GoalSearchBar, type GoalSearchItem } from "./GoalSearchBar";
+import { SearchCommandPalette } from "@/features/search";
 
 const QUICK_LINK_CONFIGS = [
   { slug: 'compress-image-to-15kb', label: 'Under 15 KB' },
@@ -20,14 +20,6 @@ const TRUST_BADGES = [
 ];
 
 export function HeroSection() {
-  const searchGoals: GoalSearchItem[] = getAllGoals().map((g) => ({
-    slug: g.slug,
-    title: g.title,
-    shortTitle: g.shortTitle,
-    category: g.category,
-    tags: g.tags,
-  }));
-
   const quickLinks = QUICK_LINK_CONFIGS
     .map(({ slug, label }) => {
       const goal = getGoal(slug)
@@ -63,7 +55,7 @@ export function HeroSection() {
 
           {/* Search bar */}
           <div className="mx-auto mt-10 max-w-xl">
-            <GoalSearchBar goals={searchGoals} />
+            <SearchCommandPalette />
           </div>
 
           {/* Quick links */}
