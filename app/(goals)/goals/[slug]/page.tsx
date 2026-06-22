@@ -4,6 +4,10 @@ import { getGoal, getGoalStaticParams, getRelatedGoals } from '@/registry/goals'
 import { getPreset } from '@/registry/presets'
 import { getRequirements } from '@/content/requirements'
 import { getCommonErrors } from '@/content/errors'
+import {
+  getGoalPageRecommendations,
+  getResultRecommendations,
+} from '@/lib/recommendations/engine'
 import { GoalHeader } from './_components/GoalHeader'
 import { ToolSection } from './_components/ToolSection'
 import { QuickStepsSection } from './_components/QuickStepsSection'
@@ -11,6 +15,9 @@ import { RequirementsSection } from './_components/RequirementsSection'
 import { CommonErrorsSection } from './_components/CommonErrorsSection'
 import { FaqSection } from './_components/FaqSection'
 import { RelatedGoalsSection } from './_components/RelatedGoalsSection'
+import { RelatedSizesSection } from './_components/RelatedSizesSection'
+import { UsersAlsoVisitSection } from './_components/UsersAlsoVisitSection'
+import { ExploreMoreToolsSection } from './_components/ExploreMoreToolsSection'
 import { GoalStructuredData } from './_components/GoalStructuredData'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
@@ -72,6 +79,16 @@ export default async function GoalPage({ params }: Props) {
   const requirements = getRequirements(goal.preset)
   const commonErrors = getCommonErrors(goal.category)
 
+  // Recommendation engine — all data derived from registries, no hardcoding
+  const pageRecs = getGoalPageRecommendations(goal.slug)
+  const resultRecs = getResultRecommendations(goal.slug)
+
+  // Heading for the compress-sizes strip differs for compress vs other goals
+  const sizesHeading =
+    goal.category === 'compress'
+      ? 'Related compression sizes'
+      : 'Popular compression sizes'
+
   return (
     <>
       <GoalStructuredData goal={goal} canonicalUrl={canonicalUrl} />
@@ -81,22 +98,32 @@ export default async function GoalPage({ params }: Props) {
         <GoalHeader goal={goal} />
 
         {/* 2. The tool itself — primary CTA, above the fold */}
-        <ToolSection toolKey={goal.tool} preset={preset} />
+        {/* resultRecs are passed as props so the client bundle stays registry-free */}
+        <ToolSection toolKey={goal.tool} preset={preset} recommendations={resultRecs} />
 
-        {/* 3. Quick Steps — visual workflow for immediate orientation */}
+        {/* 3. Related compression sizes — quick navigation strip below tool */}
+        <RelatedSizesSection goals={pageRecs.relatedSizes} heading={sizesHeading} />
+
+        {/* 4. Quick Steps — visual workflow for immediate orientation */}
         <QuickStepsSection steps={goal.howItWorks} />
 
-        {/* 4. Requirements — official specs enriched from content registry */}
+        {/* 5. Requirements — official specs enriched from content registry */}
         <RequirementsSection preset={preset} content={requirements} />
 
-        {/* 5. Common Errors — troubleshooting for upload rejections */}
+        {/* 6. Common Errors — troubleshooting for upload rejections */}
         <CommonErrorsSection errors={commonErrors} />
 
-        {/* 6. FAQ — structured Q&A for SEO and user trust */}
+        {/* 7. FAQ — structured Q&A for SEO and user trust */}
         <FaqSection faqs={goal.faqs} />
 
-        {/* 7. Related Goals — internal linking for discoverability */}
+        {/* 8. Users Also Visit — complementary cross-category goals after FAQ */}
+        <UsersAlsoVisitSection goals={pageRecs.usersAlsoVisit} />
+
+        {/* 9. Related Goals — same-category tools (existing registry data) */}
         <RelatedGoalsSection goals={relatedGoals} />
+
+        {/* 10. Explore More Tools — broad discovery at page bottom */}
+        <ExploreMoreToolsSection goals={pageRecs.exploreMore} />
       </article>
     </>
   )

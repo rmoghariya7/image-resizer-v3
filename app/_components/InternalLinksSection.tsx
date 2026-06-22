@@ -1,8 +1,11 @@
 import Link from 'next/link'
-import { getAllGoals } from '@/registry/goals'
+import { getAllGoals, getGoal } from '@/registry/goals'
 import { getAllCategories } from '@/registry/categories'
 import { SIZE_TARGETS } from '@/registry/size-presets'
+import { compressGoalSlug } from '@/registry/goals/compress'
+import { buildGoalHref } from '@/lib/recommendations/engine'
 import type { GoalCategory, GoalDefinition } from '@/types/registry'
+import type { SizeTarget } from '@/registry/size-presets'
 
 const CATEGORY_ORDER: GoalCategory[] = ['exam', 'id-documents', 'signature']
 
@@ -18,8 +21,14 @@ export function InternalLinksSection() {
   }
 
   const featuredSizes = FEATURED_SIZE_PARAMS
-    .map(param => SIZE_TARGETS.find(t => t.sizeParam === param))
-    .filter((t): t is NonNullable<typeof t> => t !== undefined)
+    .map(param => {
+      const target = SIZE_TARGETS.find(t => t.sizeParam === param)
+      if (!target) return null
+      const goal = getGoal(compressGoalSlug(target))
+      if (!goal) return null
+      return { target, goal }
+    })
+    .filter((x): x is { target: SizeTarget; goal: GoalDefinition } => x !== null)
 
   return (
     <section
@@ -38,10 +47,10 @@ export function InternalLinksSection() {
               Compress by size
             </p>
             <ul className="space-y-2" role="list">
-              {featuredSizes.map(target => (
+              {featuredSizes.map(({ target, goal }) => (
                 <li key={target.id}>
                   <Link
-                    href={`/compress-image-under-${target.sizeParam}`}
+                    href={buildGoalHref(goal)}
                     className="text-sm text-muted-foreground transition-colors hover:text-primary"
                   >
                     {target.shortTitle}
@@ -65,7 +74,7 @@ export function InternalLinksSection() {
                   {catGoals.map(goal => (
                     <li key={goal.slug}>
                       <Link
-                        href={`/goals/${goal.slug}`}
+                        href={buildGoalHref(goal)}
                         className="text-sm text-muted-foreground transition-colors hover:text-primary"
                       >
                         {goal.shortTitle}

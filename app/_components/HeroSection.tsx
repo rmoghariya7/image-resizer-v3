@@ -1,15 +1,16 @@
 import Link from "next/link";
-import { getAllGoals } from "@/registry/goals";
+import { getAllGoals, getGoal } from "@/registry/goals";
+import { buildGoalHref } from "@/lib/recommendations/engine";
 import { GoalSearchBar, type GoalSearchItem } from "./GoalSearchBar";
 
-const SIZE_QUICK_LINKS = [
-  { label: "Under 15 KB", href: "/goals/compress-image-to-15kb" },
-  { label: "Under 20 KB", href: "/goals/compress-image-to-20kb" },
-  { label: "Under 50 KB", href: "/goals/compress-image-to-50kb" },
-  { label: "Under 100 KB", href: "/goals/compress-image-to-100kb" },
-  { label: "Passport Photo", href: "/goals/passport-photo-maker" },
-  { label: "UPSC Photo", href: "/goals/upsc-photo-resizer" },
-];
+const QUICK_LINK_CONFIGS = [
+  { slug: 'compress-image-to-15kb', label: 'Under 15 KB' },
+  { slug: 'compress-image-to-20kb', label: 'Under 20 KB' },
+  { slug: 'compress-image-to-50kb', label: 'Under 50 KB' },
+  { slug: 'compress-image-to-100kb', label: 'Under 100 KB' },
+  { slug: 'passport-photo-maker', label: 'Passport Photo' },
+  { slug: 'upsc-photo-resizer', label: 'UPSC Photo' },
+] as const
 
 const TRUST_BADGES = [
   "No uploads",
@@ -26,6 +27,13 @@ export function HeroSection() {
     category: g.category,
     tags: g.tags,
   }));
+
+  const quickLinks = QUICK_LINK_CONFIGS
+    .map(({ slug, label }) => {
+      const goal = getGoal(slug)
+      return goal ? { href: buildGoalHref(goal), label } : null
+    })
+    .filter((x): x is NonNullable<typeof x> => x !== null)
 
   return (
     <section
@@ -64,7 +72,7 @@ export function HeroSection() {
             aria-label="Popular size targets"
           >
             <span className="text-xs text-muted-foreground">Popular:</span>
-            {SIZE_QUICK_LINKS.map((link) => (
+            {quickLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}

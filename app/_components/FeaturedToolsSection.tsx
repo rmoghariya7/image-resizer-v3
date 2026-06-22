@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react'
 import { getGoal } from '@/registry/goals'
 import { getPreset } from '@/registry/presets'
 import { isImagePreset, isCompressPreset } from '@/types/registry'
+import { buildGoalHref } from '@/lib/recommendations/engine'
 import type { GoalDefinition } from '@/types/registry'
 
 const FEATURED_SLUGS = [
@@ -84,7 +85,7 @@ export function FeaturedToolsSection() {
             return (
               <li key={goal.slug}>
                 <Link
-                  href={`/goals/${goal.slug}`}
+                  href={buildGoalHref(goal)}
                   className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 shadow-sm ring-1 ring-foreground/5 transition-all hover:border-primary/30 hover:shadow-md"
                 >
                   {/* Left: metadata */}

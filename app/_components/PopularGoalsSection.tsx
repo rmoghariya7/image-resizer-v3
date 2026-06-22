@@ -1,6 +1,11 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { SIZE_TARGETS } from '@/registry/size-presets'
+import { getGoal } from '@/registry/goals'
+import { compressGoalSlug } from '@/registry/goals/compress'
+import { buildGoalHref } from '@/lib/recommendations/engine'
+import type { GoalDefinition } from '@/types/registry'
+import type { SizeTarget } from '@/registry/size-presets'
 
 const POPULAR_SIZE_PARAMS = ['15kb', '20kb', '25kb', '50kb', '100kb', '200kb'] as const
 
@@ -15,8 +20,14 @@ const ACCENT_STYLES: Record<string, { text: string; bg: string }> = {
 
 export function PopularGoalsSection() {
   const sizes = POPULAR_SIZE_PARAMS
-    .map(param => SIZE_TARGETS.find(t => t.sizeParam === param))
-    .filter((t): t is NonNullable<typeof t> => t !== undefined)
+    .map(param => {
+      const target = SIZE_TARGETS.find(t => t.sizeParam === param)
+      if (!target) return null
+      const goal = getGoal(compressGoalSlug(target))
+      if (!goal) return null
+      return { target, goal }
+    })
+    .filter((x): x is { target: SizeTarget; goal: GoalDefinition } => x !== null)
 
   return (
     <section
@@ -46,12 +57,12 @@ export function PopularGoalsSection() {
           className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6"
           role="list"
         >
-          {sizes.map(target => {
+          {sizes.map(({ target, goal }) => {
             const accent = ACCENT_STYLES[target.sizeParam] ?? { text: 'text-primary', bg: 'bg-primary/5' }
             return (
               <li key={target.id}>
                 <Link
-                  href={`/compress-image-under-${target.sizeParam}`}
+                  href={buildGoalHref(goal)}
                   className="group flex h-full flex-col rounded-xl border border-border bg-card p-5 shadow-sm ring-1 ring-foreground/5 transition-all hover:border-primary/30 hover:shadow-md hover:ring-primary/20"
                   aria-label={`${target.title} — ${target.useCase}`}
                 >

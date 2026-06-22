@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { getGoal } from '@/registry/goals'
+import { buildGoalHref } from '@/lib/recommendations/engine'
 import type { GoalDefinition } from '@/types/registry'
 
 const FILE_SIZE_CONFIGS = [
@@ -54,11 +55,11 @@ export function FileSizeSection() {
         {/* Cards */}
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3" role="list">
           {FILE_SIZE_CONFIGS.map(config => {
-            const goal = getGoal(config.slug)
+            const goal: GoalDefinition | undefined = getGoal(config.slug)
             return (
               <li key={config.slug}>
                 <Link
-                  href={`/goals/${config.slug}`}
+                  href={goal ? buildGoalHref(goal) : `/goals/${config.slug}`}
                   className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 shadow-sm ring-1 ring-foreground/5 transition-all hover:border-primary/30 hover:shadow-md"
                 >
                   {/* Size number */}

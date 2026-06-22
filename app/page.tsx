@@ -2,6 +2,7 @@ import { SiteHeader } from './_components/SiteHeader'
 import { SiteFooter } from './_components/SiteFooter'
 import { HeroSection } from './_components/HeroSection'
 import { PopularGoalsSection } from './_components/PopularGoalsSection'
+import { PopularToolsSection } from './_components/PopularToolsSection'
 import { CategoriesSection } from './_components/CategoriesSection'
 import { FeaturedToolsSection } from './_components/FeaturedToolsSection'
 import { HomeFaqSection } from './_components/HomeFaqSection'
@@ -116,6 +117,7 @@ export default function HomePage() {
       <main id="main-content">
         <HeroSection />
         <PopularGoalsSection />
+        <PopularToolsSection />
         <CategoriesSection />
         <FeaturedToolsSection />
         <HomeFaqSection />

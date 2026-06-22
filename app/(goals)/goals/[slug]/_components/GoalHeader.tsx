@@ -1,30 +1,15 @@
-import Link from 'next/link'
 import type { GoalDefinition } from '@/types/registry'
-
-const CATEGORY_LABELS: Record<GoalDefinition['category'], string> = {
-  exam: 'Exam Photos',
-  'id-documents': 'ID Documents',
-  compress: 'Compress Image',
-  signature: 'Signature Tools',
-}
+import { BackButton } from './BackButton'
 
 interface Props {
   goal: GoalDefinition
 }
 
 export function GoalHeader({ goal }: Props) {
-  const categoryLabel = CATEGORY_LABELS[goal.category]
-
   return (
     <div className="border-b border-gray-100 bg-white px-4 py-6 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-3xl">
-        <Link
-          href={`/categories/${goal.category}`}
-          className="mb-3 inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-indigo-600 hover:text-indigo-500 transition-colors sm:mb-4"
-        >
-          <span aria-hidden="true">←</span>
-          {categoryLabel}
-        </Link>
+        <BackButton />
 
         <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
           {goal.title}

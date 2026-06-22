@@ -1,17 +1,21 @@
 'use client'
 
 import type { Preset } from '@/types/registry'
+import type { ResultScreenRecommendations } from '@/lib/recommendations/engine'
 import { useImageResizer } from '../hooks/useImageResizer'
 import { useDropZone } from '../hooks/useDropZone'
 import { DropZone } from './DropZone'
 import { ProcessingOverlay } from './ProcessingOverlay'
 import { ResultPanel } from './ResultPanel'
+import { ResultRecommendations } from './ResultRecommendations'
 
 interface Props {
   preset: Preset
+  /** Pre-computed by the server; determines what links appear after compression. */
+  recommendations?: ResultScreenRecommendations
 }
 
-export function ImageResizerTool({ preset }: Props) {
+export function ImageResizerTool({ preset, recommendations }: Props) {
   const { state, processFile, reset } = useImageResizer(preset)
 
   const isInteractive = state.status === 'idle' || state.status === 'error'
@@ -35,6 +39,9 @@ export function ImageResizerTool({ preset }: Props) {
     return (
       <div>
         <ResultPanel original={state.original} result={state.result} />
+        {recommendations && (
+          <ResultRecommendations recommendations={recommendations} />
+        )}
         <div className="bg-gray-50 px-4 pb-12 sm:px-6">
           <div className="mx-auto max-w-2xl">
             <button

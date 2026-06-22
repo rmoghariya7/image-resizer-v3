@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
 interface Props {
-  progress: number
+  progress: number;
 }
 
 export function ProcessingOverlay({ progress }: Props) {
@@ -10,7 +10,7 @@ export function ProcessingOverlay({ progress }: Props) {
       role="status"
       aria-live="polite"
       aria-label={`Processing image: ${progress}%`}
-      className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-2xl bg-white/90 backdrop-blur-sm"
+      className="absolute inset-0 z-10 flex flex-col items-center justify-center py-2 rounded-2xl bg-white/90 backdrop-blur-sm"
     >
       {/* Spinner */}
       <svg
@@ -35,7 +35,9 @@ export function ProcessingOverlay({ progress }: Props) {
         />
       </svg>
 
-      <p className="text-sm font-medium text-gray-700">Processing your image…</p>
+      <p className="text-sm font-medium text-gray-700">
+        Processing your image…
+      </p>
 
       {/* Progress bar */}
       <div
@@ -50,5 +52,5 @@ export function ProcessingOverlay({ progress }: Props) {
 
       <p className="mt-2 text-xs tabular-nums text-gray-400">{progress}%</p>
     </div>
-  )
+  );
 }

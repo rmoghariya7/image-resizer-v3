@@ -8,7 +8,15 @@ import {
   getRelatedSizes,
 } from '@/registry/size-presets'
 import { getCommonErrors } from '@/content/errors'
+import { getCompressPageGoalLinks, buildGoalHref } from '@/lib/recommendations/engine'
 import { SizeToolSection } from './_components/SizeToolSection'
+
+const CATEGORY_NAMES: Record<string, string> = {
+  exam: 'Exam',
+  'id-documents': 'ID Document',
+  signature: 'Signature',
+  compress: 'Compression',
+}
 import { RelatedSizesSection } from './_components/RelatedSizesSection'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
@@ -57,6 +65,7 @@ export default async function CompressImageUnderSizePage({ params }: Props) {
   const steps = generateHowItWorks(target)
   const relatedSizes = getRelatedSizes(target)
   const commonErrors = getCommonErrors('compress')
+  const popularGoals = getCompressPageGoalLinks(4)
   const canonicalUrl = `${BASE_URL}/compress-image-under-${target.sizeParam}`
 
   // ─── Structured data ─────────────────────────────────────────────────────────
@@ -106,7 +115,7 @@ export default async function CompressImageUnderSizePage({ params }: Props) {
 
       <article>
         {/* ── Page header ─────────────────────────────────────────────────────── */}
-        <header className="border-b border-border/50 bg-gradient-to-b from-background to-muted/30 px-4 py-10 sm:px-6 sm:py-14">
+        <header className="border-b border-border/50 bg-linear-to-b from-background to-muted/30 px-4 py-10 sm:px-6 sm:py-14">
           <div className="mx-auto max-w-3xl text-center">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-primary">
               Free · No upload · Browser-based
@@ -309,6 +318,52 @@ export default async function CompressImageUnderSizePage({ params }: Props) {
 
         {/* ── Related sizes ────────────────────────────────────────────────────── */}
         <RelatedSizesSection sizes={relatedSizes} />
+
+        {/* ── Popular tools — exam/ID goals for discovery ──────────────────────── */}
+        {popularGoals.length > 0 && (
+          <section
+            aria-labelledby="popular-tools-heading"
+            className="border-t border-border bg-muted/20 px-4 py-12 sm:px-6 sm:py-16"
+          >
+            <div className="mx-auto max-w-5xl">
+              <div className="mb-6">
+                <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+                  Also popular
+                </p>
+                <h2
+                  id="popular-tools-heading"
+                  className="mt-1 text-xl font-semibold tracking-tight text-foreground"
+                >
+                  Photo resizing tools
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Need to resize for a specific portal? These tools apply the exact specifications automatically.
+                </p>
+              </div>
+
+              <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4" role="list">
+                {popularGoals.map(goal => (
+                  <li key={goal.slug}>
+                    <a
+                      href={buildGoalHref(goal)}
+                      className="group flex h-full flex-col rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:border-primary/30 hover:shadow-md"
+                    >
+                      <span className="text-xs font-medium uppercase tracking-wider text-primary">
+                        {CATEGORY_NAMES[goal.category] ?? goal.category}
+                      </span>
+                      <span className="mt-1.5 block text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
+                        {goal.shortTitle}
+                      </span>
+                      <span className="mt-1 block flex-1 text-xs leading-relaxed text-muted-foreground line-clamp-2">
+                        {goal.description}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
       </article>
     </>
   )

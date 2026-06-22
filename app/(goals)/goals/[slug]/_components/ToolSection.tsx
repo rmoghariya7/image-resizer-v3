@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import type { Preset, ToolKey } from '@/types/registry'
+import type { ResultScreenRecommendations } from '@/lib/recommendations/engine'
 
 // `ssr: false` — tool uses browser-only APIs (Worker, createImageBitmap, OffscreenCanvas).
 // The loading skeleton is shown client-side while the module chunk loads.
@@ -24,15 +25,17 @@ const SizeFirstToolComponent = dynamic(
 interface Props {
   toolKey: ToolKey
   preset: Preset
+  /** Server-computed recommendations shown after a successful compression. */
+  recommendations?: ResultScreenRecommendations
 }
 
-export function ToolSection({ toolKey, preset }: Props) {
+export function ToolSection({ toolKey, preset, recommendations }: Props) {
   switch (toolKey) {
     case 'image-resizer':
       if (preset.kind === 'compress') {
         return <SizeFirstToolComponent defaultPresetKey={preset.key} />
       }
-      return <ImageResizerToolComponent preset={preset} />
+      return <ImageResizerToolComponent preset={preset} recommendations={recommendations} />
     default:
       return <ToolComingSoon />
   }
