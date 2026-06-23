@@ -6,8 +6,11 @@ import { QUICK_ACTION_SIZES } from '@/registry/size-presets'
 interface Props {
   /** The currently active (selected or most-recently-processed) preset. */
   activePresetKey: CompressPresetKey
-  /** File size to show as "Current size: X KB" context label. */
-  currentSizeKB: number
+  /**
+   * File size to show as "Current size: X KB" context label.
+   * Omit (or leave undefined) to hide the label — e.g. before any file is uploaded.
+   */
+  currentSizeKB?: number
   onSelect: (key: CompressPresetKey) => void
   /** Section heading — defaults to "Choose target size:" */
   heading?: string
@@ -37,13 +40,15 @@ export function SizePresetSelector({
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
       <div className="px-5 py-5">
-        {/* Context label */}
-        <p className="mb-0.5 text-sm text-muted-foreground">
-          Current size:{' '}
-          <span className="font-semibold text-foreground">
-            {formatSize(currentSizeKB)}
-          </span>
-        </p>
+        {/* Context label — only shown when a file is loaded */}
+        {currentSizeKB !== undefined && (
+          <p className="mb-0.5 text-sm text-muted-foreground">
+            Current size:{' '}
+            <span className="font-semibold text-foreground">
+              {formatSize(currentSizeKB)}
+            </span>
+          </p>
+        )}
 
         {/* Section heading */}
         <p className="mb-4 text-sm font-semibold text-foreground">{heading}</p>

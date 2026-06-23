@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CompressPresetKey } from '@/registry/presets/schema'
 import { useDropZone } from '../hooks/useDropZone'
 import { useSizeFirstResizer } from '../hooks/useSizeFirstResizer'
@@ -20,6 +20,24 @@ function formatSize(kb: number): string {
 
 export function SizeFirstTool({ defaultPresetKey }: Props) {
   const { state, loadFile, process, reset } = useSizeFirstResizer()
+
+  // Tracks which preset the user has chosen in the idle-state selector.
+  // Initialized to the page's preset; can be changed before upload.
+  const [pendingPreset, setPendingPreset] = useState<CompressPresetKey>(defaultPresetKey)
+  // Ref so the auto-process effect always reads the latest value without
+  // making pendingPreset a dep that would re-register the effect on every change.
+  const pendingPresetRef = useRef<CompressPresetKey>(pendingPreset)
+  pendingPresetRef.current = pendingPreset
+
+  // Auto-process: fires once each time a new file finishes loading.
+  // 'ready' → call process() → 'processing' → 'done'. No loop risk because
+  // process() only runs from 'ready' or 'done' (guard inside the hook), and
+  // the effect condition is only true for 'ready'.
+  useEffect(() => {
+    if (state.status === 'ready') {
+      process(pendingPresetRef.current)
+    }
+  }, [state.status, process])
 
   const isDroppable = state.status === 'idle' || state.status === 'error'
   const isProcessing = state.status === 'loading' || state.status === 'processing'
@@ -137,9 +155,9 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
             </div>
           </div>
 
-          {/* Size picker — same component as post-processing */}
+          {/* Size picker — shown briefly before auto-process fires */}
           <SizePresetSelector
-            activePresetKey={defaultPresetKey}
+            activePresetKey={pendingPreset}
             currentSizeKB={state.sizeKB}
             onSelect={process}
             heading="Choose target size:"
@@ -166,7 +184,7 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
     )
   }
 
-  // ─── Idle / error — drop zone ─────────────────────────────────────────────────
+  // ─── Idle / error — drop zone + preset selector ──────────────────────────────
 
   return (
     <>
@@ -183,6 +201,17 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
       >
         {isProcessing && <ProcessingOverlay progress={0} />}
       </DropZone>
+
+      {/* Preset selector — lets users change target before uploading */}
+      <div className="bg-gray-50 px-4 pb-6 sm:px-6">
+        <div className="mx-auto max-w-2xl">
+          <SizePresetSelector
+            activePresetKey={pendingPreset}
+            onSelect={setPendingPreset}
+            heading="Target size:"
+          />
+        </div>
+      </div>
 
       {state.status === 'error' && (
         <div className="mx-auto mt-4 max-w-2xl px-4 sm:px-6">
