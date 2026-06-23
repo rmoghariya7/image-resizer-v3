@@ -2,6 +2,11 @@ import type { Preset, PresetKey } from '@/types/registry'
 
 export type AcceptedMimeType = 'image/jpeg' | 'image/png' | 'image/webp'
 
+export type CompressionStatus =
+  | 'already-below-target'
+  | 'compressed'
+  | 'could-not-reach-target'
+
 export const ACCEPTED_MIME_TYPES: readonly AcceptedMimeType[] = [
   'image/jpeg',
   'image/png',
@@ -24,8 +29,8 @@ export type WorkerRequest = {
 
 export type WorkerResponse =
   | { type: 'PROGRESS'; id: string; percent: number }
-  // sizeKB: one decimal precision (e.g. 14.7). targetKB: present for compress presets.
-  | { type: 'SUCCESS'; id: string; blob: Blob; sizeKB: number; targetKB?: number }
+  // sizeKB: one decimal precision (e.g. 14.7). targetKB / compressionStatus: compress presets only.
+  | { type: 'SUCCESS'; id: string; blob: Blob; sizeKB: number; targetKB?: number; compressionStatus?: CompressionStatus }
   | { type: 'ERROR'; id: string; message: string }
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
@@ -37,6 +42,8 @@ export type ProcessedResult = {
   sizeKB: number
   /** Present for compress presets. Used to show target vs. actual comparison. */
   targetKB?: number
+  /** Outcome of the compress pipeline. Absent for image presets. */
+  compressionStatus?: CompressionStatus
   filename: string
   mimeType: string
 }

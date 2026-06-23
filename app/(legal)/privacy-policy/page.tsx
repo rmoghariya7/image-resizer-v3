@@ -42,8 +42,8 @@ export default function PrivacyPolicyPage() {
           {[
             'Your images are processed 100% in your browser — they are never uploaded to any server.',
             'We do not collect your name, email, or any personal information.',
-            'We use anonymous analytics (PostHog) to understand how the tool is used.',
-            'We use Sentry for error monitoring — no personal data is included.',
+            'We may use anonymous analytics to understand how the tool is used. This policy will be updated when analytics are activated.',
+            'We may use error monitoring to detect technical issues — no personal data is included.',
             'No account required. No sign-up. No cookies beyond what is strictly necessary.',
           ].map(point => (
             <li key={point} className="flex gap-2">
@@ -102,11 +102,11 @@ export default function PrivacyPolicyPage() {
           </h2>
 
           <h3 className="mt-5 text-base font-semibold text-foreground">
-            3.1 Analytics — PostHog
+            3.1 Analytics
           </h3>
           <p className="mt-2 text-muted-foreground">
-            We use PostHog, a privacy-focused analytics platform, to understand
-            how the tool is used. PostHog collects:
+            We may use privacy-focused analytics tools to understand how the tool
+            is used. When active, analytics may collect:
           </p>
           <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground" role="list">
             {[
@@ -122,17 +122,19 @@ export default function PrivacyPolicyPage() {
             ))}
           </ul>
           <p className="mt-3 text-sm text-muted-foreground">
-            PostHog does not receive your images or any personally identifiable
-            information. You can opt out of analytics by enabling &quot;Do Not
-            Track&quot; in your browser settings.
+            Analytics tools do not receive your images or any personally
+            identifiable information. You can opt out by enabling &quot;Do Not
+            Track&quot; in your browser settings. This policy will be updated when
+            specific analytics services are activated.
           </p>
 
           <h3 className="mt-6 text-base font-semibold text-foreground">
-            3.2 Error monitoring — Sentry
+            3.2 Error monitoring
           </h3>
           <p className="mt-2 text-muted-foreground">
-            We use Sentry to capture technical error reports when the tool
-            encounters a problem. Sentry receives:
+            We may use error monitoring tools to capture technical error reports
+            when the tool encounters a problem. When active, error monitoring may
+            receive:
           </p>
           <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground" role="list">
             {[
@@ -147,8 +149,8 @@ export default function PrivacyPolicyPage() {
             ))}
           </ul>
           <p className="mt-3 text-sm text-muted-foreground">
-            Sentry does not receive your images or any personal information you
-            have not deliberately shared.
+            Error monitoring tools do not receive your images or any personal
+            information you have not deliberately shared.
           </p>
         </section>
 
@@ -178,10 +180,10 @@ export default function PrivacyPolicyPage() {
               </thead>
               <tbody className="divide-y divide-border">
                 {[
-                  { service: 'PostHog', purpose: 'Analytics', data: 'Anonymous usage events' },
-                  { service: 'Sentry', purpose: 'Error monitoring', data: 'Error reports, browser info' },
                   { service: 'Vercel', purpose: 'Hosting', data: 'Server request logs' },
-                  { service: 'Google Fonts', purpose: 'Typography', data: 'Font request logs' },
+                  { service: 'Google Fonts (build-time)', purpose: 'Typography', data: 'None at runtime — fonts are self-hosted' },
+                  { service: 'Analytics (planned)', purpose: 'Anonymous usage analytics', data: 'Anonymous usage events (no images, no PII)' },
+                  { service: 'Error monitoring (planned)', purpose: 'Error detection', data: 'Error type, browser info, page URL' },
                 ].map(row => (
                   <tr key={row.service}>
                     <td className="px-4 py-3 font-medium text-foreground">{row.service}</td>
@@ -200,9 +202,10 @@ export default function PrivacyPolicyPage() {
           </h2>
           <p className="mt-3 text-muted-foreground">
             Since we do not store your images or personal information, there is
-            nothing to retain or delete on our end. Anonymous analytics events
-            are retained by PostHog for 12 months. Sentry error reports are
-            retained for 90 days.
+            nothing to retain or delete on our end. When analytics or error
+            monitoring services are activated, their respective retention periods
+            will be disclosed here. Anonymous usage data is typically retained for
+            12 months or less.
           </p>
         </section>
 

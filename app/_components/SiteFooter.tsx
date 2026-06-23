@@ -8,6 +8,9 @@ const FOOTER_SECTIONS = [
     links: [
       { label: 'UPSC Photo Resizer', slug: 'upsc-photo-resizer' },
       { label: 'GPSC Photo Resizer', slug: 'gpsc-photo-resizer' },
+      { label: 'SSC Photo Resizer', slug: 'ssc-photo-resizer' },
+      { label: 'Railway Photo Resizer', slug: 'railway-photo-resizer' },
+      { label: 'IBPS Photo Resizer', slug: 'ibps-photo-resizer' },
       { label: 'NDA Photo Resizer', slug: 'nda-photo-resizer' },
     ],
   },
@@ -17,6 +20,8 @@ const FOOTER_SECTIONS = [
       { label: 'Aadhaar Photo Resizer', slug: 'aadhaar-photo-resizer' },
       { label: 'PAN Card Photo Resizer', slug: 'pan-card-photo-resizer' },
       { label: 'Passport Photo Maker', slug: 'passport-photo-maker' },
+      { label: 'Driving Licence Photo', slug: 'driving-licence-photo-resizer' },
+      { label: 'Visa Photo Maker', slug: 'visa-photo-maker' },
       { label: 'Voter ID Photo Resizer', slug: 'voter-id-photo-resizer' },
     ],
   },
@@ -34,7 +39,10 @@ const FOOTER_SECTIONS = [
   {
     heading: 'Signature',
     links: [
+      { label: 'Signature Resize to 10 KB', slug: 'signature-resize-10kb' },
       { label: 'Signature Resize to 20 KB', slug: 'signature-resize-20kb' },
+      { label: 'Signature Resize to 30 KB', slug: 'signature-resize-30kb' },
+      { label: 'Signature Resize to 50 KB', slug: 'signature-resize-50kb' },
     ],
   },
 ]
@@ -86,6 +94,9 @@ export function SiteFooter() {
             </Link>
             <Link href="/terms" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
               Terms
+            </Link>
+            <Link href="/sitemap.xml" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
+              Sitemap
             </Link>
           </nav>
         </div>

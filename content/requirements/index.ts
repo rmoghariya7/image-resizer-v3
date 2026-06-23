@@ -8,6 +8,18 @@ import { panCardRequirements } from './presets/pan-card'
 import { passportIndiaRequirements } from './presets/passport-india'
 import { voterIdRequirements } from './presets/voter-id'
 import { signature20kbRequirements } from './presets/signature-20kb'
+import { signature10kbRequirements } from './presets/signature-10kb'
+import { signature30kbRequirements } from './presets/signature-30kb'
+import { signature50kbRequirements } from './presets/signature-50kb'
+import { sscRequirements } from './presets/ssc'
+import { railwayRequirements } from './presets/railway'
+import { ibpsRequirements } from './presets/ibps'
+import { bankExamRequirements } from './presets/bank-exam'
+import { ugcNetRequirements } from './presets/ugc-net'
+import { drivingLicenceRequirements } from './presets/driving-licence'
+import { visaRequirements } from './presets/visa'
+import { jobApplicationRequirements } from './presets/job-application'
+import { resumePhotoRequirements } from './presets/resume-photo'
 import { compress20kbRequirements } from './presets/compress-20kb'
 import { compress50kbRequirements } from './presets/compress-50kb'
 import { compress100kbRequirements } from './presets/compress-100kb'
@@ -23,6 +35,18 @@ const REQUIREMENTS_MAP = new Map<PresetKey, RequirementsContent>([
   ['passport-india', passportIndiaRequirements],
   ['voter-id', voterIdRequirements],
   ['signature-20kb', signature20kbRequirements],
+  ['signature-10kb', signature10kbRequirements],
+  ['signature-30kb', signature30kbRequirements],
+  ['signature-50kb', signature50kbRequirements],
+  ['ssc', sscRequirements],
+  ['railway', railwayRequirements],
+  ['ibps', ibpsRequirements],
+  ['bank-exam', bankExamRequirements],
+  ['ugc-net', ugcNetRequirements],
+  ['driving-licence', drivingLicenceRequirements],
+  ['visa', visaRequirements],
+  ['job-application', jobApplicationRequirements],
+  ['resume-photo', resumePhotoRequirements],
   ['compress-20kb', compress20kbRequirements],
   ['compress-50kb', compress50kbRequirements],
   ['compress-100kb', compress100kbRequirements],

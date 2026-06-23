@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   title: 'Presetly — Free Photo Resizer for Indian Government Applications',
   description:
     'Resize and compress photos for UPSC, GPSC, Aadhaar, PAN card, Passport, and 10+ Indian government portals. Browser-based, no uploads, no sign-up, completely free.',
+  alternates: {
+    canonical: BASE_URL,
+  },
   keywords: [
     'photo resizer',
     'image compressor',

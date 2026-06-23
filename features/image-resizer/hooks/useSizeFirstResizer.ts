@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { getPreset } from '@/registry/presets'
+import { getCompressPreset } from '@/registry/presets'
 import type { CompressPresetKey } from '@/registry/presets/schema'
 import {
   ACCEPTED_MIME_TYPES,
@@ -96,6 +96,7 @@ export function useSizeFirstResizer(): UseSizeFirstResizerReturn {
               // Never derived from filename.
               sizeKB: msg.sizeKB,
               targetKB: msg.targetKB,
+              compressionStatus: msg.compressionStatus,
               filename: buildFilename(prev.activePresetKey, msg.blob.type),
               mimeType: msg.blob.type,
             }
@@ -160,11 +161,34 @@ export function useSizeFirstResizer(): UseSizeFirstResizerReturn {
     const width = cur.status === 'ready' ? cur.width : cur.original.width
     const height = cur.status === 'ready' ? cur.height : cur.original.height
 
+    const preset = getCompressPreset(presetKey)
+    const targetBytes = preset.targetKB * 1024
+
     setState({ status: 'processing', progress: 0, file, width, height, sizeKB, objectUrl, activePresetKey: presetKey })
+
+    // Short-circuit: the original already satisfies the target size.
+    // Recompressing would either inflate the file (canvas encoder is less
+    // efficient than the original encoder) or needlessly degrade quality.
+    if (file.size <= targetBytes) {
+      if (resultUrlRef.current) URL.revokeObjectURL(resultUrlRef.current)
+      const resultUrl = URL.createObjectURL(file)
+      resultUrlRef.current = resultUrl
+      const result: ProcessedResult = {
+        blob: file,
+        objectUrl: resultUrl,
+        sizeKB: parseFloat((file.size / 1024).toFixed(1)),
+        targetKB: preset.targetKB,
+        compressionStatus: 'already-below-target',
+        filename: file.name,
+        mimeType: file.type || 'image/jpeg',
+      }
+      const original: OriginalImage = { file, objectUrl, width, height, sizeKB }
+      setState({ status: 'done', original, result, activePresetKey: presetKey })
+      return
+    }
 
     try {
       const bitmap = await createImageBitmap(file)
-      const preset = getPreset(presetKey)
 
       const originalMime: AcceptedMimeType = ACCEPTED_MIME_TYPES.includes(
         file.type as AcceptedMimeType,

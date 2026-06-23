@@ -18,19 +18,19 @@ export function SiteHeader() {
             aria-label="Main navigation"
           >
             <Link
-              href="#tools"
+              href="/#tools"
               className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               Tools
             </Link>
             <Link
-              href="#categories"
+              href="/#categories"
               className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               Categories
             </Link>
             <Link
-              href="#faq"
+              href="/#faq"
               className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               FAQ

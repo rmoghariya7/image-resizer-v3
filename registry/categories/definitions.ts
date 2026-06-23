@@ -6,8 +6,15 @@ export const categoryDefinitions: readonly CategoryDefinition[] = Object.freeze(
     name: 'Exam Photos',
     description: 'Photo resizer tools for Indian competitive exam applications',
     metaDescription:
-      'Resize your photo to the exact size required for UPSC, GPSC, NDA, SSC, and other Indian competitive exam online applications.',
-    keywords: ['exam photo', 'upsc photo size', 'gpsc photo size', 'nda photo size', 'competitive exam photo'],
+      'Resize your photo to the exact size required for UPSC, GPSC, NDA, SSC, Railway, IBPS, and other Indian competitive exam online applications.',
+    keywords: [
+      'exam photo',
+      'upsc photo size',
+      'gpsc photo size',
+      'ssc photo size',
+      'bank exam photo size',
+      'competitive exam photo',
+    ],
     faqs: [
       {
         question: 'Are exam photo requirements the same for UPSC and GPSC?',
@@ -20,9 +27,9 @@ export const categoryDefinitions: readonly CategoryDefinition[] = Object.freeze(
           'Most competitive exams require a plain white or off-white background. Patterned, coloured, or dark backgrounds are rejected.',
       },
       {
-        question: 'Can I use the same photo for UPSC and NDA applications?',
+        question: 'Can I use the same photo for multiple exams?',
         answer:
-          'If the photo meets both specifications (413×531 px, JPEG), you can use it for both — but always re-process it through the correct goal tool to ensure the file size limit is met.',
+          'If the photo meets all dimensions (413×531 px, JPEG), you can use it for multiple exams — but always re-process it through the correct goal tool to ensure the file size limit is met for each exam.',
       },
     ],
     subcategories: [
@@ -40,21 +47,36 @@ export const categoryDefinitions: readonly CategoryDefinition[] = Object.freeze(
         parentCategory: 'exam',
         goalSlugs: ['nda-photo-resizer'],
       },
+      {
+        slug: 'banking-ssc',
+        name: 'Banking & SSC',
+        description: 'Photo tools for SSC, IBPS, SBI, and other banking and staff selection exams',
+        parentCategory: 'exam',
+        goalSlugs: ['ssc-photo-resizer', 'ibps-photo-resizer', 'bank-exam-photo-resizer'],
+      },
+      {
+        slug: 'railway-education',
+        name: 'Railway & Education',
+        description: 'Photo tools for Indian Railways recruitment and NTA education exams',
+        parentCategory: 'exam',
+        goalSlugs: ['railway-photo-resizer', 'ugc-net-photo-resizer'],
+      },
     ],
     priority: 0.9,
-    updatedAt: '2026-06-01',
+    updatedAt: '2026-06-23',
   },
   {
     slug: 'id-documents',
     name: 'ID Documents',
-    description: 'Photo resizer tools for Aadhaar, PAN card, Passport, and Voter ID applications',
+    description: 'Photo resizer tools for Aadhaar, PAN card, Passport, Voter ID, and other ID document applications',
     metaDescription:
-      'Resize your photo for Aadhaar (UIDAI), PAN card (NSDL), Indian Passport, and Voter ID (NVSP) applications instantly in your browser.',
+      'Resize your photo for Aadhaar (UIDAI), PAN card (NSDL), Indian Passport, Voter ID (NVSP), Driving Licence, and Visa applications instantly in your browser.',
     keywords: [
       'aadhaar photo size',
       'pan card photo size',
       'passport photo size',
       'voter id photo size',
+      'driving licence photo size',
       'id document photo',
     ],
     faqs: [
@@ -87,9 +109,21 @@ export const categoryDefinitions: readonly CategoryDefinition[] = Object.freeze(
           'voter-id-photo-resizer',
         ],
       },
+      {
+        slug: 'employment-travel',
+        name: 'Employment & Travel',
+        description: 'Photo tools for Driving Licence, Visa, job portals, and resume applications',
+        parentCategory: 'id-documents',
+        goalSlugs: [
+          'driving-licence-photo-resizer',
+          'visa-photo-maker',
+          'job-application-photo-resizer',
+          'resume-photo-resizer',
+        ],
+      },
     ],
     priority: 0.9,
-    updatedAt: '2026-06-01',
+    updatedAt: '2026-06-23',
   },
   {
     slug: 'compress',
@@ -140,31 +174,32 @@ export const categoryDefinitions: readonly CategoryDefinition[] = Object.freeze(
       },
     ],
     priority: 0.8,
-    updatedAt: '2026-06-01',
+    updatedAt: '2026-06-23',
   },
   {
     slug: 'signature',
     name: 'Signature Tools',
     description: 'Resize and compress digital signature images for exam and ID document applications',
     metaDescription:
-      'Resize your digital signature to 140×60 px and compress it under 20 KB for UPSC, GPSC, NDA, and bank exam online applications.',
+      'Resize your digital signature to 140×60 px and compress it under 10–50 KB for UPSC, GPSC, SSC, IBPS, and other exam and ID document online applications.',
     keywords: [
       'signature resize',
       'digital signature size',
       'signature 20kb',
       'upsc signature',
+      'ibps signature size',
       'exam signature size',
     ],
     faqs: [
       {
         question: 'What is the standard signature size for Indian exam portals?',
         answer:
-          'Most competitive exam portals (UPSC, GPSC, NDA, SSC, IBPS) require a signature of 140×60 pixels in JPEG format, under 20 KB.',
+          'Most competitive exam portals (UPSC, GPSC, NDA, SSC, IBPS) require a signature of 140×60 pixels in JPEG format. The file size limit varies: 10 KB for some portals, 20 KB for UPSC/GPSC, and 30 KB for IBPS/NTA.',
       },
       {
         question: 'How should I scan my signature for digital upload?',
         answer:
-          'Sign on plain white paper, scan at 300 DPI, and crop tightly around the signature. This tool handles the resizing and compression after that.',
+          'Sign on plain white paper, scan at 200–300 DPI, and crop tightly around the signature. This tool handles the resizing and compression after that.',
       },
       {
         question: 'Can I use this tool for my PAN card signature upload?',
@@ -176,12 +211,17 @@ export const categoryDefinitions: readonly CategoryDefinition[] = Object.freeze(
       {
         slug: 'exam-signatures',
         name: 'Exam Signatures',
-        description: 'Signature resizing tools for competitive exam applications',
+        description: 'Signature resizing tools for competitive exam and document applications',
         parentCategory: 'signature',
-        goalSlugs: ['signature-resize-20kb'],
+        goalSlugs: [
+          'signature-resize-10kb',
+          'signature-resize-20kb',
+          'signature-resize-30kb',
+          'signature-resize-50kb',
+        ],
       },
     ],
     priority: 0.7,
-    updatedAt: '2026-06-01',
+    updatedAt: '2026-06-23',
   },
 ] satisfies CategoryDefinition[])

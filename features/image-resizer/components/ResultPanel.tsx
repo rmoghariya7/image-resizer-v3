@@ -28,8 +28,20 @@ export function ResultPanel({ original, result }: Props) {
 
   // Target / actual comparison — only for compress presets.
   const hasTarget = result.targetKB !== undefined
-  const diff = hasTarget ? parseFloat((result.sizeKB - result.targetKB!).toFixed(1)) : 0
-  const isOverTarget = hasTarget && diff > 0
+
+  const isAlreadyBelow = result.compressionStatus === 'already-below-target'
+  const isCouldNotReach = result.compressionStatus === 'could-not-reach-target'
+  const headerLabel = isAlreadyBelow ? 'Already below target size' : 'Ready to download'
+
+  const statusLabel =
+    isAlreadyBelow ? 'Already Below Target' :
+    isCouldNotReach ? 'Closest Match Available' :
+    'Success'
+
+  const statusColor =
+    isAlreadyBelow ? 'text-blue-600' :
+    isCouldNotReach ? 'text-amber-600' :
+    'text-green-600'
 
   return (
     <section
@@ -39,7 +51,11 @@ export function ResultPanel({ original, result }: Props) {
       <div className="mx-auto max-w-2xl">
         {/* Header */}
         <div className="mb-6 flex items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500">
+          <span
+            className={`flex h-6 w-6 items-center justify-center rounded-full ${
+              isAlreadyBelow ? 'bg-blue-500' : 'bg-green-500'
+            }`}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -54,10 +70,15 @@ export function ResultPanel({ original, result }: Props) {
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </span>
-          <p className="text-sm font-semibold text-gray-900">Ready to download</p>
-          {reductionPercent > 0 && (
+          <p className="text-sm font-semibold text-gray-900">{headerLabel}</p>
+          {reductionPercent > 0 && !isAlreadyBelow && (
             <span className="ml-auto rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700">
               {reductionPercent}% smaller
+            </span>
+          )}
+          {isAlreadyBelow && (
+            <span className="ml-auto rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-700">
+              Original returned
             </span>
           )}
         </div>
@@ -147,18 +168,20 @@ export function ResultPanel({ original, result }: Props) {
               </div>
               <div className="px-4 py-3 text-center">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
-                  Difference
+                  Status
                 </p>
-                <p
-                  className={`mt-1 text-sm font-semibold ${
-                    isOverTarget ? 'text-amber-600' : 'text-green-600'
-                  }`}
-                >
-                  {diff > 0 ? '+' : ''}{diff.toFixed(1)} KB
+                <p className={`mt-1 text-sm font-semibold ${statusColor}`}>
+                  {statusLabel}
                 </p>
               </div>
             </div>
-            {isOverTarget && (
+            {isAlreadyBelow && (
+              <p className="border-t border-blue-100 bg-blue-50 px-4 py-2 text-xs text-blue-700">
+                Your image is already within the {fmtKB(result.targetKB!)} limit — the original
+                file was returned unchanged to preserve maximum quality.
+              </p>
+            )}
+            {isCouldNotReach && (
               <p className="border-t border-amber-100 bg-amber-50 px-4 py-2 text-xs text-amber-700">
                 Could not compress to {fmtKB(result.targetKB!)} — image is too complex at minimum
                 quality. Try a larger target or upload a smaller image.

@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { getSitemapEntries } from '@/registry/goals'
 import { getAllCategories } from '@/registry/categories'
 import { getAllSizeParams } from '@/registry/size-presets'
+import { getGuideSlugs } from '@/content/guides'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 
@@ -50,5 +51,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }))
 
-  return [...home, ...categoryPages, ...compressionPages, ...goalPages, ...legalPages]
+  // Guide pages
+  const guidePages: MetadataRoute.Sitemap = getGuideSlugs().map(slug => ({
+    url: `${BASE_URL}/guides/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
+  return [...home, ...categoryPages, ...compressionPages, ...goalPages, ...guidePages, ...legalPages]
 }

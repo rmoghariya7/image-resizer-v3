@@ -13,6 +13,21 @@ export const IMAGE_PRESET_KEY_SCHEMA = z.enum([
   'passport-india',
   'voter-id',
   'signature-20kb',
+  // Phase 3 — Signature expansion
+  'signature-10kb',
+  'signature-30kb',
+  'signature-50kb',
+  // Phase 4 — Exam expansion
+  'ssc',
+  'railway',
+  'ibps',
+  'bank-exam',
+  'ugc-net',
+  // Phase 5 — Document expansion
+  'driving-licence',
+  'visa',
+  'job-application',
+  'resume-photo',
 ])
 
 export const COMPRESS_PRESET_KEY_SCHEMA = z.enum([

@@ -4,13 +4,13 @@ import { buildGoalHref } from "@/lib/recommendations/engine";
 import { SearchCommandPalette } from "@/features/search";
 
 const QUICK_LINK_CONFIGS = [
-  { slug: 'compress-image-to-15kb', label: 'Under 15 KB' },
-  { slug: 'compress-image-to-20kb', label: 'Under 20 KB' },
-  { slug: 'compress-image-to-50kb', label: 'Under 50 KB' },
-  { slug: 'compress-image-to-100kb', label: 'Under 100 KB' },
-  { slug: 'passport-photo-maker', label: 'Passport Photo' },
-  { slug: 'upsc-photo-resizer', label: 'UPSC Photo' },
-] as const
+  { slug: "compress-image-to-15kb", label: "Under 15 KB" },
+  { slug: "compress-image-to-20kb", label: "Under 20 KB" },
+  { slug: "compress-image-to-50kb", label: "Under 50 KB" },
+  { slug: "compress-image-to-100kb", label: "Under 100 KB" },
+  { slug: "passport-photo-maker", label: "Passport Photo" },
+  { slug: "upsc-photo-resizer", label: "UPSC Photo" },
+] as const;
 
 const TRUST_BADGES = [
   "No uploads",
@@ -20,17 +20,15 @@ const TRUST_BADGES = [
 ];
 
 export function HeroSection() {
-  const quickLinks = QUICK_LINK_CONFIGS
-    .map(({ slug, label }) => {
-      const goal = getGoal(slug)
-      return goal ? { href: buildGoalHref(goal), label } : null
-    })
-    .filter((x): x is NonNullable<typeof x> => x !== null)
+  const quickLinks = QUICK_LINK_CONFIGS.map(({ slug, label }) => {
+    const goal = getGoal(slug);
+    return goal ? { href: buildGoalHref(goal), label } : null;
+  }).filter((x): x is NonNullable<typeof x> => x !== null);
 
   return (
     <section
       aria-label="Hero"
-      className="relative overflow-hidden border-b border-border/50 bg-linear-to-b from-background to-muted/30"
+      className="relative border-b border-border/50 bg-linear-to-b from-background to-muted/30"
     >
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
         <div className="mx-auto max-w-3xl text-center">

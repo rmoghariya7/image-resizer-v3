@@ -1,5 +1,6 @@
 import type { Preset } from '@/types/registry'
 import type { AcceptedMimeType } from '../types'
+import type { CompressionStatus } from '../types'
 
 // ─── Geometry ─────────────────────────────────────────────────────────────────
 
@@ -28,11 +29,19 @@ function coverFit(
 }
 
 // ─── Quality binary search ────────────────────────────────────────────────────
-// Returns the highest-quality blob that is ≤ targetBytes, or the minimum-quality
-// blob if nothing in [loQ, hiQ] satisfies the constraint.
+// Returns the candidate closest to targetBytes across the explored quality range.
 //
-// The caller must check blob.size ≤ targetBytes to know whether the target
-// was actually reached — this function never throws on failure.
+// Objective: minimize |blob.size - targetBytes|
+//
+// The search range adapts to the initial probe at hiQ:
+//   • If hiQ already fits (≤ target): explore ABOVE hiQ (up to QUALITY_CEIL) so
+//     we find the highest-quality encoding that still fits — rather than stopping
+//     at a potentially far-below-target result.
+//   • If hiQ is over target: explore BELOW hiQ (down to loQ) as before.
+//
+// The caller checks blob.size vs targetBytes to determine compressionStatus.
+
+const QUALITY_CEIL = 0.99 // ceiling for upward search (1.0 often acts like 0.99)
 
 async function binarySearchQuality(
   canvas: OffscreenCanvas,
@@ -42,42 +51,69 @@ async function binarySearchQuality(
   targetBytes: number,
   onProgress: (percent: number) => void,
 ): Promise<Blob> {
-  const MAX_ITER = 10
+  const MAX_ITER = 12
 
-  // Fast exit: already fits at max quality — return immediately.
-  let candidate = await canvas.convertToBlob({ type: mimeType, quality: hiQ })
-  if (candidate.size <= targetBytes) return candidate
-
-  let lo = loQ
-  let hi = hiQ
-  let best: Blob | null = null
-
-  for (let i = 0; i < MAX_ITER; i++) {
-    const mid = (lo + hi) / 2
-    candidate = await canvas.convertToBlob({ type: mimeType, quality: mid })
-    onProgress(Math.round(((i + 1) / MAX_ITER) * 100))
-
-    if (candidate.size <= targetBytes) {
-      best = candidate
-      lo = mid   // try higher quality (might still fit)
-    } else {
-      hi = mid   // too big, go lower
+  // Track the candidate with minimum |size - targetBytes| across all probes.
+  let closest: Blob | null = null
+  const nearest = (b: Blob): void => {
+    if (!closest || Math.abs(b.size - targetBytes) < Math.abs(closest.size - targetBytes)) {
+      closest = b
     }
   }
 
-  if (best) return best
+  // Initial probe at hiQ determines which direction to search.
+  let probe = await canvas.convertToBlob({ type: mimeType, quality: hiQ })
+  nearest(probe)
 
-  // Nothing in [loQ, hiQ] fits — return min-quality as absolute floor.
-  // Caller checks blob.size > targetBytes and handles accordingly.
-  return canvas.convertToBlob({ type: mimeType, quality: loQ })
+  let lo: number
+  let hi: number
+
+  if (probe.size <= targetBytes) {
+    // hiQ fits under target. The closest match may be at a HIGHER quality
+    // (producing more bytes, still ≤ target). Extend the range upward.
+    const ceiling = await canvas.convertToBlob({ type: mimeType, quality: QUALITY_CEIL })
+    nearest(ceiling)
+    if (ceiling.size <= targetBytes) {
+      // Even the ceiling fits — return it (maximum quality, closest to target).
+      return closest!
+    }
+    // ceiling is over target, hiQ is under — binary search [hiQ, QUALITY_CEIL].
+    lo = hiQ
+    hi = QUALITY_CEIL
+  } else {
+    // hiQ is over target — binary search [loQ, hiQ] to find something that fits.
+    lo = loQ
+    hi = hiQ
+  }
+
+  for (let i = 0; i < MAX_ITER; i++) {
+    const mid = (lo + hi) / 2
+    probe = await canvas.convertToBlob({ type: mimeType, quality: mid })
+    onProgress(Math.round(((i + 1) / MAX_ITER) * 100))
+    nearest(probe)
+
+    if (probe.size <= targetBytes) {
+      lo = mid  // try higher quality (might get closer to target from below)
+    } else {
+      hi = mid  // too big, go lower
+    }
+  }
+
+  return closest!
 }
 
 // ─── Shared canvas factory ────────────────────────────────────────────────────
 
-function drawToCanvas(bitmap: ImageBitmap, w: number, h: number): OffscreenCanvas {
+function drawToCanvas(bitmap: ImageBitmap, w: number, h: number, outputMime: string): OffscreenCanvas {
   const canvas = new OffscreenCanvas(w, h)
   const ctx = canvas.getContext('2d')
   if (!ctx) throw new Error('OffscreenCanvas 2D context not available in this environment.')
+  if (outputMime === 'image/jpeg') {
+    // JPEG has no alpha channel. Without this fill, the browser composites
+    // transparent canvas pixels against black, producing black areas.
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(0, 0, w, h)
+  }
   ctx.drawImage(bitmap, 0, 0, w, h)
   return canvas
 }
@@ -95,8 +131,12 @@ export async function processImagePreset(
 
   onProgress(5)
 
-  if (preset.backgroundFill) {
-    ctx.fillStyle = preset.backgroundFill
+  // For JPEG output, a background fill is required — JPEG has no alpha channel.
+  // Use the preset's explicit fill if provided, otherwise default to white so
+  // transparent PNG inputs don't composite against black.
+  const bgColor = preset.backgroundFill ?? (preset.format === 'jpeg' ? '#ffffff' : null)
+  if (bgColor) {
+    ctx.fillStyle = bgColor
     ctx.fillRect(0, 0, preset.widthPx, preset.heightPx)
   }
 
@@ -122,6 +162,25 @@ export async function processImagePreset(
   )
   onProgress(100)
   return blob
+}
+
+// ─── Pure helpers (exported for unit tests) ───────────────────────────────────
+
+/**
+ * Decides the output MIME type for a compress operation.
+ *
+ * Rules:
+ * - PNG inputs always output PNG: JPEG has no alpha channel and would composite
+ *   transparent areas against black.
+ * - JPEG/WEBP inputs follow the preset's preserveFormat flag: false allows
+ *   conversion to JPEG for better compression at small sizes.
+ */
+export function selectOutputMime(
+  originalMime: AcceptedMimeType,
+  preserveFormat: boolean,
+): string {
+  if (originalMime === 'image/png') return 'image/png'
+  return preserveFormat ? originalMime : 'image/jpeg'
 }
 
 // ─── Compress preset ──────────────────────────────────────────────────────────
@@ -153,22 +212,31 @@ export async function processCompressPreset(
   preset: Extract<Preset, { kind: 'compress' }>,
   originalMime: AcceptedMimeType,
   onProgress: (percent: number) => void,
-): Promise<Blob> {
+): Promise<{ blob: Blob; compressionStatus: Extract<CompressionStatus, 'compressed' | 'could-not-reach-target'> }> {
   const targetBytes = preset.targetKB * 1024
-  // preserveFormat: false → JPEG always (better compression for small targets)
-  const outputMime: string = preset.preserveFormat ? originalMime : 'image/jpeg'
+
+  const outputMime = selectOutputMime(originalMime, preset.preserveFormat)
+
   const minQ = preset.minQuality / 100
   const maxQ = preset.maxQuality / 100
 
   const totalPhases = COMPRESS_SCALES.length
-  let fallback: Blob | null = null
+
+  // Track the globally closest blob across all scales for the could-not-reach-target path.
+  // When all scales produce blobs > target, this is the one with minimum overshoot.
+  let globalClosest: Blob | null = null
+  const updateGlobal = (b: Blob): void => {
+    if (!globalClosest || Math.abs(b.size - targetBytes) < Math.abs(globalClosest.size - targetBytes)) {
+      globalClosest = b
+    }
+  }
 
   for (let phase = 0; phase < totalPhases; phase++) {
     const scale = COMPRESS_SCALES[phase]
     const w = Math.max(1, Math.round(bitmap.width * scale))
     const h = Math.max(1, Math.round(bitmap.height * scale))
 
-    const canvas = drawToCanvas(bitmap, w, h)
+    const canvas = drawToCanvas(bitmap, w, h, outputMime)
 
     // Spread progress evenly across phases: phase 0 = 5–19%, phase 1 = 20–34%, etc.
     const phaseStart = 5 + Math.round((phase / totalPhases) * 85)
@@ -177,23 +245,21 @@ export async function processCompressPreset(
       onProgress(phaseStart + Math.round((p / 100) * (phaseEnd - phaseStart)))
 
     const blob = await binarySearchQuality(canvas, outputMime, minQ, maxQ, targetBytes, phaseProgress)
-
-    // Track the last attempt for the absolute fallback return.
-    fallback = blob
+    updateGlobal(blob)
 
     if (blob.size <= targetBytes) {
+      // This scale's binary search already returned the closest match ≤ target.
+      // Smaller scales would only move further below target, so stop here.
       bitmap.close()
       onProgress(100)
-      return blob
+      return { blob, compressionStatus: 'compressed' }
     }
 
-    // This scale's minimum quality still produces a blob over target.
-    // Continue to next (smaller) scale.
+    // This scale's closest match is still over target — try a smaller scale.
   }
 
-  // Absolute fallback: return the last (smallest scale + min quality) blob.
-  // The result panel shows target vs. actual so the user sees the overage.
+  // All scales exhausted. Return the globally closest blob (minimum overshoot).
   bitmap.close()
   onProgress(100)
-  return fallback!
+  return { blob: globalClosest!, compressionStatus: 'could-not-reach-target' }
 }

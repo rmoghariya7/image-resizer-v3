@@ -1,13 +1,17 @@
 import type { GuideContent } from '@/content/types'
+import { photoSizeRequirementsGuide } from './photo-size-requirements'
+import { signatureSizeRequirementsGuide } from './signature-size-requirements'
+import { passportPhotoGuidelinesGuide } from './passport-photo-guidelines'
+import { howToCompress50kbGuide } from './how-to-compress-50kb'
 
 // ─── Registry map ─────────────────────────────────────────────────────────────
-// Guides are long-form SEO content pages referenced by goal.primaryGuide.
-// Add guide files here as they are written.
+// Guides are long-form SEO content pages.
 
 const GUIDES_MAP = new Map<string, GuideContent>([
-  // Populated as guide content is authored.
-  // Example:
-  // ['upsc-cse-photo-requirements-2026', upscCseGuide],
+  ['photo-size-requirements', photoSizeRequirementsGuide],
+  ['signature-size-requirements', signatureSizeRequirementsGuide],
+  ['passport-photo-guidelines', passportPhotoGuidelinesGuide],
+  ['how-to-compress-50kb', howToCompress50kbGuide],
 ])
 
 // ─── Lookup ───────────────────────────────────────────────────────────────────
@@ -26,4 +30,11 @@ export function getGuide(slug: string): GuideContent | undefined {
  */
 export function getGuideSlugs(): string[] {
   return [...GUIDES_MAP.keys()]
+}
+
+/**
+ * Returns all registered guides.
+ */
+export function getAllGuides(): GuideContent[] {
+  return [...GUIDES_MAP.values()]
 }
