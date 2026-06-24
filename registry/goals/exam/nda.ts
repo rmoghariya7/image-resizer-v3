@@ -5,11 +5,15 @@ export const ndaGoal = {
   title: 'NDA Photo Resizer',
   shortTitle: 'NDA Photo',
   description:
-    'Resize your photo to NDA exam specifications — 413×531 px, JPEG, under 300 KB — instantly in your browser.',
+    'Prepare your NDA application photo online. Gets it to 413x531 px and under 300 KB in seconds, right in your browser.',
+  seoTitle: 'NDA photo resizer: 413x531 px, under 300 KB | Presetly',
+  ogDescription:
+    'Get your UPSC NDA application photo ready. 413x531 pixels, JPEG, under 300 KB. Runs in your browser. No server upload.',
+  twitterDescription: 'NDA application photo: 413x531 px, 300 KB. Browser-only. Free.',
   longDescription:
-    'The National Defence Academy online application requires photos at 3.5×4.5 cm (413×531 pixels at 300 DPI), ' +
-    'in JPEG format and under 300 KB. This tool applies the correct NDA preset automatically. ' +
-    'Upload your photo and download a compliant file in seconds — all processing happens in your browser.',
+    'The UPSC NDA online application has specific photo requirements: 3.5x4.5 cm (413x531 pixels at 300 DPI), JPEG format, and under 300 KB. ' +
+    'Getting this wrong means the portal rejects your upload before you can proceed. ' +
+    'This tool applies the correct NDA preset in one step. Upload, process, download. No settings to adjust, no server upload.',
   category: 'exam',
   subcategory: 'defence',
   tags: ['nda', 'national defence academy', 'defence exam', 'upsc nda', 'photo resize'],
@@ -25,36 +29,36 @@ export const ndaGoal = {
   howItWorks: [
     {
       title: 'Upload your photo',
-      body: 'Drop your photo or click to select it. JPEG, PNG, and WebP are all supported.',
+      body: 'Select a recent, clear photo. You can upload JPEG, PNG, or WebP. Nothing to install, no sign-up required.',
     },
     {
-      title: 'Resized to NDA spec in your browser',
-      body: 'Your photo is resized to 413×531 pixels and compressed under 300 KB. Nothing leaves your device.',
+      title: 'NDA dimensions applied, all inside your browser',
+      body: 'Your photo is resized to 413x531 pixels and compressed under 300 KB. The process runs locally in your browser. Your photo stays on your device the whole time.',
     },
     {
-      title: 'Download and submit',
-      body: 'Download your JPEG and upload it to the NDA online application portal.',
+      title: 'Download and upload to the NDA portal',
+      body: 'Save the JPEG file. Log in to the UPSC NDA portal, open your application form, and upload this file in the photograph section.',
     },
   ],
   faqs: [
     {
       question: 'What is the photo size requirement for the NDA exam application?',
       answer:
-        'The NDA application requires a photo of 3.5×4.5 cm (413×531 pixels at 300 DPI), in JPEG format and under 300 KB.',
+        'The NDA application requires a photo of 3.5x4.5 cm (413x531 pixels at 300 DPI), in JPEG format and under 300 KB. Both conditions must be met or the portal will reject the upload.',
     },
     {
-      question: 'What background should I use for my NDA application photo?',
-      answer: 'Use a white or plain light-coloured background. The photo must show your full face clearly.',
+      question: 'What background is acceptable for the NDA application photo?',
+      answer: 'A plain white background is the safest option. Light off-white also works. Do not use coloured walls, studio backdrops, or outdoor settings. The face should be fully visible with no shadows.',
     },
     {
-      question: 'Is the NDA photo size the same as UPSC?',
+      question: 'Is the NDA photo size the same as UPSC Civil Services?',
       answer:
-        'Yes, both NDA and UPSC use the same photo dimensions (3.5×4.5 cm, JPEG, 300 KB max). You can use the same photo.',
+        'Yes, both use 3.5x4.5 cm, JPEG, under 300 KB. If you have already processed your photo for UPSC CSE, the same file can be used for the NDA application.',
     },
     {
       question: 'Do I need to resize my signature for the NDA application?',
       answer:
-        'Yes. The NDA application also requires a digital signature image. Use our {{goal:signature-resize-20kb}} to prepare it.',
+        'Yes. The NDA form requires a separate digital signature upload at 140x60 pixels, under 20 KB. Use {{goal:signature-resize-20kb}} to prepare it alongside the photo.',
     },
   ],
   relatedGoals: [
@@ -69,5 +73,5 @@ export const ndaGoal = {
   ],
   status: 'active',
   priority: 'medium',
-  updatedAt: '2026-06-01',
+  updatedAt: '2026-06-24',
 } satisfies GoalDefinition

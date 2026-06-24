@@ -5,11 +5,15 @@ export const passportGoal = {
   title: 'Passport Photo Maker',
   shortTitle: 'Passport Photo',
   description:
-    'Create a biometric passport photo that meets Indian passport requirements — 600×600 px, white background, JPEG — in your browser.',
+    'Create a Passport Seva-ready photo. Crops to 600x600 pixels, fills white background, outputs JPEG under 100 KB. Browser-only.',
+  seoTitle: 'Passport photo maker: 600x600 px, white background | Presetly',
+  ogDescription:
+    'Create a Passport Seva-ready photo. Crops to 600x600 pixels, fills white background, compresses under 100 KB. No upload. Free.',
+  twitterDescription: 'Passport photo: 600x600 px, white background. Passport Seva-ready. Free.',
   longDescription:
     'Indian passport applications require a 2×2 inch (51×51 mm) colour photograph with a white or near-white background, ' +
     'in JPEG format. This tool resizes your photo to 600×600 pixels (2×2 inches at 300 DPI), fills transparent areas with white, ' +
-    'and ensures the output file is under 500 KB. All processing happens in your browser — nothing is uploaded.',
+    'and ensures the output file is under 500 KB. All processing happens in your browser, nothing is uploaded.',
   category: 'id-documents',
   subcategory: 'central-ids',
   tags: ['passport', 'india passport', 'biometric photo', 'id document', 'photo resize'],

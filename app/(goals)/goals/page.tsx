@@ -9,17 +9,22 @@ import type { GoalCategory } from '@/types/registry'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 
 export const metadata: Metadata = {
-  title: 'All Image Resizing Tools — Presetly',
+  title: 'All photo and image tools | Presetly',
   description:
-    'Browse all free image resizing and compression tools on Presetly. UPSC, Aadhaar, PAN card, Passport, Voter ID, signature, and file size compression tools — browser-based, no uploads.',
+    'Browse all free tools on Presetly. UPSC, Aadhaar, PAN card, Passport, Railway, IBPS, signature resize, and file size compressors. Browser-based, no uploads.',
   alternates: { canonical: `${BASE_URL}/goals` },
   openGraph: {
-    title: 'All Image Resizing Tools — Presetly',
+    title: 'All image tools on Presetly — exam, ID, signature, compress',
     description:
-      'Free browser-based tools for Indian government portal photos. UPSC, Aadhaar, PAN, Passport, Voter ID, and more.',
+      'Every portal photo tool in one place. Exam photos, Aadhaar, PAN, Passport, Voter ID, signature resize, and compression. Free, browser-only.',
     url: `${BASE_URL}/goals`,
     type: 'website',
     siteName: 'Presetly',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'All tools | Presetly',
+    description: 'Exam photos, Aadhaar, PAN, Passport, signature, compression. All free, browser-only.',
   },
 }
 

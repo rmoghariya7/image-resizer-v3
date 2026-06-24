@@ -5,11 +5,15 @@ export const drivingLicenceGoal = {
   title: 'Driving Licence Photo Resizer',
   shortTitle: 'Driving Licence Photo',
   description:
-    'Resize your photo to Sarathi (Indian driving licence) requirements — 413×531 px, under 200 KB — free and browser-based.',
+    'Get your Sarathi driving licence application photo ready. Resizes to 413x531 pixels and keeps the file under 200 KB. Free, browser-based.',
+  seoTitle: 'Driving licence photo resize: Sarathi spec free | Presetly',
+  ogDescription:
+    'Get your Sarathi driving licence application photo right. 413x531 pixels, under 200 KB, JPEG. Browser-based, no server upload. Free.',
+  twitterDescription: 'Sarathi driving licence photo: 413x531 px, 200 KB. Free.',
   longDescription:
     'The Sarathi portal for Indian driving licence applications requires a passport-size photo: 3.5×4.5 cm ' +
     '(413×531 pixels at 300 DPI), JPEG format, under 200 KB. This tool applies the correct preset automatically. ' +
-    'Upload your photo and download a Sarathi-ready JPEG. Everything runs in your browser — no uploads to any server.',
+    'Upload your photo and download a Sarathi-ready JPEG. Everything runs in your browser, no uploads to any server.',
   category: 'id-documents',
   subcategory: 'employment-travel',
   tags: ['driving licence', 'sarathi', 'dl', 'rto', 'driving license', 'vehicle licence', 'photo resize'],
@@ -47,7 +51,7 @@ export const drivingLicenceGoal = {
     {
       question: 'Is the photo requirement the same for learner licence and permanent licence?',
       answer:
-        'Yes — both learner licence (LL) and permanent driving licence (DL) applications on Sarathi use the same photo specification.',
+        'Yes. Both learner licence (LL) and permanent driving licence (DL) applications on Sarathi use the same photo specification.',
     },
     {
       question: 'What background colour is required for the Sarathi photo?',

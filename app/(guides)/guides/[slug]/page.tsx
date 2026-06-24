@@ -29,15 +29,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: { canonical },
     openGraph: {
       title: guide.title,
-      description,
+      description: guide.introduction.slice(0, 200),
       url: canonical,
       type: 'article',
       siteName: 'Presetly',
     },
     twitter: {
       card: 'summary',
-      title: guide.title,
-      description,
+      title: `${guide.title} | Presetly`,
+      description: guide.introduction.slice(0, 120),
     },
     robots: { index: true, follow: true },
   }

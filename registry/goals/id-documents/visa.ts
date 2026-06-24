@@ -5,12 +5,16 @@ export const visaGoal = {
   title: 'Visa Photo Maker',
   shortTitle: 'Visa Photo',
   description:
-    'Resize your photo to standard visa specifications — 600×600 px, white background, under 500 KB. Free, browser-based.',
+    'Resize your photo to standard visa specifications. Output is 600x600 pixels with white background, under 500 KB. Free, browser-based.',
+  seoTitle: 'Visa photo maker: 600x600 px, white background | Presetly',
+  ogDescription:
+    'Prepare your visa application photo. Resizes to 600x600 pixels with a white background, output under 500 KB. Works for most country visa formats. Free.',
+  twitterDescription: 'Visa photo: 600x600 px, white background. Ready for most visa forms. Free.',
   longDescription:
     'Most international visa applications (including Indian e-Visa, US, UK, Schengen, and Gulf visas) require a square ' +
     'passport-style photo: typically 600×600 pixels at 300 DPI, plain white background, JPEG format, under 500 KB. ' +
     'This tool resizes your photo to the standard square visa format and ensures a white background fill. ' +
-    'Everything runs in your browser — no server upload required.',
+    'Everything runs in your browser. No server upload required.',
   category: 'id-documents',
   subcategory: 'employment-travel',
   tags: ['visa', 'visa photo', 'e-visa', 'passport photo', 'international travel', 'photo resize'],
@@ -33,7 +37,7 @@ export const visaGoal = {
     },
     {
       title: 'Resized to square visa format',
-      body: 'Your photo is resized to 600×600 pixels with a white background fill and compressed under 500 KB — entirely in your browser.',
+      body: 'Your photo is resized to 600x600 pixels with a white background fill and compressed under 500 KB, entirely in your browser.',
     },
     {
       title: 'Download and attach to your visa application',

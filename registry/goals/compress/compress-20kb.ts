@@ -1,73 +1,86 @@
 import type { GoalDefinition } from '@/registry/goals/schema'
 
 export const compress20kbGoal = {
-  slug: 'compress-image-to-20kb',
+  slug: 'compress-image-20kb',
   title: 'Compress Image to 20KB',
   shortTitle: 'Compress to 20KB',
   description:
-    'Compress any image to under 20 KB without quality controls — upload, compress, download. Works in your browser.',
+    'Compress any image under 20 KB while keeping it clear. Ideal for signature portals and strict state government forms.',
+  seoTitle: 'Compress image to 20 KB: strict govt portals | Presetly',
+  ogDescription:
+    'State government portals and older central systems cap uploads at 20 KB. This tool compresses any image to fit under 20 KB. Runs in your browser. Free.',
+  twitterDescription: 'Compress image to 20 KB for strict govt portals. Browser-only. Free.',
   longDescription:
-    'Many government portals cap image uploads at 20 KB — small enough that most photos need compression before they can be uploaded. ' +
-    'This tool uses a binary-search quality algorithm to find the highest JPEG quality that produces a file under 20 KB. ' +
-    'The result is the smallest possible file at the best possible quality. Everything runs in your browser.',
+    'Some state government portals and older central government systems cap image uploads at just 20 KB. ' +
+    'Standard compressors usually stop at 50 KB or 100 KB and leave you stuck. ' +
+    'This tool is built for strict limits. It finds the highest quality level that still fits under 20 KB ' +
+    'and outputs a clean JPEG. No manual trial and error. Runs in your browser with no server upload.',
   category: 'compress',
-  tags: ['compress image', 'reduce image size', '20kb', 'file size', 'jpeg compression'],
+  subcategory: 'strict-size',
+  tags: ['compress image', '20kb', 'image compressor', 'signature compress', 'government portal', 'reduce file size'],
   tool: 'image-resizer',
   preset: 'compress-20kb',
   keywords: [
     'compress image to 20kb',
-    'reduce image size to 20kb',
+    'reduce image size to 20kb online',
     'image compressor 20kb',
-    'make photo 20kb',
+    'compress photo under 20kb',
+    'resize image to 20kb',
     'compress jpg to 20kb',
+    'signature image 20kb',
   ],
   howItWorks: [
     {
       title: 'Upload your image',
-      body: 'Drop your image or click to select it. JPEG, PNG, and WebP are all supported.',
+      body: 'Select your image file. JPEG, PNG, and WebP are supported. For signature images with transparent backgrounds, PNG works well.',
     },
     {
-      title: 'Compressed to under 20 KB in your browser',
-      body: 'The tool finds the highest quality that fits under 20 KB using a binary search. Nothing is uploaded to any server.',
+      title: 'Automatically compressed under 20 KB',
+      body: 'The tool tries different quality levels automatically to find the highest JPEG quality that still fits under 20 KB. Nothing leaves your device.',
     },
     {
-      title: 'Download your compressed image',
-      body: 'Download your compressed file. It\'s ready to upload to any portal that caps uploads at 20 KB.',
+      title: 'Download and upload to your portal',
+      body: 'Save the compressed file and upload it to whichever portal capped the upload at 20 KB. Signature portals, state government forms, older central portals.',
     },
   ],
   faqs: [
     {
       question: 'Which portals require images under 20 KB?',
       answer:
-        'Many Indian government portals including signature uploads for UPSC, GPSC, NDA, and bank exam applications require images under 20 KB.',
+        'Older state government portals, some scholarship forms, and certain central recruitment sites cap signature uploads at 20 KB. If you get a file size error on upload, this is the right tool.',
     },
     {
-      question: 'Will my image look bad after compressing to 20 KB?',
+      question: 'Will compressing to 20 KB make my image blurry?',
       answer:
-        'It depends on the original image size. The tool always picks the highest quality that fits within 20 KB, so the result is as good as it can be at that size.',
+        'For small images like signatures (140x60 pixels), the result is clear as long as the original has dark ink on white paper. For photos, some quality loss is expected at this size but the image stays usable.',
     },
     {
-      question: 'Can I compress a PNG to 20 KB?',
+      question: 'Can I compress a photo to 20 KB, not just a signature?',
       answer:
-        'Yes. If the PNG cannot reach 20 KB at minimum quality while staying PNG, the tool converts it to JPEG automatically.',
+        'Yes. Any JPEG, PNG, or WebP can be compressed here. Photos at 20 KB will show some compression, but the output is accepted by all portals that set this limit.',
     },
     {
-      question: 'I need to compress my signature image to 20 KB with specific dimensions. What should I use?',
+      question: 'What format does the output use?',
       answer:
-        'Use our {{goal:signature-resize-20kb}} which applies both the correct dimensions (140×60 px) and the 20 KB limit in one step.',
+        'The output is always JPEG. Most portals that set a 20 KB limit expect JPEG. If you upload a PNG, it is converted to JPEG before compression.',
+    },
+    {
+      question: 'Should I use this for exam photo uploads too?',
+      answer:
+        'Exam photo portals usually allow 100 KB or 200 KB. Use the exam-specific tools for photos. This compressor is for the cases where 20 KB is the actual hard limit.',
     },
   ],
   relatedGoals: [
-    'compress-image-to-50kb',
-    'compress-image-to-100kb',
+    'compress-image-50kb',
+    'compress-image-100kb',
     'signature-resize-20kb',
-    'aadhaar-photo-resizer',
+    'signature-resize-10kb',
   ],
   complementaryGoals: [
     'signature-resize-20kb',
-    'compress-image-to-50kb',
+    'signature-resize-10kb',
   ],
   status: 'active',
-  priority: 'high',
-  updatedAt: '2026-06-01',
+  priority: 'medium',
+  updatedAt: '2026-06-24',
 } satisfies GoalDefinition

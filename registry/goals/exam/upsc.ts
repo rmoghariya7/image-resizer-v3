@@ -5,11 +5,15 @@ export const upscGoal = {
   title: 'UPSC Photo Resizer',
   shortTitle: 'UPSC Photo',
   description:
-    'Resize your photo to UPSC specifications — 413×531 px, under 300 KB — instantly in your browser. No uploads, no sign-up.',
+    'Get your UPSC exam photo right. Resizes to 413x531 pixels, keeps the file under 300 KB. Runs in your browser. No upload, no account.',
   longDescription:
-    'The UPSC online application system rejects photos that do not match the exact dimensional and file-size requirements. ' +
-    'This tool resizes your photo to 413×531 pixels (3.5×4.5 cm at 300 DPI) and compresses it under 300 KB, which are the ' +
-    'official UPSC Civil Services Examination specifications. Everything runs in your browser — your photo never leaves your device.',
+    'UPSC online applications (Civil Services, NDA, CDS, CAPF) require a passport-size photo of 3.5x4.5 cm ' +
+    '(413×531 pixels at 300 DPI), JPEG format, and under 300 KB. This tool applies the correct UPSC preset automatically. ' +
+    'Upload your photo, download a portal-ready JPEG. No settings, no server, no sign-up.',
+  seoTitle: 'UPSC photo resizer: 413x531 px, 300 KB | Presetly',
+  ogDescription:
+    'Upload your photo and get a UPSC-ready JPEG in seconds. 413x531 pixels, under 300 KB. Runs in your browser. Your photo never leaves your device.',
+  twitterDescription: 'UPSC exam photo: 413x531 px, 300 KB. Done in your browser. Free.',
   category: 'exam',
   subcategory: 'civil-services',
   tags: ['upsc', 'civil services', 'ias', 'ips', 'government exam', 'photo resize'],
@@ -17,68 +21,66 @@ export const upscGoal = {
   preset: 'upsc',
   keywords: [
     'upsc photo size',
-    'upsc photo resize',
-    'upsc application photo requirements',
-    'upsc cse photo size pixels',
-    'ias application photo',
-    'upsc photo 413x531',
+    'upsc photo resize online',
+    'upsc application photo size pixels',
+    'upsc exam photo 413x531',
+    'ias photo size',
+    'civil services photo requirements',
+    'upsc photo under 300kb',
   ],
   howItWorks: [
     {
       title: 'Upload your photo',
-      body: 'Drop your photo or click to select it. JPEG, PNG, and WebP are all supported. No account needed.',
+      body: 'Drop your photo or click to select it. JPEG, PNG, and WebP are all accepted. No account or sign-up needed.',
     },
     {
-      title: 'Resized to UPSC spec instantly',
-      body: 'Your photo is resized to exactly 413×531 pixels and compressed under 300 KB in your browser. Nothing is sent to any server.',
+      title: 'UPSC dimensions applied in your browser',
+      body: 'Your photo is resized to 413x531 pixels and compressed under 300 KB. Everything runs locally in your browser. Nothing is uploaded to any server.',
     },
     {
-      title: 'Download and submit',
-      body: 'Download your JPEG and upload it directly to the UPSC online application portal.',
+      title: 'Download and upload to the UPSC portal',
+      body: 'Save the output JPEG. Open your UPSC online application, navigate to the photo upload section, and attach this file directly.',
     },
   ],
   faqs: [
     {
-      question: 'What is the required photo size for UPSC application?',
+      question: 'What photo size does UPSC require?',
       answer:
-        'UPSC requires a photo of 3.5×4.5 cm (413×531 pixels at 300 DPI), saved as JPEG, and under 300 KB in file size.',
+        'UPSC requires a passport-size photo of 3.5x4.5 cm (413x531 pixels at 300 DPI), in JPEG format and under 300 KB. This applies to Civil Services, NDA, CDS, and CAPF applications.',
     },
     {
-      question: 'What should the background of my UPSC photo be?',
+      question: 'What background is required for a UPSC exam photo?',
       answer:
-        'The background must be plain white or off-white. Coloured, patterned, or outdoor backgrounds are not accepted.',
+        'A plain white or light-coloured background is required. The face must be clearly visible with a neutral expression. Sunglasses, caps, and heavy shadow are not allowed.',
     },
     {
-      question: 'Can I upload a PNG photo to UPSC?',
+      question: 'Is the UPSC photo size the same as GPSC?',
       answer:
-        'No. UPSC only accepts JPEG format. This tool automatically converts your photo to JPEG when you download it.',
+        'The pixel dimensions are the same (413x531 px), but GPSC allows only up to 200 KB while UPSC allows 300 KB. Use {{goal:gpsc-photo-resizer}} for GPSC applications.',
     },
     {
-      question: 'Will my photo quality be affected by resizing?',
+      question: 'Do I also need to resize my signature for UPSC?',
       answer:
-        'No. The tool targets the highest quality that fits within 300 KB. For most photos, the difference is invisible to the eye.',
+        'Yes. UPSC requires a separate signature image at 140x60 pixels, under 20 KB. Use {{goal:signature-resize-20kb}} to prepare it alongside the photo.',
     },
     {
-      question: 'Do I also need to resize my signature for the UPSC application?',
+      question: 'Can I use this photo for multiple UPSC exams?',
       answer:
-        'Yes. UPSC requires a digital signature of 140×60 pixels, under 20 KB. Use our {{goal:signature-resize-20kb}} for that.',
+        'Yes. A single properly processed photo works for all UPSC exams (CSE, NDA, CDS, CAPF) as long as the photo is recent (taken within the last 6 months).',
     },
   ],
   relatedGoals: [
     'gpsc-photo-resizer',
     'nda-photo-resizer',
-    'aadhaar-photo-resizer',
-    'pan-card-photo-resizer',
-    'compress-image-to-50kb',
+    'ssc-photo-resizer',
     'signature-resize-20kb',
+    'compress-image-20kb',
   ],
   complementaryGoals: [
     'signature-resize-20kb',
-    'pan-card-photo-resizer',
-    'aadhaar-photo-resizer',
+    'compress-image-20kb',
   ],
-  requirementsPage: 'upsc-cse-photo-requirements-2026',
   status: 'active',
   priority: 'high',
-  updatedAt: '2026-06-01',
+  updatedAt: '2026-06-24',
 } satisfies GoalDefinition

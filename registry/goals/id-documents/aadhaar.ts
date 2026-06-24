@@ -5,11 +5,15 @@ export const aadhaarGoal = {
   title: 'Aadhaar Photo Resizer',
   shortTitle: 'Aadhaar Photo',
   description:
-    'Resize your photo to Aadhaar update specifications — 200×200 px, JPEG, under 50 KB — in your browser. No uploads.',
+    'Resize your photo for Aadhaar update. UIDAI requires 200x200 pixels, JPEG, under 50 KB. Done in your browser, no server upload.',
+  seoTitle: 'Aadhaar photo resize online: 200x200 px, 50 KB | Presetly',
+  ogDescription:
+    'Resize your photo for Aadhaar update. UIDAI requires 200x200 pixels, JPEG, under 50 KB. All processing runs in your browser. Nothing uploaded.',
+  twitterDescription: 'Aadhaar update photo: 200x200 px, 50 KB. Browser-only. Free.',
   longDescription:
     'The UIDAI Aadhaar update portal requires a photo of exactly 200×200 pixels in JPEG format, under 50 KB. ' +
     'Most phone cameras produce photos that are far too large and the wrong shape. This tool resizes and compresses ' +
-    'your photo to the correct Aadhaar specification automatically — everything runs locally in your browser.',
+    'your photo to the correct Aadhaar specification automatically. Everything runs locally in your browser.',
   category: 'id-documents',
   subcategory: 'central-ids',
   tags: ['aadhaar', 'uidai', 'aadhar card', 'id document', 'photo resize'],

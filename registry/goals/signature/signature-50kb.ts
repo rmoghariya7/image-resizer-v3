@@ -5,58 +5,69 @@ export const signature50kbGoal = {
   title: 'Signature Resize to 50KB',
   shortTitle: 'Signature 50KB',
   description:
-    'Resize your digital signature to 140×60 px and compress it under 50 KB — ideal for Aadhaar, PAN card, and document update portals.',
+    'Get your Aadhaar or PAN signature upload ready. Resizes to 140x60 px, compresses under 50 KB. Free, browser-based.',
+  seoTitle: 'Aadhaar signature resize to 50 KB: 140x60 px | Presetly',
+  ogDescription:
+    'Prepare your Aadhaar update or PAN card signature. Resizes to 140x60 pixels, compresses within 50 KB. PNG transparent backgrounds converted to white. Free.',
+  twitterDescription: 'Aadhaar, PAN signature: 140x60 px, 50 KB. Browser-only. Free.',
   longDescription:
-    'Document update portals like Aadhaar online services and PAN card applications sometimes allow signatures up to 50 KB. ' +
-    'This tool resizes your signature image to the standard 140×60 pixel dimensions and compresses it comfortably under 50 KB. ' +
-    'Everything runs in your browser — no server upload, no account required.',
+    'UIDAI (Aadhaar update) and the PAN card portal both require a scanned signature at 140x60 pixels and under 50 KB. ' +
+    'This is also the standard for state income tax portals and several scholarship forms. ' +
+    'Upload your signature and the tool outputs a properly sized, compressed JPEG ready for any of these portals. ' +
+    'Runs completely in your browser. Nothing is stored or transmitted.',
   category: 'signature',
-  tags: ['signature', 'signature resize', '50kb', 'aadhaar signature', 'pan card', 'digital signature'],
+  subcategory: 'aadhaar-pan',
+  tags: ['signature', 'resize signature', '50kb', 'aadhaar', 'pan card', 'uidai', 'compress signature'],
   tool: 'image-resizer',
   preset: 'signature-50kb',
   keywords: [
     'signature resize 50kb',
-    'signature 50kb online',
-    'compress signature to 50kb',
     'aadhaar signature size',
-    'pan card signature size 50kb',
-    'signature 140x60 pixels 50kb',
-    'resize signature 50kb free',
+    'pan card signature requirements',
+    'compress signature to 50kb online',
+    '140x60 signature 50kb',
+    'uidai signature size pixels',
+    'signature file 50kb',
   ],
   howItWorks: [
     {
-      title: 'Upload your scanned signature',
-      body: 'Select your scanned or digital signature image. JPEG, PNG, and WebP are all supported.',
+      title: 'Upload your signature image',
+      body: 'Select your signature file. JPEG, PNG, and WebP all work. Even a photo of your signature taken on a smartphone works fine.',
     },
     {
-      title: 'Resized to 140×60 px and compressed under 50 KB',
-      body: 'Your signature is resized to 140×60 pixels and compressed to meet the 50 KB limit — entirely in your browser.',
+      title: 'Scaled to 140x60 and compressed within 50 KB',
+      body: 'Your signature is scaled to 140x60 pixels and compressed within 50 KB. Transparent backgrounds are converted to white automatically. Runs fully in your browser.',
     },
     {
-      title: 'Download and upload to your portal',
-      body: 'Download the JPEG and upload it directly to Aadhaar services, PAN portal, or other document update portals.',
+      title: 'Download and attach to your application',
+      body: 'Download the JPEG and attach it to your Aadhaar update form or PAN card application. The file size and format will be accepted by both portals.',
     },
   ],
   faqs: [
     {
-      question: 'What is the signature size for Aadhaar update?',
+      question: 'What signature size does Aadhaar update require?',
       answer:
-        'UIDAI Aadhaar online portals typically accept a signature image under 50 KB in JPEG format. This tool targets exactly that limit.',
+        'UIDAI requires a signature image of 140x60 pixels, JPEG format, under 50 KB for the Aadhaar update portal. The same specification applies to the PAN card application on the NSDL or UTIITSL portal.',
     },
     {
-      question: 'Is a 50 KB signature too large for most exam portals?',
+      question: 'Can I use a phone photo of my signature instead of a scan?',
       answer:
-        'Yes — exam portals like UPSC, SSC, and IBPS require signatures under 20–30 KB. For those, use {{goal:signature-resize-20kb}} or {{goal:signature-resize-30kb}} instead.',
+        'Yes. Place your signature on white paper in good natural light, photograph it flat, and upload the image. The tool crops and compresses it to the required size. A scanner gives a cleaner result, but a phone photo works.',
     },
     {
-      question: 'My signature has a transparent background. Will that work?',
+      question: 'Will a PNG signature work on the Aadhaar portal?',
       answer:
-        'The tool automatically fills transparent backgrounds with white, which is required for JPEG output. This ensures portal compatibility.',
+        'The Aadhaar portal expects JPEG. Upload your PNG here and the tool converts it to JPEG and compresses it under 50 KB before you download.',
     },
     {
-      question: 'I also need to update my photo on the portal. What should I use?',
+      question: 'Does this work for state income tax portal signature uploads?',
       answer:
-        'Use {{goal:aadhaar-photo-resizer}} for Aadhaar photo updates or {{goal:pan-card-photo-resizer}} for PAN card applications.',
+        'Most state income tax portals follow the same 140x60 pixel, 50 KB JPEG standard. A file prepared with this tool should be accepted.',
+    },
+    {
+      question: 'Do I also need to resize my photo for Aadhaar update?',
+      answer:
+        'Yes. Aadhaar update requires a passport-size photo as well. Use {{goal:aadhaar-photo-resizer}} for the photo and prepare the signature here before starting the form.',
     },
   ],
   relatedGoals: [
@@ -71,6 +82,6 @@ export const signature50kbGoal = {
     'pan-card-photo-resizer',
   ],
   status: 'active',
-  priority: 'medium',
-  updatedAt: '2026-06-23',
+  priority: 'high',
+  updatedAt: '2026-06-24',
 } satisfies GoalDefinition

@@ -5,9 +5,13 @@ export const signature20kbGoal = {
   title: 'Signature Resize to 20KB',
   shortTitle: 'Signature 20KB',
   description:
-    'Resize your digital signature image to 140×60 px and compress it under 20 KB — ready for UPSC, GPSC, NDA, and bank exam applications.',
+    'Resize your digital signature image to 140x60 px and compress it under 20 KB. Ready for UPSC, GPSC, NDA, and bank exam applications.',
+  seoTitle: 'UPSC signature resize to 20 KB: 140x60 px | Presetly',
+  ogDescription:
+    'Prepare your UPSC, GPSC, or NDA signature upload. Resizes to 140x60 pixels and compresses under 20 KB. Done in your browser. No upload. Free.',
+  twitterDescription: 'UPSC, GPSC signature: 140x60 px, 20 KB. Browser-only. Free.',
   longDescription:
-    'Most Indian competitive exam portals — UPSC, GPSC, NDA, SSC, IBPS — require a scanned signature in JPEG format, ' +
+    'Most Indian competitive exam portals (UPSC, GPSC, NDA, SSC, IBPS) require a scanned signature in JPEG format, ' +
     '140×60 pixels, under 20 KB. This tool applies those exact dimensions and compresses the output to meet the file-size requirement. ' +
     'Upload your scanned signature, and download a portal-ready file. Everything runs in your browser.',
   category: 'signature',
@@ -30,7 +34,7 @@ export const signature20kbGoal = {
     },
     {
       title: 'Resized to 140×60 px and compressed under 20 KB',
-      body: 'Your signature is resized to 140×60 pixels and compressed to meet the 20 KB limit — entirely in your browser.',
+      body: 'Your signature is resized to 140x60 pixels and compressed to meet the 20 KB limit, entirely in your browser.',
     },
     {
       title: 'Download and upload to your exam portal',
@@ -46,7 +50,7 @@ export const signature20kbGoal = {
     {
       question: 'What is the signature size for GPSC exam forms?',
       answer:
-        'GPSC requires a digital signature of 140×60 pixels in JPEG format, under 20 KB — the same specification as UPSC. This tool works for both.',
+        'GPSC requires a digital signature of 140x60 pixels in JPEG format, under 20 KB. The same specification as UPSC. This tool works for both.',
     },
     {
       question: 'My signature background is coloured. Will the tool handle it?',
@@ -56,7 +60,7 @@ export const signature20kbGoal = {
     {
       question: 'I also need to upload a photo for my application. What should I use?',
       answer:
-        'Use {{goal:upsc-photo-resizer}} for UPSC applications or {{goal:gpsc-photo-resizer}} for GPSC — both apply the correct exam photo dimensions.',
+        'Use {{goal:upsc-photo-resizer}} for UPSC applications or {{goal:gpsc-photo-resizer}} for GPSC. Both apply the correct exam photo dimensions.',
     },
   ],
   relatedGoals: [

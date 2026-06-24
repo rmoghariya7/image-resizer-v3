@@ -5,7 +5,11 @@ export const bankExamGoal = {
   title: 'Bank Exam Photo Resizer',
   shortTitle: 'Bank Exam Photo',
   description:
-    'Resize your photo to SBI, PNB, Canara Bank, and other bank exam requirements — 413×531 px, under 50 KB — free.',
+    'Resize your photo for SBI, PNB, Canara Bank, and other bank exam portals. Output is 413x531 px, under 50 KB. Free.',
+  seoTitle: 'SBI bank exam photo resizer: 413x531 px, 50 KB | Presetly',
+  ogDescription:
+    'Resize your photo for SBI, PNB, or Canara Bank applications. Hits the SBI 50 KB limit so it works for every bank portal. Free, browser-only.',
+  twitterDescription: 'SBI, PNB, Canara bank exam photo: 413x531 px, 50 KB. Free.',
   longDescription:
     'SBI PO, SBI Clerk, PNB, Canara Bank, and other public sector bank exams require an application photo of ' +
     '3.5×4.5 cm (413×531 pixels), JPEG format, under 50 KB. This tool applies the most conservative bank exam ' +
@@ -28,42 +32,42 @@ export const bankExamGoal = {
   howItWorks: [
     {
       title: 'Upload your photo',
-      body: 'Drop your photo or click to select it. JPEG, PNG, and WebP are all accepted.',
+      body: 'Click the upload area or drag your photo in. JPEG, PNG, and WebP all work. No registration or account required.',
     },
     {
-      title: 'Resized to bank exam spec instantly',
-      body: 'Your photo is resized to 413×531 pixels and compressed under 50 KB entirely in your browser.',
+      title: 'Compressed to 50 KB for bank portals',
+      body: 'Your photo is resized to 413x531 pixels and compressed under 50 KB. SBI has the strictest limit of all bank portals. This output works on all of them. Processing stays in your browser.',
     },
     {
-      title: 'Download and submit',
-      body: 'Download your JPEG and upload it to any bank exam application portal — SBI, PNB, Canara Bank, and more.',
+      title: 'Download and attach to your bank application',
+      body: 'Save the JPEG file. Open SBI, PNB, Canara Bank, or any bank recruitment portal and upload this file in the photo field.',
     },
   ],
   faqs: [
     {
       question: 'What photo size does SBI PO require?',
       answer:
-        'SBI PO and SBI Clerk require a passport-size photo: 3.5×4.5 cm (413×531 pixels), JPEG format, under 50 KB. This tool targets exactly that.',
+        'SBI PO and SBI Clerk require a passport-size photo: 3.5x4.5 cm (413x531 pixels), JPEG format, under 50 KB. This is the strictest bank portal limit in India, and this tool targets exactly that.',
     },
     {
       question: 'Why does this tool use 50 KB and not 200 KB?',
       answer:
-        'SBI uses the strictest limit at 50 KB. Using 50 KB ensures your photo is accepted by all bank portals including those with higher limits.',
+        'SBI sets the strictest limit at 50 KB. If you compress to 50 KB, the same file will be accepted by all bank portals, including IBPS and PNB which allow higher sizes. Going the other way does not work.',
     },
     {
       question: 'What background is required for bank exam photos?',
       answer:
-        'Most bank portals require a plain white background. Ensure a recent photo (within the last 6 months) with a neutral expression.',
+        'All major bank portals require a plain white background. Photo should be taken in the last 6 months, face forward, neutral expression. Coloured walls or outdoor backgrounds are rejected.',
     },
     {
-      question: 'Do I need a separate signature image?',
+      question: 'Do I need a separate signature image for bank applications?',
       answer:
-        'Yes. Banks require a signature image at 140×60 pixels, under 20–30 KB. Use {{goal:signature-resize-20kb}} or {{goal:signature-resize-30kb}}.',
+        'Yes. Bank applications require a signature image at 140x60 pixels. The file size limit varies by bank. Use {{goal:signature-resize-20kb}} for a 20 KB output or {{goal:signature-resize-30kb}} for 30 KB.',
     },
     {
-      question: 'Can I use this for IBPS as well?',
+      question: 'Can I use this photo for IBPS as well?',
       answer:
-        'Yes, a 50 KB photo is within IBPS\'s 200 KB limit, so it will be accepted. Alternatively, use {{goal:ibps-photo-resizer}} which applies IBPS\'s native 200 KB limit for better quality.',
+        'Yes. A 50 KB photo is well within the IBPS 200 KB limit and will be accepted. But if quality matters more, use {{goal:ibps-photo-resizer}} instead, which applies the full 200 KB budget for a sharper result.',
     },
   ],
   relatedGoals: [
@@ -79,5 +83,5 @@ export const bankExamGoal = {
   ],
   status: 'active',
   priority: 'high',
-  updatedAt: '2026-06-23',
+  updatedAt: '2026-06-24',
 } satisfies GoalDefinition

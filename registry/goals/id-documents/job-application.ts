@@ -5,7 +5,11 @@ export const jobApplicationGoal = {
   title: 'Job Application Photo Resizer',
   shortTitle: 'Job Application Photo',
   description:
-    'Resize your profile photo for job portals like Naukri, LinkedIn, and government employment sites — 413×531 px, under 200 KB.',
+    'Resize your profile photo for job portals like Naukri, LinkedIn, and government employment sites. Output is 413x531 pixels, under 200 KB.',
+  seoTitle: 'Job portal photo resize: Naukri, LinkedIn, govt | Presetly',
+  ogDescription:
+    'Resize your photo for Naukri, LinkedIn, or government job portals. Gets it to 413x531 pixels, under 200 KB. Browser-based, no upload. Free.',
+  twitterDescription: 'Job portal photo: 413x531 px, 200 KB. Naukri, LinkedIn ready. Free.',
   longDescription:
     'Job portals and government employment sites (NCS, Employment Exchange, Naukri) typically require a passport-size ' +
     'professional photo: 3.5×4.5 cm (413×531 pixels at 300 DPI), JPEG format, under 200 KB. ' +
@@ -48,7 +52,7 @@ export const jobApplicationGoal = {
     {
       question: 'Can I use this for government job applications (SSC, UPSC)?',
       answer:
-        'For SSC, use {{goal:ssc-photo-resizer}} and for UPSC, use {{goal:upsc-photo-resizer}} — those apply exam-specific file size limits.',
+        'For SSC, use {{goal:ssc-photo-resizer}} and for UPSC, use {{goal:upsc-photo-resizer}}. Those apply exam-specific file size limits.',
     },
     {
       question: 'What background should I use for a job application photo?',

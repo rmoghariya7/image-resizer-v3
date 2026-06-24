@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { generateCompressMetadata } from '@/lib/metadata/generators'
 import {
   getSizeTarget,
   getAllSizeParams,
@@ -35,25 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!target) return {}
 
   const canonical = `${BASE_URL}/compress-image-under-${target.sizeParam}`
-
-  return {
-    title: target.metaTitle,
-    description: target.description,
-    keywords: [...target.keywords],
-    alternates: { canonical },
-    openGraph: {
-      title: target.title,
-      description: target.description,
-      url: canonical,
-      type: 'website',
-      siteName: 'Presetly',
-    },
-    twitter: {
-      card: 'summary',
-      title: target.title,
-      description: target.description,
-    },
-  }
+  return generateCompressMetadata(target, canonical)
 }
 
 export default async function CompressImageUnderSizePage({ params }: Props) {

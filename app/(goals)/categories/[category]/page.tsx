@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, GraduationCap, CreditCard, Minimize2, PenLine } from 'lucide-react'
+import { generateCategoryMetadata } from '@/lib/metadata/generators'
 import {
   getCategory,
   getCategoryStaticParams,
@@ -57,25 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!cat) return {}
 
   const canonical = `${BASE_URL}/categories/${cat.slug}`
-
-  return {
-    title: `${cat.name} — Free Online Tools | Presetly`,
-    description: cat.metaDescription,
-    keywords: [...cat.keywords],
-    alternates: { canonical },
-    openGraph: {
-      title: cat.name,
-      description: cat.metaDescription,
-      url: canonical,
-      type: 'website',
-      siteName: 'Presetly',
-    },
-    twitter: {
-      card: 'summary',
-      title: cat.name,
-      description: cat.metaDescription,
-    },
-  }
+  return generateCategoryMetadata(cat, canonical)
 }
 
 export default async function CategoryPage({ params }: Props) {

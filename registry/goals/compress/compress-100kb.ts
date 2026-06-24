@@ -1,76 +1,87 @@
 import type { GoalDefinition } from '@/registry/goals/schema'
 
 export const compress100kbGoal = {
-  slug: 'compress-image-to-100kb',
+  slug: 'compress-image-100kb',
   title: 'Compress Image to 100KB',
   shortTitle: 'Compress to 100KB',
   description:
-    'Compress any image to under 100 KB instantly in your browser. No settings, no uploads, no account required.',
+    'Compress any image under 100 KB for Passport Seva, scholarships, and government portals. Free, browser-based.',
+  seoTitle: 'Compress image to 100 KB: Passport Seva, NTA | Presetly',
+  ogDescription:
+    'Passport Seva and NTA exam portals cap photos at 100 KB. This tool compresses your image under 100 KB at the best quality possible. Browser-only. Free.',
+  twitterDescription: 'Compress image to 100 KB for Passport Seva, NTA exams. Free.',
   longDescription:
-    'Passport photo applications, railway concession forms, scholarship portals, and many government services ' +
-    'cap photo uploads at 100 KB. This tool compresses your image to under 100 KB by finding the highest quality ' +
-    'level that fits within that limit. The format is preserved — JPEG stays JPEG, PNG stays PNG. ' +
-    'All processing runs in your browser; nothing is uploaded to any server.',
+    'Passport Seva, NTA exam portals, state scholarship forms, and many central government services cap photo uploads at 100 KB. ' +
+    'This tool finds the highest quality level that still keeps the file under 100 KB. ' +
+    'JPEG stays JPEG. PNG stays PNG where possible. ' +
+    'Everything runs locally in your browser. No upload, no waiting, no account.',
   category: 'compress',
-  tags: ['compress image', 'reduce image size', '100kb', 'file size', 'jpeg compression'],
+  subcategory: 'passport-scholarship',
+  tags: ['compress image', '100kb', 'image compressor', 'passport seva', 'scholarship', 'nta', 'reduce file size'],
   tool: 'image-resizer',
   preset: 'compress-100kb',
   keywords: [
     'compress image to 100kb',
-    'reduce image size to 100kb',
+    'reduce image size to 100kb online',
+    'compress photo under 100kb',
     'image compressor 100kb',
-    'make photo 100kb',
-    'compress jpg to 100kb',
-    'compress png to 100kb',
+    'passport seva photo 100kb',
+    'compress jpg to 100kb free',
+    'nta photo 100kb',
+    'scholarship photo size kb',
   ],
   howItWorks: [
     {
       title: 'Upload your image',
-      body: 'Drop your image or click to select it. JPEG, PNG, and WebP are all accepted.',
+      body: 'Drag your image onto the page or click to browse. JPEG, PNG, and WebP are all accepted. The file can be any starting size.',
     },
     {
-      title: 'Compressed to under 100 KB in your browser',
-      body: 'A quality-optimising algorithm finds the highest quality that fits within 100 KB. Nothing leaves your device.',
+      title: 'Quality optimised to stay under 100 KB',
+      body: 'The tool finds the highest quality level that keeps the file under 100 KB. JPEG stays JPEG, PNG stays PNG. Everything runs locally. No upload, no waiting.',
     },
     {
-      title: 'Download your compressed image',
-      body: 'Download the compressed file and upload it to any portal that requires images under 100 KB.',
+      title: 'Download and attach to your form',
+      body: 'Save the compressed file and attach it to your Passport Seva form, scholarship portal, or any government service that caps photo uploads at 100 KB.',
     },
   ],
   faqs: [
     {
-      question: 'Which portals require images under 100 KB?',
+      question: 'Does Passport Seva require a photo under 100 KB?',
       answer:
-        'Passport applications (Passport Seva), IRCTC railway concessions, scholarship portals, and many state recruitment boards limit photos to 100 KB.',
+        'Yes. The Passport Seva Online portal caps photo uploads at 100 KB, JPEG format. The photo also needs to be 35x45 mm with a white background. Use {{goal:passport-photo-maker}} if you need both resizing and compression.',
     },
     {
-      question: 'Is 100 KB enough quality for a printed photo?',
+      question: 'Will my photo lose quality at 100 KB?',
       answer:
-        'For digital submission, yes — portals display the photo at screen resolution. For printing, you may need a higher-resolution original.',
+        'Very little. A passport-size photo (413x531 pixels) at 100 KB is visually sharp. The difference from the original is not visible to the naked eye for most photos taken in good light.',
     },
     {
-      question: 'Will my PNG be converted to JPEG during compression?',
+      question: 'What happens to PNG files?',
       answer:
-        'No. For this preset the format is preserved. If the PNG is still over 100 KB at maximum compression, try resizing the image first.',
+        'PNG files are converted to JPEG if needed to hit the 100 KB target. Passport Seva and most government portals only accept JPEG anyway. If the PNG is already under 100 KB, it stays as PNG.',
     },
     {
-      question: 'I need my passport photo at exactly 600×600 px as well. What should I use?',
+      question: 'My photo is 413x531 but still over 100 KB. What should I do?',
       answer:
-        'Use {{goal:passport-photo-maker}} — it resizes to the correct 600×600 px and compresses to under 500 KB for Indian passport applications in one step.',
+        'Use this tool directly on the 413x531 image. The compressor will bring the file under 100 KB while keeping the same dimensions. Do not resize the photo again.',
+    },
+    {
+      question: 'Can I use this for NTA exam portal photos?',
+      answer:
+        'Yes. NTA caps photos at 100 KB across UGC NET, CSIR NET, and CUET. But for a properly resized and compressed NTA photo, {{goal:ugc-net-photo-resizer}} handles both in one step.',
     },
   ],
   relatedGoals: [
-    'compress-image-to-50kb',
-    'compress-image-to-20kb',
+    'compress-image-50kb',
+    'compress-image-20kb',
     'passport-photo-maker',
-    'aadhaar-photo-resizer',
-    'voter-id-photo-resizer',
+    'ugc-net-photo-resizer',
   ],
   complementaryGoals: [
     'passport-photo-maker',
-    'compress-image-to-50kb',
+    'ugc-net-photo-resizer',
   ],
   status: 'active',
   priority: 'high',
-  updatedAt: '2026-06-01',
+  updatedAt: '2026-06-24',
 } satisfies GoalDefinition

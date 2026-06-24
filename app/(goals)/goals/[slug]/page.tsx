@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { generateGoalMetadata } from '@/lib/metadata/generators'
 import { getGoal, getGoalStaticParams, getRelatedGoals } from '@/registry/goals'
 import { getPreset } from '@/registry/presets'
 import { getRequirements } from '@/content/requirements'
@@ -36,31 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!goal) return {}
 
   const canonical = `${BASE_URL}/goals/${goal.slug}`
-
-  return {
-    title: `${goal.title} — Free Online Tool | Presetly`,
-    description: goal.description,
-    keywords: goal.keywords,
-    alternates: {
-      canonical,
-    },
-    openGraph: {
-      title: goal.title,
-      description: goal.description,
-      url: canonical,
-      type: 'website',
-      siteName: 'Presetly',
-    },
-    twitter: {
-      card: 'summary',
-      title: goal.title,
-      description: goal.description,
-    },
-    robots: {
-      index: goal.status === 'active',
-      follow: true,
-    },
-  }
+  return generateGoalMetadata(goal, canonical)
 }
 
 export default async function GoalPage({ params }: Props) {

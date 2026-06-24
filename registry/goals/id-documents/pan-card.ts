@@ -5,11 +5,15 @@ export const panCardGoal = {
   title: 'PAN Card Photo Resizer',
   shortTitle: 'PAN Card Photo',
   description:
-    'Resize your photo to PAN card specifications — 200×230 px, JPEG, under 50 KB — instantly in your browser.',
+    'Prepare your PAN card application photo. NSDL and UTIITSL require 200x230 pixels, JPEG, under 50 KB. Browser-only, no upload.',
+  seoTitle: 'PAN card photo resize: 200x230 px, under 50 KB | Presetly',
+  ogDescription:
+    'Get your PAN card application photo ready. NSDL and UTIITSL require 200x230 pixels, JPEG, under 50 KB. Done in your browser. No upload.',
+  twitterDescription: 'PAN card photo: 200x230 px, 50 KB. NSDL and UTIITSL ready. Free.',
   longDescription:
     'The NSDL and UTIITSL PAN card application portals require a photo of 200×230 pixels in JPEG format, ' +
     'under 50 KB. This tool resizes and compresses your photo to the correct PAN card dimensions automatically. ' +
-    'All processing happens in your browser — your photo never leaves your device.',
+    'All processing happens in your browser. Your photo never leaves your device.',
   category: 'id-documents',
   subcategory: 'central-ids',
   tags: ['pan card', 'nsdl', 'utiitsl', 'income tax', 'id document', 'photo resize'],
@@ -50,7 +54,7 @@ export const panCardGoal = {
     {
       question: 'I also need to resize my signature for PAN card. Where can I do that?',
       answer:
-        'Use our {{goal:signature-resize-20kb}} — PAN card also requires a digital signature of 140×60 pixels, under 10 KB.',
+        'Use our {{goal:signature-resize-20kb}}. PAN card also requires a digital signature of 140x60 pixels, under 10 KB.',
     },
     {
       question: 'What background should my PAN card photo have?',

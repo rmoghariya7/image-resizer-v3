@@ -19,7 +19,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-  title: 'Presetly — Free Photo Resizer for Indian Government Applications',
+  title: 'Presetly: free photo resizer for Indian government portals',
   description:
     'Resize and compress photos for UPSC, GPSC, Aadhaar, PAN card, Passport, and 10+ Indian government portals. Browser-based, no uploads, no sign-up, completely free.',
   alternates: {
@@ -39,16 +39,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: 'Presetly',
-    title: 'Presetly — Free Photo Resizer for Indian Government Applications',
+    title: 'Exam photos, Aadhaar, PAN, Passport, signature resize, all free | Presetly',
     description:
-      'Resize and compress photos for UPSC, GPSC, Aadhaar, PAN card, Passport, and 10+ Indian government portals. Browser-based, no uploads, completely free.',
+      'Every Indian portal photo tool in one place. Exam photos, Aadhaar, PAN card, Passport Seva, Voter ID, signature resize, and image compression. Runs in your browser, no upload.',
     url: BASE_URL,
   },
   twitter: {
     card: 'summary',
-    title: 'Presetly — Free Photo Resizer for Indian Government Applications',
+    title: 'All photo tools for Indian portals | Presetly',
     description:
-      'Resize photos for UPSC, Aadhaar, PAN card, and more — instantly in your browser.',
+      'Exam photos, Aadhaar, PAN, Passport, signature resize, image compression. All free, all browser-only.',
   },
   robots: { index: true, follow: true },
 }

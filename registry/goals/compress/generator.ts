@@ -52,7 +52,7 @@ export function generateCompressGoal(
   ]
 
   const longDescription = [
-    `Compress any image to under ${target.displaySize} — entirely in your browser, with no uploads, no account, and no quality sliders.`,
+    `Compress any image to under ${target.displaySize}, entirely in your browser, with no uploads, no account, and no quality sliders.`,
     `The tool uses a binary-search algorithm to find the highest JPEG quality that produces a file under ${target.displaySize}.`,
     `Commonly needed for: ${target.useCase}.`,
     `Accepts JPEG, PNG, and WebP. Files up to 20 MB supported.`,

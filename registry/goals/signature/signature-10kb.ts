@@ -5,71 +5,77 @@ export const signature10kbGoal = {
   title: 'Signature Resize to 10KB',
   shortTitle: 'Signature 10KB',
   description:
-    'Resize your digital signature to 140×60 px and compress it under 10 KB — ready for portals with strict file size limits.',
+    'Resize your scanned signature to 140x60 px and compress it under 10 KB for strict government portal uploads. Free.',
+  seoTitle: 'Signature resize to 10 KB: 140x60 px, strict portals | Presetly',
+  ogDescription:
+    'Compress your signature to 10 KB for strict state government portals. Resizes to 140x60 pixels. Dark ink on white paper gives the cleanest result. Free.',
+  twitterDescription: 'Signature: 140x60 px, under 10 KB. State govt portals. Free.',
   longDescription:
-    'Some government portals require a scanned signature in JPEG format, 140×60 pixels, under 10 KB. ' +
-    'This tool applies those exact dimensions and compresses the output to meet the 10 KB limit. ' +
-    'Upload your scanned signature and download a portal-ready file. Everything runs in your browser — no uploads, no sign-up.',
+    'Some state government portals and older central government systems cap the signature upload at just 10 KB. ' +
+    'Most general compressors cannot hit this limit without destroying the image. ' +
+    'This tool is built for exactly that constraint. It scales your signature to 140x60 pixels, ' +
+    'then compresses the output to fit under 10 KB while keeping the ink legible. ' +
+    'Runs in your browser. No server, no upload, no account.',
   category: 'signature',
-  tags: ['signature', 'signature resize', '10kb', 'digital signature', 'exam form'],
+  subcategory: 'strict-limit',
+  tags: ['signature', 'resize signature', '10kb', 'government portal', 'state government', 'compress signature'],
   tool: 'image-resizer',
   preset: 'signature-10kb',
   keywords: [
     'signature resize 10kb',
-    'signature 10kb online',
-    'compress signature to 10kb',
-    'digital signature 10kb',
-    'signature 140x60 pixels 10kb',
-    'resize signature image 10kb',
+    'compress signature to 10kb online',
+    'signature size 10kb government',
+    '140x60 signature 10kb',
+    'state portal signature size',
+    'signature file size 10kb',
   ],
   howItWorks: [
     {
-      title: 'Upload your scanned signature',
-      body: 'Select your scanned or digital signature image. JPEG, PNG, and WebP are all supported.',
+      title: 'Upload your signature image',
+      body: 'Open the file from your phone or computer. Works with JPEG, PNG, and WebP. If you scanned your signature, upload the scan directly.',
     },
     {
-      title: 'Resized to 140×60 px and compressed under 10 KB',
-      body: 'Your signature is resized to 140×60 pixels and compressed to meet the 10 KB limit — entirely in your browser.',
+      title: 'Scaled to 140x60 and compressed under 10 KB',
+      body: 'Your signature is scaled down to 140x60 pixels. Then the tool compresses it to fit under 10 KB. This is a strict limit, so use a clear, high-contrast signature for the best result.',
     },
     {
-      title: 'Download and upload to your portal',
-      body: 'Download the JPEG and upload it directly to your application portal.',
+      title: 'Download and attach to your form',
+      body: 'Save the JPEG. Go to your state government or central portal and attach this file in the signature upload field.',
     },
   ],
   faqs: [
     {
       question: 'Which portals require a signature under 10 KB?',
       answer:
-        'Some state government portals and older central government systems enforce a 10 KB limit. Check your application form — if it says 10 KB, use this tool.',
+        'Several state government portals and some older central government recruitment sites set a 10 KB cap for signature uploads. If your portal shows a 10 KB error, this is the right tool.',
     },
     {
-      question: 'Will the signature still be readable at 10 KB?',
+      question: 'Will the signature still look clear at 10 KB?',
       answer:
-        'Yes. At 140×60 px, the signature is small enough that JPEG compression at 10 KB still preserves legibility. Use a dark ink on plain white paper for best results.',
+        'Yes, if the original is well-lit with dark ink on white paper. A dark blue or black pen on clean white gives the best result after compression. Faint or grey signatures may lose legibility.',
     },
     {
-      question: 'My portal says 20 KB — which tool should I use?',
+      question: 'What format should I use for a 10 KB signature?',
       answer:
-        'Use {{goal:signature-resize-20kb}} for a 20 KB limit. It applies slightly less compression and preserves more detail.',
+        'JPEG is best for hitting very low file sizes. This tool outputs JPEG automatically. PNG files at 140x60 will almost always exceed 10 KB, so do not try to submit a PNG to a 10 KB portal.',
     },
     {
-      question: 'Can I use the same signature image for both photo and signature upload slots?',
+      question: 'Do I also need to resize my photo for the same portal?',
       answer:
-        'No. The photo slot requires a face photo (413×531 px), while the signature slot requires your scanned signature (140×60 px). They are different files.',
+        'Most likely yes. If your portal requires a 10 KB signature, it usually has a separate photo size requirement too. Check whether you need {{goal:upsc-photo-resizer}} or any of the exam photo tools.',
     },
   ],
   relatedGoals: [
     'signature-resize-20kb',
     'signature-resize-30kb',
     'signature-resize-50kb',
-    'upsc-photo-resizer',
-    'ssc-photo-resizer',
+    'compress-image-20kb',
   ],
   complementaryGoals: [
     'upsc-photo-resizer',
-    'ssc-photo-resizer',
+    'compress-image-20kb',
   ],
   status: 'active',
-  priority: 'medium',
-  updatedAt: '2026-06-23',
+  priority: 'low',
+  updatedAt: '2026-06-24',
 } satisfies GoalDefinition

@@ -1,13 +1,13 @@
-import type { GoalDefinition } from '@/types/registry'
-import { BackButton } from './BackButton'
+import type { GoalDefinition } from "@/types/registry";
+import { BackButton } from "./BackButton";
 
 interface Props {
-  goal: GoalDefinition
+  goal: GoalDefinition;
 }
 
 export function GoalHeader({ goal }: Props) {
   return (
-    <div className="border-b border-gray-100 bg-white px-4 py-6 sm:px-6 sm:py-16">
+    <div className="border-b border-gray-100 bg-white px-4 py-6 sm:px-6 sm:py-12">
       <div className="mx-auto max-w-3xl">
         <BackButton />
 
@@ -33,5 +33,5 @@ export function GoalHeader({ goal }: Props) {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -5,7 +5,11 @@ export const railwayGoal = {
   title: 'Railway Photo Resizer',
   shortTitle: 'Railway Photo',
   description:
-    'Resize your photo to Indian Railways (RRB/RRC) requirements — 413×531 px, under 100 KB, JPEG — free and browser-based.',
+    'Resize your photo for Indian Railways (RRB/RRC) applications. Output is 413x531 px, under 100 KB, JPEG. Free and browser-based.',
+  seoTitle: 'Railway RRB photo resize: 413x531 px free | Presetly',
+  ogDescription:
+    'Resize your photo for RRB NTPC, Group D, RRC, or RPF applications. 413x531 pixels, under 100 KB, JPEG. Free and browser-based.',
+  twitterDescription: 'RRB NTPC, Group D photo: 413x531 px, 100 KB. Free.',
   longDescription:
     'Indian Railways recruitment exams (RRB NTPC, RRB Group D, RRC, RPF) require application photos to be 3.5×4.5 cm ' +
     '(413×531 pixels at 300 DPI), JPEG format, and under 100 KB. This tool applies the correct Railway preset automatically. ' +
@@ -27,42 +31,42 @@ export const railwayGoal = {
   howItWorks: [
     {
       title: 'Upload your photo',
-      body: 'Drop your photo or click to select it. JPEG, PNG, and WebP are all accepted.',
+      body: 'Select a photo from your phone or computer. JPEG, PNG, and WebP are all fine. Opens right in the browser, no app needed.',
     },
     {
-      title: 'Resized to Railway spec instantly',
-      body: 'Your photo is resized to 413×531 pixels and compressed under 100 KB entirely in your browser.',
+      title: 'Resized to Railway specs in your browser',
+      body: 'The tool sets the size to 413x531 pixels and keeps the file under 100 KB. Everything is processed on your device. No data goes anywhere.',
     },
     {
-      title: 'Download and submit',
-      body: 'Download your JPEG and upload it directly to the RRB or RRC online application portal.',
+      title: 'Download and submit to RRB or RRC portal',
+      body: 'Download the JPEG. Then open the RRB NTPC, Group D, or RPF application form and attach this file in the photo upload field.',
     },
   ],
   faqs: [
     {
       question: 'What photo size does RRB NTPC require?',
       answer:
-        'RRB NTPC requires a photo of 3.5×4.5 cm (413×531 pixels), JPEG format, and typically under 100 KB. This tool applies those exact specifications.',
+        'RRB NTPC requires a photo of 3.5x4.5 cm (413x531 pixels), JPEG format, and under 100 KB. This tool applies those exact specifications and produces a file the RRB portal will accept.',
     },
     {
       question: 'Is RRB Group D photo size the same as NTPC?',
       answer:
-        'Yes — RRB NTPC, RRB Group D, RRC Group C, and RPF all use the same photo dimensions: 3.5×4.5 cm, JPEG, under 100 KB.',
+        'Yes. RRB NTPC, RRB Group D, RRC Group C, and RPF Constable all use the same photo dimensions. One processed file works for all of them.',
     },
     {
-      question: 'What background is required for Railway exam photos?',
+      question: 'What background is required for Railway recruitment photos?',
       answer:
-        'A plain white background is required. The candidate must face forward with a neutral expression.',
+        'White background, plain. No patterns, no outdoor settings. Face forward with a neutral expression. Railway recruitment boards are fairly strict about background quality on the admit card photo.',
     },
     {
-      question: 'Do I also need to upload my signature?',
+      question: 'Do I also need to upload my signature for Railway applications?',
       answer:
-        'Yes. Use {{goal:signature-resize-20kb}} to prepare your digital signature to 140×60 pixels, under 20 KB — required alongside the photo on Railway applications.',
+        'Yes. RRB and RRC applications require a separate signature image at 140x60 pixels, under 20 KB. Prepare it with {{goal:signature-resize-20kb}} and upload it alongside the photo.',
     },
     {
       question: 'Can I use this tool for RPF Constable applications?',
       answer:
-        'Yes. RPF Constable and Sub-Inspector applications follow the same photo requirements as other Railway exams.',
+        'Yes. RPF Constable, RPF Sub-Inspector, and RRC Group C applications all follow the same photo size requirement as other Railway exams.',
     },
   ],
   relatedGoals: [
@@ -78,5 +82,5 @@ export const railwayGoal = {
   ],
   status: 'active',
   priority: 'high',
-  updatedAt: '2026-06-23',
+  updatedAt: '2026-06-24',
 } satisfies GoalDefinition

@@ -5,11 +5,15 @@ export const voterIdGoal = {
   title: 'Voter ID Photo Resizer',
   shortTitle: 'Voter ID Photo',
   description:
-    'Resize your photo to EPIC / Voter ID specifications — 413×531 px, JPEG, under 50 KB — instantly in your browser.',
+    'Prepare your Voter ID (EPIC) update photo. NVSP requires 413x531 pixels, JPEG, under 50 KB. Resized in your browser, no upload.',
+  seoTitle: 'Voter ID photo resize: 413x531 px, under 50 KB | Presetly',
+  ogDescription:
+    'Prepare your Voter ID or EPIC update photo. NVSP requires 413x531 pixels, JPEG, under 50 KB. Runs in your browser. Nothing uploaded.',
+  twitterDescription: 'Voter ID EPIC photo: 413x531 px, 50 KB. Browser-only. Free.',
   longDescription:
     'The Election Commission of India requires a passport-size photo of 3.5×4.5 cm (413×531 pixels) in JPEG format, ' +
     'under 50 KB, for new EPIC (Voter ID) enrolment and corrections. This tool applies the correct specification automatically. ' +
-    'Upload your photo, download a compliant JPEG — all in your browser with no uploads to any server.',
+    'Upload your photo, download a compliant JPEG, all in your browser with no uploads to any server.',
   category: 'id-documents',
   subcategory: 'central-ids',
   tags: ['voter id', 'epic card', 'election commission', 'id document', 'photo resize'],
@@ -54,7 +58,7 @@ export const voterIdGoal = {
     {
       question: 'I also need to update my Aadhaar card. Can I use the same photo?',
       answer:
-        'No — Aadhaar requires a 200×200 px square photo. Use our {{goal:aadhaar-photo-resizer}} for the correct Aadhaar dimensions.',
+        'No. Aadhaar requires a 200x200 px square photo. Use our {{goal:aadhaar-photo-resizer}} for the correct Aadhaar dimensions.',
     },
   ],
   relatedGoals: [

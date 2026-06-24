@@ -56,6 +56,14 @@ export const goalDefinitionSchema = z.object({
   longDescription: z.string().min(100),
   keywords: z.array(z.string()).min(3).max(20),
 
+  // ── Extended SEO (optional — falls back to title/description when absent)
+  // seoTitle: custom <title> tag. Falls back to `${title} — Free Online Tool | Presetly`.
+  seoTitle: z.string().min(20).max(65).optional(),
+  // ogDescription: Open Graph description for social sharing. Falls back to description.
+  ogDescription: z.string().min(50).max(200).optional(),
+  // twitterDescription: Twitter card description. Falls back to description (truncated).
+  twitterDescription: z.string().min(20).max(150).optional(),
+
   // ── Taxonomy
   category: GOAL_CATEGORY_SCHEMA,
   subcategory: z.string().optional(),
