@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { generateGoalMetadata } from '@/lib/metadata/generators'
 import { getGoal, getGoalStaticParams, getRelatedGoals } from '@/registry/goals'
+import { getSizeTargetByPresetKey } from '@/registry/size-presets'
+import type { CompressPresetKey } from '@/registry/presets/schema'
 import { getPreset } from '@/registry/presets'
 import { getRequirements } from '@/content/requirements'
 import { getCommonErrors } from '@/content/errors'
@@ -35,6 +37,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const goal = getGoal(slug)
   if (!goal) return {}
+
+  // Compress goal pages are near-duplicates of /compress-image-under-[size] pages.
+  // Set canonical to the richer compress-under page so Google consolidates signals there.
+  if (goal.category === 'compress') {
+    const target = getSizeTargetByPresetKey(goal.preset as CompressPresetKey)
+    if (target) {
+      const compressCanonical = `${BASE_URL}/compress-image-under-${target.sizeParam}`
+      return {
+        ...generateGoalMetadata(goal, compressCanonical),
+        robots: { index: false, follow: true },
+      }
+    }
+  }
 
   const canonical = `${BASE_URL}/goals/${goal.slug}`
   return generateGoalMetadata(goal, canonical)

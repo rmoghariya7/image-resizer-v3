@@ -17,8 +17,23 @@ export const metadata: Metadata = {
   },
 }
 
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+    { '@type': 'ListItem', position: 2, name: 'Terms of Service', item: `${BASE_URL}/terms` },
+  ],
+}
+
 export default function TermsPage() {
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
 
       {/* Header */}
@@ -225,5 +240,6 @@ export default function TermsPage() {
 
       </div>
     </article>
+    </>
   )
 }

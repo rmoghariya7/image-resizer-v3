@@ -27,13 +27,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.4,
   }))
 
-  // Goal pages — includes compress goals at /goals/compress-image-to-*
-  const goalPages: MetadataRoute.Sitemap = getSitemapEntries().map(goal => ({
-    url: `${BASE_URL}/goals/${goal.slug}`,
-    lastModified: new Date(goal.updatedAt),
-    changeFrequency: 'monthly' as const,
-    priority: 0.7,
-  }))
+  // Goal pages — excludes compress goals which are noindex (canonical → /compress-image-under-*)
+  // Compress goal slugs always start with 'compress-image-to-'
+  const goalPages: MetadataRoute.Sitemap = getSitemapEntries()
+    .filter(goal => !goal.slug.startsWith('compress-image-to-'))
+    .map(goal => ({
+      url: `${BASE_URL}/goals/${goal.slug}`,
+      lastModified: new Date(goal.updatedAt),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    }))
 
   // Compress-under pages — separate from goal pages, live at /compress-image-under-[size]
   const compressionPages: MetadataRoute.Sitemap = getAllSizeParams().map(size => ({

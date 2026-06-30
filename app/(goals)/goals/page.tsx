@@ -56,7 +56,21 @@ export default function GoalsListingPage() {
     })
     .filter((x): x is NonNullable<typeof x> => x !== null)
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: 'All Tools', item: `${BASE_URL}/goals` },
+    ],
+  }
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
     <article>
       {/* Header */}
       <header className="border-b border-border/50 bg-linear-to-b from-background to-muted/30 px-4 py-10 sm:px-6 sm:py-16">
@@ -149,5 +163,6 @@ export default function GoalsListingPage() {
         ))}
       </div>
     </article>
+    </>
   )
 }

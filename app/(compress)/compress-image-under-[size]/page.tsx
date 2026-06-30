@@ -53,6 +53,16 @@ export default async function CompressImageUnderSizePage({ params }: Props) {
 
   // ─── Structured data ─────────────────────────────────────────────────────────
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Compress Image', item: `${BASE_URL}/categories/compress` },
+      { '@type': 'ListItem', position: 3, name: target.title, item: canonicalUrl },
+    ],
+  }
+
   const howToSchema = {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
@@ -80,18 +90,32 @@ export default async function CompressImageUnderSizePage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: target.title,
+    description: target.description,
     applicationCategory: 'MultimediaApplication',
     operatingSystem: 'Any',
+    browserRequirements: 'Requires a modern web browser with Canvas API support',
+    url: canonicalUrl,
+    featureList: [
+      'Browser-based image compression — no server upload',
+      'Free to use — no sign-up required',
+      `Compresses any image to under ${target.displaySize}`,
+      'Auto quality optimisation using binary search algorithm',
+    ],
     offers: {
       '@type': 'Offer',
       price: '0',
       priceCurrency: 'USD',
     },
-    url: canonicalUrl,
+    provider: {
+      '@type': 'Organization',
+      name: 'Presetly',
+      url: BASE_URL,
+    },
   }
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }} />

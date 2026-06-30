@@ -38,6 +38,26 @@ const organizationSchema = {
     'Browser-based image compression and document preparation platform. Privacy-first: all processing runs locally in the browser.',
 }
 
+const webPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Presetly: free photo resizer for Indian government portals',
+  description:
+    'Resize and compress photos for UPSC, GPSC, Aadhaar, PAN card, Passport, and 10+ Indian government portals. Browser-based, no uploads, no sign-up, completely free.',
+  url: BASE_URL,
+  isPartOf: { '@type': 'WebSite', url: BASE_URL, name: 'Presetly' },
+  about: {
+    '@type': 'Thing',
+    name: 'Image resizing and compression for Indian government portals',
+  },
+  breadcrumb: {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+    ],
+  },
+}
+
 const homeFaqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -110,6 +130,10 @@ export default function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
       />
 
       <SiteHeader />

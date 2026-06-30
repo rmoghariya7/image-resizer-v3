@@ -27,8 +27,23 @@ const TOOLS = [
   { label: 'Signature Resize to 20 KB', href: '/goals/signature-resize-20kb' },
 ]
 
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+    { '@type': 'ListItem', position: 2, name: 'About', item: `${BASE_URL}/about` },
+  ],
+}
+
 export default function AboutPage() {
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
 
       {/* Header */}
@@ -166,5 +181,6 @@ export default function AboutPage() {
 
       </div>
     </article>
+    </>
   )
 }
