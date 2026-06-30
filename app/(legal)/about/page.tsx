@@ -19,12 +19,12 @@ export const metadata: Metadata = {
 }
 
 const TOOLS = [
-  { label: 'UPSC Photo Resizer', href: '/goals/upsc-photo-resizer' },
-  { label: 'Aadhaar Photo Resizer', href: '/goals/aadhaar-photo-resizer' },
-  { label: 'PAN Card Photo Resizer', href: '/goals/pan-card-photo-resizer' },
-  { label: 'Passport Photo Maker', href: '/goals/passport-photo-maker' },
-  { label: 'Compress Image to 50 KB', href: '/goals/compress-image-to-50kb' },
-  { label: 'Signature Resize to 20 KB', href: '/goals/signature-resize-20kb' },
+  { label: 'UPSC Photo Resizer', href: '/upsc-photo-resizer' },
+  { label: 'Aadhaar Photo Resizer', href: '/aadhaar-photo-resizer' },
+  { label: 'PAN Card Photo Resizer', href: '/pan-card-photo-resizer' },
+  { label: 'Passport Photo Maker', href: '/passport-photo-maker' },
+  { label: 'Compress Image to 50 KB', href: '/compress-image-to-50kb' },
+  { label: 'Signature Resize to 20 KB', href: '/signature-resize-20kb' },
 ]
 
 

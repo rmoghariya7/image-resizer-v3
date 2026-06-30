@@ -21,7 +21,7 @@ const COMMON_QUESTIONS = [
   {
     question: 'My compressed image is still being rejected by the portal.',
     answer: 'Portal requirements change without notice. Double-check the official portal for current specifications, then re-process your image using the correct goal tool.',
-    href: '/goals/upsc-photo-resizer',
+    href: '/upsc-photo-resizer',
   },
   {
     question: 'Which tool should I use for my application?',

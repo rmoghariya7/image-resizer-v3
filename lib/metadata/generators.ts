@@ -6,19 +6,14 @@ import type { SizeTarget } from '@/registry/size-presets'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 const SITE_NAME = 'Presetly'
 
-// ─── Goal pages (/goals/[slug]) ───────────────────────────────────────────────
+// --- Goal pages (/[slug]) ---
 
 export function generateGoalMetadata(
   goal: GoalDefinition,
   canonical: string,
 ): Metadata {
-  // Page <title>: use custom seoTitle when present, else build from goal.title
   const pageTitle = goal.seoTitle ?? `${goal.title} | Free Online Tool | ${SITE_NAME}`
-
-  // OG description: social-sharing copy (different from meta description)
   const ogDesc = goal.ogDescription ?? goal.description
-
-  // Twitter description: concise (falls back to ogDesc, then description)
   const twitterDesc =
     goal.twitterDescription ?? (goal.ogDescription ?? goal.description).slice(0, 150)
 
@@ -35,7 +30,7 @@ export function generateGoalMetadata(
       siteName: SITE_NAME,
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title: goal.shortTitle
         ? `${goal.shortTitle} | ${SITE_NAME}`
         : (goal.seoTitle ?? goal.title),
@@ -48,7 +43,7 @@ export function generateGoalMetadata(
   }
 }
 
-// ─── Category pages (/categories/[category]) ─────────────────────────────────
+// --- Category pages (/categories/[category]) ---
 
 export function generateCategoryMetadata(
   cat: CategoryDefinition,
@@ -71,14 +66,14 @@ export function generateCategoryMetadata(
       siteName: SITE_NAME,
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title: ogTitle,
       description: ogDesc.slice(0, 150),
     },
   }
 }
 
-// ─── Compress size pages (/compress-image-under-[size]) ──────────────────────
+// --- Compress size pages (/compress-image-under-[size]) ---
 
 export function generateCompressMetadata(
   target: SizeTarget,
@@ -100,13 +95,13 @@ export function generateCompressMetadata(
       siteName: SITE_NAME,
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title: target.twitterTitle ?? target.shortTitle,
       description: twitterDesc,
     },
   }
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// --- Helpers ---
 
 export { BASE_URL }

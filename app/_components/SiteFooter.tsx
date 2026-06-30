@@ -64,7 +64,7 @@ export function SiteFooter() {
                   return (
                     <li key={link.slug}>
                       <Link
-                        href={goal ? buildGoalHref(goal) : `/goals/${link.slug}`}
+                        href={goal ? buildGoalHref(goal) : `/${link.slug}`}
                         className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {link.label}

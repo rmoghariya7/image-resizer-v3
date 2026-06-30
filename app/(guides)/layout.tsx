@@ -14,7 +14,7 @@ export default function GuidesLayout({ children }: { children: ReactNode }) {
             Presetly
           </Link>
           <Link
-            href="/goals"
+            href="/tools"
             className="text-sm text-gray-600 transition-colors hover:text-indigo-600"
           >
             All Tools

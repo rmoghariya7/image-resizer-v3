@@ -33,7 +33,7 @@ export function buildSearchIndex(): SearchIndex {
     ...getAllGoals().map((goal) => ({
     type: 'goal' as const,
     slug: goal.slug,
-    href: `/goals/${goal.slug}`,
+    href: `/${goal.slug}`,
     label: goal.title,
     shortLabel: goal.shortTitle,
     description: goal.description,

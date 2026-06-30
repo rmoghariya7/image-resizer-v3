@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: 'Presetly',
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title: `${guide.title} | Presetly`,
       description: guide.introduction.slice(0, 120),
     },
@@ -59,7 +59,13 @@ export default async function GuidePage({ params }: Props) {
     headline: guide.title,
     description: guide.introduction,
     url: canonical,
+    datePublished: guide.updatedAt,
     dateModified: guide.updatedAt,
+    author: {
+      '@type': 'Organization',
+      name: 'Presetly',
+      url: BASE_URL,
+    },
     publisher: {
       '@type': 'Organization',
       name: 'Presetly',
@@ -67,13 +73,13 @@ export default async function GuidePage({ params }: Props) {
     },
   }
 
+  // Breadcrumb: Home → Guide Title (no /guides index page exists)
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Guides', item: `${BASE_URL}/guides` },
-      { '@type': 'ListItem', position: 3, name: guide.title, item: canonical },
+      { '@type': 'ListItem', position: 2, name: guide.title, item: canonical },
     ],
   }
 

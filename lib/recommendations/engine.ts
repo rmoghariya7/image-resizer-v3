@@ -14,11 +14,18 @@ import type { GoalDefinition } from '@/registry/goals/schema'
 import type { CompressPresetKey } from '@/registry/presets/schema'
 
 // ─── Single source of truth for goal URLs ────────────────────────────────────
-// All link components must call this helper. If the route structure ever changes
-// (e.g. /goals/[slug] → /tools/[slug]), only this function needs updating.
+// All link components must call this helper. Public URLs are /[slug] — the word
+// "goals" is an internal implementation detail and never appears in public URLs.
+//
+// Compress goals are noindex — their canonical URL is /compress-image-under-[size].
+// We route internal links there directly so PageRank flows to the indexable page.
 
 export function buildGoalHref(goal: GoalDefinition): string {
-  return `/goals/${goal.slug}`
+  if (goal.category === 'compress') {
+    const target = getSizeTargetByPresetKey(goal.preset as CompressPresetKey)
+    if (target) return `/compress-image-under-${target.sizeParam}`
+  }
+  return `/${goal.slug}`
 }
 
 // ─── Private helpers ──────────────────────────────────────────────────────────

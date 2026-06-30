@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     url: BASE_URL,
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'All photo tools for Indian portals | Presetly',
     description:
       'Exam photos, Aadhaar, PAN, Passport, signature resize, image compression. All free, all browser-only.',

@@ -19,14 +19,6 @@ const websiteSchema = {
   url: BASE_URL,
   description:
     'Free browser-based image compressor and resizer. Compress any image to the exact file size you need — 15 KB, 50 KB, 100 KB, and more. No upload, no sign-up.',
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: {
-      '@type': 'EntryPoint',
-      urlTemplate: `${BASE_URL}/goals/{search_term_string}`,
-    },
-    'query-input': 'required name=search_term_string',
-  },
 }
 
 const organizationSchema = {
@@ -36,6 +28,12 @@ const organizationSchema = {
   url: BASE_URL,
   description:
     'Browser-based image compression and document preparation platform. Privacy-first: all processing runs locally in the browser.',
+  logo: {
+    '@type': 'ImageObject',
+    url: `${BASE_URL}/opengraph-image`,
+    width: 1200,
+    height: 630,
+  },
 }
 
 const webPageSchema = {
@@ -61,13 +59,14 @@ const webPageSchema = {
 const homeFaqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
+  // NOTE: answers must match the visible HomeFaqSection content exactly.
   mainEntity: [
     {
       '@type': 'Question',
       name: 'What is Presetly?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Presetly is a free browser-based image compression and resizing platform. Pick a target file size, upload your image, and download the compressed file in seconds — no sign-up, no server uploads, no watermarks.',
+        text: 'Presetly is a free browser-based image compression and resizing platform. You pick a target file size — 15 KB, 50 KB, 100 KB, or any other limit — upload your image, and download the compressed file in seconds. No sign-up, no server uploads, no watermarks.',
       },
     },
     {
@@ -75,7 +74,7 @@ const homeFaqSchema = {
       name: 'Does my image get uploaded to a server?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'No. All processing happens locally in your browser using Web Workers and the Canvas API. Your image never leaves your device.',
+        text: 'No. All processing happens locally in your browser using Web Workers and the Canvas API. Your image never leaves your device. Nothing is stored, logged, or transmitted.',
       },
     },
     {
@@ -83,7 +82,7 @@ const homeFaqSchema = {
       name: 'What is the smallest file size I can compress to?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'The smallest supported target is 15 KB. For very small targets, the tool converts PNG images to JPEG for maximum efficiency.',
+        text: 'The smallest supported target is 15 KB. For very small targets, the tool converts PNG images to JPEG — the most efficient format for photos at small sizes. Most images can reach 15 KB with acceptable visual quality.',
       },
     },
     {
@@ -91,7 +90,7 @@ const homeFaqSchema = {
       name: 'Which image formats are supported?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'JPEG, PNG, and WebP. Files up to 20 MB are supported.',
+        text: 'JPEG, PNG, and WebP. Files up to 20 MB can be uploaded. The tool outputs JPEG for small size targets (under 40 KB) and preserves the original format for larger targets.',
       },
     },
     {
@@ -99,7 +98,7 @@ const homeFaqSchema = {
       name: 'Can I use this for government portal photo requirements?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. Presetly supports photo resizing for UPSC, GPSC, NDA, Aadhaar, PAN card, Passport, and Voter ID — automatically applying the correct dimensions, DPI, and format.',
+        text: 'Yes. Presetly also supports photo resizing presets for UPSC, GPSC, NDA, Aadhaar, PAN card, Passport, and Voter ID — automatically setting the correct dimensions, DPI, and format for each portal.',
       },
     },
     {
@@ -107,7 +106,7 @@ const homeFaqSchema = {
       name: 'Are all tools completely free?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes — 100% free, no sign-up, no credit card, no watermarks, no daily limits.',
+        text: 'Yes, every tool is free with no restrictions — no sign-up, no credit card, no watermarks, no daily limits.',
       },
     },
   ],

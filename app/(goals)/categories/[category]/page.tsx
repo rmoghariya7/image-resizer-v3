@@ -264,7 +264,7 @@ export default async function CategoryPage({ params }: Props) {
                 Common questions
               </Link>
               <Link
-                href="/goals"
+                href="/tools"
                 className="rounded-full border border-border bg-background px-4 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
               >
                 All tools

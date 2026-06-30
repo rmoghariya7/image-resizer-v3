@@ -59,7 +59,7 @@ export function FileSizeSection() {
             return (
               <li key={config.slug}>
                 <Link
-                  href={goal ? buildGoalHref(goal) : `/goals/${config.slug}`}
+                  href={goal ? buildGoalHref(goal) : `/${config.slug}`}
                   className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 shadow-sm ring-1 ring-foreground/5 transition-all hover:border-primary/30 hover:shadow-md"
                 >
                   {/* Size number */}

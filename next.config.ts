@@ -24,6 +24,22 @@ const nextConfig: NextConfig = {
       headers: securityHeaders,
     },
   ],
+
+  rewrites: async () => [
+    // Public URL /compress-image-under-15kb is rewritten internally to
+    // /compress-image-under/15kb so the App Router routes it to
+    // app/(compress)/compress-image-under/[size]/page.tsx with params.size = '15kb'.
+    //
+    // Without this rewrite, the old single-segment folder name
+    // compress-image-under-[size] would capture the entire slug as
+    // params.size = 'compress-image-under-15kb', causing getSizeTarget() to return
+    // undefined and triggering notFound(). The root-level [slug] route would also
+    // intercept these URLs for the same reason (both have identical regex patterns).
+    {
+      source: '/compress-image-under-:size',
+      destination: '/compress-image-under/:size',
+    },
+  ],
 }
 
 export default nextConfig

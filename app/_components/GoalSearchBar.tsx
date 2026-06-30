@@ -84,7 +84,7 @@ export function GoalSearchBar({ goals }: Props) {
       case 'Enter':
         e.preventDefault()
         if (activeIndex >= 0 && filtered[activeIndex]) {
-          router.push(`/goals/${filtered[activeIndex].slug}`)
+          router.push(`/${filtered[activeIndex].slug}`)
           closeDropdown()
           setQuery('')
         }
@@ -140,7 +140,7 @@ export function GoalSearchBar({ goals }: Props) {
             <Link
               key={goal.slug}
               id={`result-${index}`}
-              href={`/goals/${goal.slug}`}
+              href={`/${goal.slug}`}
               role="option"
               aria-selected={index === activeIndex}
               className={cn(

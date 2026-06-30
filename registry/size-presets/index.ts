@@ -370,6 +370,28 @@ export const QUICK_ACTION_SIZES: readonly SizeTarget[] = QUICK_PARAMS
 export type SizeFaq = { question: string; answer: string }
 
 export function generateFaqs(target: SizeTarget): SizeFaq[] {
+  // Size-specific context for format FAQ
+  const formatFaq: SizeFaq = target.targetKB <= 40
+    ? {
+        question: 'Which image formats are supported, and will my PNG be converted?',
+        answer: `JPEG, PNG, and WebP are accepted. Because the target is ${target.displaySize} — a strict limit — PNG files are automatically converted to JPEG before compressing. JPEG achieves far smaller file sizes for photographs. If you need a PNG output at this size, that is not possible while meeting the ${target.displaySize} cap.`,
+      }
+    : {
+        question: 'Which image formats are supported?',
+        answer: `JPEG, PNG, and WebP. For this ${target.displaySize} target, PNG format is preserved where possible. Only at very small targets (under 40 KB) does the tool convert PNG to JPEG to meet the size limit.`,
+      }
+
+  // Size-specific context for quality FAQ
+  const qualityFaq: SizeFaq = target.targetKB <= 30
+    ? {
+        question: `Is this tool completely free, even for ${target.displaySize} compression?`,
+        answer: `Yes — 100% free with no sign-up, no watermarks, and no daily limits. Compressing to very small targets like ${target.displaySize} requires more processing passes, but it still runs entirely in your browser at no cost.`,
+      }
+    : {
+        question: 'Is this tool completely free?',
+        answer: `Yes. 100% free, no sign-up, no watermarks, no daily limits. The tool runs entirely in your browser using the Canvas API — nothing is uploaded to any server.`,
+      }
+
   return [
     {
       question: `What is the best way to compress an image to ${target.displaySize}?`,
@@ -377,22 +399,14 @@ export function generateFaqs(target: SizeTarget): SizeFaq[] {
     },
     {
       question: `Will my image look blurry after compressing to ${target.displaySize}?`,
-      answer: `It depends on your original image size. A 2 MB photo compressed to ${target.displaySize} will lose some detail, inevitable at a ${Math.round((1 - target.targetKB / 2048) * 100)}% reduction. A 200 KB photo compressed to ${target.displaySize} looks nearly identical. The tool maximises quality within the size limit.`,
+      answer: `It depends on your original image size. A 2 MB photo compressed to ${target.displaySize} will lose some detail — inevitable at a ${Math.round((1 - target.targetKB / 2048) * 100)}% reduction. A photo already close to ${target.displaySize} looks nearly identical. The tool always maximises quality within the size limit.`,
     },
-    {
-      question: 'Which image formats are supported?',
-      answer:
-        'JPEG, PNG, and WebP. For very small targets like under 30 KB, PNG images are automatically converted to JPEG since JPEG compression is more efficient for photos.',
-    },
-    {
-      question: 'Is this tool completely free?',
-      answer:
-        'Yes. 100% free, no sign-up, no watermarks, no daily limits. The tool runs entirely in your browser and nothing is uploaded to any server.',
-    },
+    formatFaq,
+    qualityFaq,
     {
       question: 'Can I compress multiple images at once?',
       answer:
-        'Currently the tool processes one image at a time. After downloading, click "Process another image" to compress the next one. Batch processing is on the roadmap.',
+        `Currently the tool processes one image at a time. After downloading, click "Process another image" to compress the next one. Batch processing is planned for a future release.`,
     },
   ]
 }

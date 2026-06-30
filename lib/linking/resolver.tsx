@@ -21,7 +21,7 @@ export function resolveGoalLinks(text: string): React.ReactNode[] {
     parts.push(
       <a
         key={slug}
-        href={`/goals/${slug}`}
+        href={`/${slug}`}
         className="font-medium text-indigo-600 underline underline-offset-2 hover:text-indigo-500 transition-colors"
       >
         {label}
