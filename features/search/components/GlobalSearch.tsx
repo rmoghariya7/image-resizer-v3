@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useMemo, type ElementType } from 'react'
 import { useRouter } from 'next/navigation'
-import { GraduationCap, CreditCard, Minimize2, PenLine, FolderOpen, Wrench } from 'lucide-react'
+import { GraduationCap, CreditCard, Minimize2, PenLine, FolderOpen, Wrench, BookOpen, Clock } from 'lucide-react'
 import {
   Command,
   CommandDialog,
@@ -16,8 +16,9 @@ import {
 import { cn } from '@/lib/utils'
 import { useSearch } from '../context'
 import { filterSearchIndex } from '../search-index'
-import type { GoalSearchItem, CategorySearchItem, ToolSearchItem } from '../types'
+import type { GoalSearchItem, CategorySearchItem, ToolSearchItem, LearnSearchItem } from '../types'
 import type { GoalCategory } from '@/types/registry'
+import { LEARN_CATEGORY_LABELS } from '@/registry/learn/schema'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -165,6 +166,46 @@ function ToolResultItem({
   )
 }
 
+function LearnResultItem({
+  item,
+  onSelect,
+}: {
+  item: LearnSearchItem
+  onSelect: (href: string) => void
+}) {
+  return (
+    <CommandItem
+      value={item.slug}
+      onSelect={() => onSelect(item.href)}
+      className="gap-3 py-2.5"
+    >
+      <div
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-100"
+        aria-hidden="true"
+      >
+        <BookOpen className="size-4 text-indigo-600" />
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <span className="truncate text-sm font-medium leading-tight text-foreground">
+          {item.label}
+        </span>
+        {item.description && (
+          <span className="mt-0.5 truncate text-xs text-muted-foreground">
+            {item.description}
+          </span>
+        )}
+      </div>
+      <span
+        className="hidden shrink-0 items-center gap-1 text-[11px] text-muted-foreground sm:flex"
+        aria-hidden="true"
+      >
+        <Clock className="h-3 w-3" />
+        {item.readingTime}m
+      </span>
+    </CommandItem>
+  )
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function GlobalSearch() {
@@ -212,24 +253,25 @@ export function GlobalSearch() {
     [index, query, isSearching],
   )
 
-  const displayGoals = isSearching ? (filtered?.goals ?? []) : popularGoals
+  const displayGoals      = isSearching ? (filtered?.goals ?? [])      : popularGoals
   const displayCategories = isSearching ? (filtered?.categories ?? []) : [...index.categories]
-  const displayTools = isSearching ? (filtered?.tools ?? []) : []
+  const displayTools      = isSearching ? (filtered?.tools ?? [])      : []
+  const displayLearn      = isSearching ? (filtered?.learn ?? [])      : []
 
   const hasResults =
-    displayGoals.length + displayCategories.length + displayTools.length > 0
+    displayGoals.length + displayCategories.length + displayTools.length + displayLearn.length > 0
 
   return (
     <CommandDialog
       open={open}
       onOpenChange={handleOpenChange}
       title="Search Presetly"
-      description="Search for goals, categories, or tools"
+      description="Search for tools, guides, and categories"
       className="sm:max-w-xl"
     >
       <Command shouldFilter={false}>
         <CommandInput
-          placeholder="Search goals, categories, tools…"
+          placeholder="Search tools, guides, categories…"
           value={query}
           onValueChange={setQuery}
         />
@@ -259,38 +301,25 @@ export function GlobalSearch() {
           )}
 
           {displayTools.length > 0 && (
-            <>
-              <CommandSeparator />
-              <CommandGroup heading="Tools">
-                {displayTools.map(item => (
-                  <ToolResultItem key={item.key} item={item} onSelect={navigate} />
-                ))}
-              </CommandGroup>
-            </>
+            <CommandGroup heading="Tools">
+              {displayTools.map(item => (
+                <ToolResultItem key={item.key} item={item} onSelect={navigate} />
+              ))}
+            </CommandGroup>
+          )}
+
+          {displayLearn.length > 0 && (
+            <CommandSeparator />
+          )}
+
+          {displayLearn.length > 0 && (
+            <CommandGroup heading="Learn">
+              {displayLearn.map(item => (
+                <LearnResultItem key={item.slug} item={item} onSelect={navigate} />
+              ))}
+            </CommandGroup>
           )}
         </CommandList>
-
-        {/* Footer keyboard hints */}
-        <div className="flex items-center gap-3 border-t border-border/60 px-3 py-2">
-          <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <kbd className="rounded border border-border bg-muted px-1 font-mono text-[10px]">
-              ↑↓
-            </kbd>
-            navigate
-          </span>
-          <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <kbd className="rounded border border-border bg-muted px-1 font-mono text-[10px]">
-              ↵
-            </kbd>
-            open
-          </span>
-          <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <kbd className="rounded border border-border bg-muted px-1 font-mono text-[10px]">
-              esc
-            </kbd>
-            close
-          </span>
-        </div>
       </Command>
     </CommandDialog>
   )

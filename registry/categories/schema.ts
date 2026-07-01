@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { GOAL_CATEGORY_SCHEMA, faqSchema } from '@/registry/goals/schema'
+import { searchIntentSchema } from '@/registry/shared/search-intent'
 
 // ─── SubcategoryDefinition ────────────────────────────────────────────────────
 
@@ -35,6 +36,10 @@ export const categoryDefinitionSchema = z.object({
   // Sitemap priority 0-1
   priority: z.number().min(0).max(1),
   updatedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+
+  // Search intent — powers metadata hints, internal linking, and recommendations.
+  // See docs/search-intent.md.
+  search: searchIntentSchema.optional(),
 })
 
 export type CategoryDefinition = z.infer<typeof categoryDefinitionSchema>

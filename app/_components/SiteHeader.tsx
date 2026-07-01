@@ -35,6 +35,12 @@ export function SiteHeader() {
             >
               FAQ
             </Link>
+            <Link
+              href="/learn"
+              className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              Learn
+            </Link>
           </nav>
 
           <SearchTrigger />

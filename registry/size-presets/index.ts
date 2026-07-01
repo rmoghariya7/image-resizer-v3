@@ -1,3 +1,4 @@
+import type { SearchIntent } from '@/registry/shared/search-intent'
 import type { CompressPresetKey } from '@/registry/presets/schema'
 
 // ─── SizeTarget type ──────────────────────────────────────────────────────────
@@ -19,6 +20,8 @@ export type SizeTarget = {
   readonly ogDescription?: string
   readonly twitterTitle?: string
   readonly twitterDescription?: string
+  // Search intent — see docs/search-intent.md.
+  readonly search?: SearchIntent
 }
 
 // ─── Size target definitions ──────────────────────────────────────────────────
@@ -47,6 +50,18 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
       'compress jpg to 15kb',
       'compress png to 15kb',
     ],
+    search: {
+      primaryQuery: 'compress image to 15kb',
+      relatedQueries: [
+        'reduce image size to 15kb',
+        'compress photo to 15kb',
+        'make image 15kb',
+        'upsc photo 15kb',
+        'government portal 15kb image',
+      ],
+      intent: 'transactional',
+      topicCluster: 'image-compression',
+    },
   },
   {
     id: 'compress-20kb',
@@ -72,6 +87,18 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
       'compress png to 20kb',
       'upsc photo size',
     ],
+    search: {
+      primaryQuery: 'compress image to 20kb',
+      relatedQueries: [
+        'reduce image size to 20kb',
+        'compress photo to 20kb',
+        'make image 20kb',
+        'upsc signature 20kb',
+        'shrink image to 20kb',
+      ],
+      intent: 'transactional',
+      topicCluster: 'image-compression',
+    },
   },
   {
     id: 'compress-25kb',
@@ -95,6 +122,18 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
       'resize image 25kb',
       'compress jpg to 25kb',
     ],
+    search: {
+      primaryQuery: 'compress image to 25kb',
+      relatedQueries: [
+        'reduce image size to 25kb',
+        'compress photo to 25kb',
+        'make image 25kb',
+        'exam photo 25kb',
+        'shrink image to 25kb',
+      ],
+      intent: 'transactional',
+      topicCluster: 'image-compression',
+    },
   },
   {
     id: 'compress-30kb',
@@ -118,6 +157,18 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
       'resize image 30kb',
       'compress jpg to 30kb',
     ],
+    search: {
+      primaryQuery: 'compress image to 30kb',
+      relatedQueries: [
+        'reduce image size to 30kb',
+        'compress photo to 30kb',
+        'make image 30kb',
+        'signature 30kb portal',
+        'shrink image to 30kb',
+      ],
+      intent: 'transactional',
+      topicCluster: 'image-compression',
+    },
   },
   {
     id: 'compress-40kb',
@@ -140,6 +191,18 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
       'image compressor 40kb',
       'resize image 40kb',
     ],
+    search: {
+      primaryQuery: 'compress image to 40kb',
+      relatedQueries: [
+        'reduce image size to 40kb',
+        'compress photo to 40kb',
+        'make image 40kb',
+        'shrink image to 40kb',
+        'image compressor 40kb',
+      ],
+      intent: 'transactional',
+      topicCluster: 'image-compression',
+    },
   },
   {
     id: 'compress-50kb',
@@ -166,6 +229,18 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
       'aadhaar photo size',
       'pan card photo size',
     ],
+    search: {
+      primaryQuery: 'compress image to 50kb',
+      relatedQueries: [
+        'reduce image size to 50kb',
+        'compress photo to 50kb',
+        'make image 50kb',
+        'aadhaar photo 50kb',
+        'shrink image to 50kb',
+      ],
+      intent: 'transactional',
+      topicCluster: 'image-compression',
+    },
   },
   {
     id: 'compress-75kb',
@@ -188,6 +263,18 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
       'image compressor 75kb',
       'resize image 75kb',
     ],
+    search: {
+      primaryQuery: 'compress image to 75kb',
+      relatedQueries: [
+        'reduce image size to 75kb',
+        'compress photo to 75kb',
+        'make image 75kb',
+        'shrink image to 75kb',
+        'image compressor 75kb',
+      ],
+      intent: 'transactional',
+      topicCluster: 'image-compression',
+    },
   },
   {
     id: 'compress-100kb',
@@ -213,6 +300,18 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
       'compress png to 100kb',
       'passport photo size',
     ],
+    search: {
+      primaryQuery: 'compress image to 100kb',
+      relatedQueries: [
+        'reduce image size to 100kb',
+        'compress photo to 100kb',
+        'make image 100kb',
+        'passport photo 100kb',
+        'shrink image to 100kb',
+      ],
+      intent: 'transactional',
+      topicCluster: 'image-compression',
+    },
   },
   {
     id: 'compress-150kb',
@@ -235,6 +334,18 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
       'image compressor 150kb',
       'resize image 150kb',
     ],
+    search: {
+      primaryQuery: 'compress image to 150kb',
+      relatedQueries: [
+        'reduce image size to 150kb',
+        'compress photo to 150kb',
+        'make image 150kb',
+        'shrink image to 150kb',
+        'image compressor 150kb',
+      ],
+      intent: 'transactional',
+      topicCluster: 'image-compression',
+    },
   },
   {
     id: 'compress-200kb',
@@ -258,6 +369,18 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
       'resize image 200kb',
       'compress jpg to 200kb',
     ],
+    search: {
+      primaryQuery: 'compress image to 200kb',
+      relatedQueries: [
+        'reduce image size to 200kb',
+        'compress photo to 200kb',
+        'make image 200kb',
+        'voter id photo 200kb',
+        'shrink image to 200kb',
+      ],
+      intent: 'transactional',
+      topicCluster: 'image-compression',
+    },
   },
   {
     id: 'compress-500kb',
@@ -281,6 +404,18 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
       'resize image 500kb',
       'compress jpg online',
     ],
+    search: {
+      primaryQuery: 'compress image to 500kb',
+      relatedQueries: [
+        'reduce image size to 500kb',
+        'compress photo to 500kb',
+        'make image 500kb',
+        'shrink image to 500kb',
+        'image compressor 500kb',
+      ],
+      intent: 'transactional',
+      topicCluster: 'image-compression',
+    },
   },
   {
     id: 'compress-1mb',
@@ -305,6 +440,18 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
       'compress jpg online free',
       'compress png online free',
     ],
+    search: {
+      primaryQuery: 'compress image to 1mb',
+      relatedQueries: [
+        'reduce image size to 1mb',
+        'compress photo to 1mb',
+        'make image 1mb',
+        'shrink image to 1mb',
+        'image compressor 1mb',
+      ],
+      intent: 'transactional',
+      topicCluster: 'image-compression',
+    },
   },
 ]
 

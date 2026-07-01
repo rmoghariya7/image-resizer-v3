@@ -71,6 +71,18 @@ export const voterIdGoal = {
     'aadhaar-photo-resizer',
     'pan-card-photo-resizer',
   ],
+  search: {
+    primaryQuery: 'voter id photo resizer',
+    relatedQueries: [
+      'voter id photo size',
+      'nvsp photo resize',
+      'voter card photo requirements',
+      'voter id photo 100kb',
+      'voter id photo pixels',
+    ],
+    intent: 'transactional',
+    topicCluster: 'id-documents',
+  },
   status: 'active',
   priority: 'medium',
   updatedAt: '2026-06-01',

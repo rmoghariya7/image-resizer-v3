@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { PRESET_KEY_SCHEMA } from '@/registry/presets/schema'
 import { TOOL_KEY_SCHEMA } from '@/registry/tools/schema'
+import { searchIntentSchema } from '@/registry/shared/search-intent'
 
 // ─── Goal category ───────────────────────────────────────────────────────────
 // Defined here (not in categories/schema) to avoid a circular dependency.
@@ -92,6 +93,10 @@ export const goalDefinitionSchema = z.object({
   status: goalStatusSchema,
   priority: goalPrioritySchema,
   updatedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be YYYY-MM-DD'),
+
+  // Search intent (optional) -- powers metadata hints, internal linking, and recommendations.
+  // See docs/search-intent.md.
+  search: searchIntentSchema.optional(),
 })
 
 export type GoalDefinition = z.infer<typeof goalDefinitionSchema>

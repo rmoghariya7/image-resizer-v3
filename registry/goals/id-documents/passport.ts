@@ -74,6 +74,18 @@ export const passportGoal = {
     'pan-card-photo-resizer',
   ],
   requirementsPage: 'passport-photo-requirements-india',
+  search: {
+    primaryQuery: 'passport photo maker',
+    relatedQueries: [
+      'passport photo size india',
+      'passport photo resize online',
+      'passport photo 35x45mm',
+      'passport photo requirements india',
+      'passport photo 50kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'id-documents',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-01',

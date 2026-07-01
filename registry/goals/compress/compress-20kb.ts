@@ -80,6 +80,18 @@ export const compress20kbGoal = {
     'signature-resize-20kb',
     'signature-resize-10kb',
   ],
+  search: {
+    primaryQuery: 'compress image to 20kb',
+    relatedQueries: [
+      'reduce image size to 20kb',
+      'compress photo to 20kb',
+      'make image 20kb',
+      'upsc signature 20kb',
+      'shrink image to 20kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'image-compression',
+  },
   status: 'active',
   priority: 'medium',
   updatedAt: '2026-06-24',

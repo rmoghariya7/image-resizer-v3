@@ -81,6 +81,18 @@ export const signature50kbGoal = {
     'aadhaar-photo-resizer',
     'pan-card-photo-resizer',
   ],
+  search: {
+    primaryQuery: 'signature resize to 50kb',
+    relatedQueries: [
+      'compress signature to 50kb',
+      'signature image 50kb',
+      'exam portal signature 50kb',
+      'signature resize online 50kb',
+      'signature under 50kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'signature-tools',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-24',

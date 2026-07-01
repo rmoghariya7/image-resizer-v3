@@ -75,6 +75,18 @@ export const signature10kbGoal = {
     'upsc-photo-resizer',
     'compress-image-20kb',
   ],
+  search: {
+    primaryQuery: 'signature resize to 10kb',
+    relatedQueries: [
+      'compress signature to 10kb',
+      'signature image 10kb',
+      'upsc signature 10kb',
+      'signature resize online',
+      'signature file size 10kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'signature-tools',
+  },
   status: 'active',
   priority: 'low',
   updatedAt: '2026-06-24',

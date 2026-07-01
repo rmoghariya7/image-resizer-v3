@@ -80,6 +80,18 @@ export const sscGoal = {
     'signature-resize-20kb',
     'signature-resize-30kb',
   ],
+  search: {
+    primaryQuery: 'ssc photo resizer',
+    relatedQueries: [
+      'ssc exam photo size',
+      'ssc cgl photo resize',
+      'ssc chsl photo requirements',
+      'ssc photo pixels',
+      'ssc application photo 100kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'exam-photos',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-24',

@@ -76,6 +76,18 @@ export const jobApplicationGoal = {
     'resume-photo-resizer',
     'compress-image-to-200kb',
   ],
+  search: {
+    primaryQuery: 'job application photo resizer',
+    relatedQueries: [
+      'job application photo size',
+      'resume photo resize',
+      'job portal photo requirements',
+      'linkedin photo size',
+      'job photo 200kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'id-documents',
+  },
   status: 'active',
   priority: 'medium',
   updatedAt: '2026-06-23',

@@ -75,6 +75,18 @@ export const aadhaarGoal = {
     'compress-image-to-50kb',
   ],
   requirementsPage: 'aadhaar-photo-update-requirements',
+  search: {
+    primaryQuery: 'aadhaar photo resizer',
+    relatedQueries: [
+      'aadhaar photo update',
+      'uidai photo size',
+      'aadhaar card photo resize',
+      'aadhaar photo 50kb',
+      'aadhaar photo pixels',
+    ],
+    intent: 'transactional',
+    topicCluster: 'id-documents',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-01',

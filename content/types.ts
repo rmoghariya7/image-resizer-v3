@@ -1,3 +1,4 @@
+import type { SearchIntent } from '@/registry/shared/search-intent'
 import type { PresetKey, GoalCategory } from '@/types/registry'
 
 // ─── Requirements ─────────────────────────────────────────────────────────────
@@ -63,4 +64,6 @@ export type GuideContent = {
   sections: readonly GuideSection[]
   relatedGoals?: string[]
   updatedAt: string
+  // Search intent — see docs/search-intent.md.
+  search?: SearchIntent
 }

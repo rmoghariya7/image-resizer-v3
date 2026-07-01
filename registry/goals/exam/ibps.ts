@@ -80,6 +80,18 @@ export const ibpsGoal = {
     'signature-resize-30kb',
     'signature-resize-20kb',
   ],
+  search: {
+    primaryQuery: 'ibps photo resizer',
+    relatedQueries: [
+      'ibps photo size',
+      'ibps exam photo resize',
+      'ibps application photo requirements',
+      'ibps po photo size',
+      'ibps clerk photo size',
+    ],
+    intent: 'transactional',
+    topicCluster: 'exam-photos',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-24',

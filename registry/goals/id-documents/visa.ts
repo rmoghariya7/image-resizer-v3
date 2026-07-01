@@ -82,6 +82,18 @@ export const visaGoal = {
     'passport-photo-maker',
     'compress-image-to-200kb',
   ],
+  search: {
+    primaryQuery: 'visa photo maker',
+    relatedQueries: [
+      'visa photo size',
+      'us visa photo requirements',
+      'visa photo resize online',
+      'visa photo 2x2 inch',
+      'uk visa photo size',
+    ],
+    intent: 'transactional',
+    topicCluster: 'id-documents',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-23',

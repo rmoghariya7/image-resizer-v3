@@ -80,6 +80,18 @@ export const compress50kbGoal = {
     'aadhaar-photo-resizer',
     'signature-resize-50kb',
   ],
+  search: {
+    primaryQuery: 'compress image to 50kb',
+    relatedQueries: [
+      'reduce image size to 50kb',
+      'compress photo to 50kb',
+      'make image 50kb',
+      'aadhaar photo 50kb',
+      'shrink image to 50kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'image-compression',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-24',

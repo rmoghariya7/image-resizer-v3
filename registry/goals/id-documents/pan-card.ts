@@ -72,6 +72,18 @@ export const panCardGoal = {
     'signature-resize-20kb',
     'aadhaar-photo-resizer',
   ],
+  search: {
+    primaryQuery: 'pan card photo resizer',
+    relatedQueries: [
+      'pan card photo size',
+      'nsdl pan photo resize',
+      'pan application photo requirements',
+      'pan card photo 50kb',
+      'pan card photo pixels',
+    ],
+    intent: 'transactional',
+    topicCluster: 'id-documents',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-01',

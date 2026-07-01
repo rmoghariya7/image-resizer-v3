@@ -71,6 +71,18 @@ export const ndaGoal = {
     'signature-resize-20kb',
     'upsc-photo-resizer',
   ],
+  search: {
+    primaryQuery: 'nda photo resizer',
+    relatedQueries: [
+      'nda exam photo size',
+      'nda application photo resize',
+      'nda photo requirements',
+      'upsc nda photo size pixels',
+      'nda photo 300kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'exam-photos',
+  },
   status: 'active',
   priority: 'medium',
   updatedAt: '2026-06-24',

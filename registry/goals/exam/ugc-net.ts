@@ -81,6 +81,18 @@ export const ugcNetGoal = {
     'signature-resize-30kb',
     'signature-resize-20kb',
   ],
+  search: {
+    primaryQuery: 'ugc net photo resizer',
+    relatedQueries: [
+      'ugc net photo size',
+      'ugc net exam photo resize',
+      'ugc net application photo requirements',
+      'nta ugc photo pixels',
+      'ugc net photo 100kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'exam-photos',
+  },
   status: 'active',
   priority: 'medium',
   updatedAt: '2026-06-24',

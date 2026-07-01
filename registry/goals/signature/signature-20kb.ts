@@ -74,6 +74,18 @@ export const signature20kbGoal = {
     'gpsc-photo-resizer',
     'compress-image-to-20kb',
   ],
+  search: {
+    primaryQuery: 'signature resize to 20kb',
+    relatedQueries: [
+      'compress signature to 20kb',
+      'signature image 20kb',
+      'upsc signature size 20kb',
+      'signature resize online 20kb',
+      'government portal signature 20kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'signature-tools',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-01',

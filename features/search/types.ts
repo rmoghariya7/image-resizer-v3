@@ -1,4 +1,5 @@
 import type { GoalCategory, ToolKey } from '@/types/registry'
+import type { LearnCategory } from '@/registry/learn/schema'
 
 export type GoalSearchItem = {
   type: 'goal'
@@ -29,16 +30,29 @@ export type ToolSearchItem = {
   keywords: string[]
 }
 
-export type SearchItem = GoalSearchItem | CategorySearchItem | ToolSearchItem
+export type LearnSearchItem = {
+  type: 'learn'
+  slug: string
+  href: string
+  label: string
+  description: string
+  category: LearnCategory
+  readingTime: number
+  keywords: string[]
+}
+
+export type SearchItem = GoalSearchItem | CategorySearchItem | ToolSearchItem | LearnSearchItem
 
 export type SearchIndex = {
-  readonly goals: readonly GoalSearchItem[]
-  readonly categories: readonly CategorySearchItem[]
-  readonly tools: readonly ToolSearchItem[]
+  goals: GoalSearchItem[]
+  categories: CategorySearchItem[]
+  tools: ToolSearchItem[]
+  learn: LearnSearchItem[]
 }
 
 export type FilteredSearchIndex = {
   goals: GoalSearchItem[]
   categories: CategorySearchItem[]
   tools: ToolSearchItem[]
+  learn: LearnSearchItem[]
 }

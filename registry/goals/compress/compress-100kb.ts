@@ -81,6 +81,18 @@ export const compress100kbGoal = {
     'passport-photo-maker',
     'ugc-net-photo-resizer',
   ],
+  search: {
+    primaryQuery: 'compress image to 100kb',
+    relatedQueries: [
+      'reduce image size to 100kb',
+      'compress photo to 100kb',
+      'make image 100kb',
+      'passport photo 100kb',
+      'shrink image to 100kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'image-compression',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-24',

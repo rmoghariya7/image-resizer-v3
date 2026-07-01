@@ -81,6 +81,18 @@ export const bankExamGoal = {
     'signature-resize-20kb',
     'signature-resize-30kb',
   ],
+  search: {
+    primaryQuery: 'bank exam photo resizer',
+    relatedQueries: [
+      'bank exam photo size',
+      'sbi po photo resize',
+      'bank application photo requirements',
+      'ibps bank photo pixels',
+      'bank exam photo 50kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'exam-photos',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-24',

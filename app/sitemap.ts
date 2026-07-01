@@ -3,6 +3,7 @@ import { getSitemapEntries } from '@/registry/goals'
 import { getAllCategories } from '@/registry/categories'
 import { getAllSizeParams } from '@/registry/size-presets'
 import { getAllGuides } from '@/content/guides'
+import { getLearnSitemapEntries } from '@/registry/learn'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 
@@ -69,5 +70,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }))
 
-  return [...home, ...categoryPages, ...compressionPages, ...goalPages, ...guidePages, ...legalPages]
+  // Learn index page
+  const learnIndex: MetadataRoute.Sitemap = [{
+    url: `${BASE_URL}/learn`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }]
+
+  // Learn article pages
+  const LEARN_PRIORITY_MAP: Record<string, number> = { high: 0.8, medium: 0.7, low: 0.6 }
+  const learnPages: MetadataRoute.Sitemap = getLearnSitemapEntries().map(entry => ({
+    url: `${BASE_URL}/learn/${entry.slug}`,
+    lastModified: new Date(entry.updatedAt),
+    changeFrequency: 'monthly' as const,
+    priority: LEARN_PRIORITY_MAP[entry.priority] ?? 0.7,
+  }))
+
+  return [
+    ...home,
+    ...learnIndex,
+    ...categoryPages,
+    ...compressionPages,
+    ...goalPages,
+    ...guidePages,
+    ...learnPages,
+    ...legalPages,
+  ]
 }

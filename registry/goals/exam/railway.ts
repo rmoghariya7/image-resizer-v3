@@ -80,6 +80,18 @@ export const railwayGoal = {
     'signature-resize-20kb',
     'signature-resize-30kb',
   ],
+  search: {
+    primaryQuery: 'railway exam photo resizer',
+    relatedQueries: [
+      'rrb photo size',
+      'railway recruitment photo resize',
+      'rrb ntpc photo requirements',
+      'railway photo pixels',
+      'rrb photo size kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'exam-photos',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-24',

@@ -81,6 +81,18 @@ export const resumePhotoGoal = {
     'job-application-photo-resizer',
     'compress-image-to-100kb',
   ],
+  search: {
+    primaryQuery: 'resume photo resizer',
+    relatedQueries: [
+      'resume photo size',
+      'cv photo resize online',
+      'resume photo requirements',
+      'resume photo pixels',
+      'resume photo 100kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'id-documents',
+  },
   status: 'active',
   priority: 'medium',
   updatedAt: '2026-06-23',

@@ -17,7 +17,7 @@ type SearchContextValue = {
   index: SearchIndex
 }
 
-const EMPTY_INDEX: SearchIndex = { goals: [], categories: [], tools: [] }
+const EMPTY_INDEX: SearchIndex = { goals: [], categories: [], tools: [], learn: [] }
 
 const SearchContext = createContext<SearchContextValue | null>(null)
 

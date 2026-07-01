@@ -2,6 +2,7 @@ import { getAllGoals } from '@/registry/goals'
 import { getAllCategories } from '@/registry/categories'
 import { getAllTools } from '@/registry/tools'
 import { SIZE_TARGETS } from '@/registry/size-presets'
+import { getAllLearnArticles } from '@/registry/learn'
 import type { GoalCategory } from '@/registry/goals/schema'
 import type {
   SearchIndex,
@@ -9,6 +10,7 @@ import type {
   GoalSearchItem,
   CategorySearchItem,
   ToolSearchItem,
+  LearnSearchItem,
 } from './types'
 
 export function buildSearchIndex(): SearchIndex {
@@ -74,28 +76,47 @@ export function buildSearchIndex(): SearchIndex {
     ],
   }))
 
-  return { goals, categories, tools }
+  const learn: LearnSearchItem[] = getAllLearnArticles().map((article) => ({
+    type:        'learn' as const,
+    slug:        article.slug,
+    href:        `/learn/${article.slug}`,
+    label:       article.title,
+    description: article.description,
+    category:    article.category,
+    readingTime: article.readingTime,
+    keywords: [
+      article.title.toLowerCase(),
+      article.shortTitle.toLowerCase(),
+      article.category.toLowerCase(),
+      ...article.tags.map((t) => t.toLowerCase()),
+      ...article.keywords.map((k) => k.toLowerCase()),
+    ],
+  }))
+
+  return { goals, categories, tools, learn }
 }
 
-function matchesQuery(keywords: string[], query: string): boolean {
-  return keywords.some((k) => k.includes(query))
-}
-
-export function filterSearchIndex(
-  index: SearchIndex,
-  query: string,
-): FilteredSearchIndex {
-  const q = query.toLowerCase().trim()
-
+export function filterSearchIndex(index: SearchIndex, query: string): FilteredSearchIndex {
+  const q = query.trim().toLowerCase()
   if (!q) {
-    return { goals: [], categories: [], tools: [] }
+    return { goals: [], categories: [], tools: [], learn: [] }
   }
-
+  const match = (keywords: string[]) => keywords.some((k) => k.includes(q))
   return {
-    goals: index.goals.filter((item) => matchesQuery(item.keywords, q)),
-    categories: index.categories.filter((item) =>
-      matchesQuery(item.keywords, q),
+    goals: index.goals.filter(
+      (item) => match(item.keywords) || item.label.toLowerCase().includes(q),
     ),
-    tools: index.tools.filter((item) => matchesQuery(item.keywords, q)),
+    categories: index.categories.filter(
+      (item) => match(item.keywords) || item.label.toLowerCase().includes(q),
+    ),
+    tools: index.tools.filter(
+      (item) => match(item.keywords) || item.label.toLowerCase().includes(q),
+    ),
+    learn: index.learn.filter(
+      (item) =>
+        match(item.keywords) ||
+        item.label.toLowerCase().includes(q) ||
+        item.description.toLowerCase().includes(q),
+    ),
   }
 }

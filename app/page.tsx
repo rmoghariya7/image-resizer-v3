@@ -7,6 +7,7 @@ import { CategoriesSection } from './_components/CategoriesSection'
 import { FeaturedToolsSection } from './_components/FeaturedToolsSection'
 import { HomeFaqSection } from './_components/HomeFaqSection'
 import { InternalLinksSection } from './_components/InternalLinksSection'
+import { HomeLearnSection } from './_components/HomeLearnSection'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 
@@ -144,6 +145,7 @@ export default function HomePage() {
         <CategoriesSection />
         <FeaturedToolsSection />
         <HomeFaqSection />
+        <HomeLearnSection />
         <InternalLinksSection />
       </main>
 

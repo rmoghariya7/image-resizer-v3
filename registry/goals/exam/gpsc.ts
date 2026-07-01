@@ -72,6 +72,18 @@ export const gpscGoal = {
     'signature-resize-20kb',
     'pan-card-photo-resizer',
   ],
+  search: {
+    primaryQuery: 'gpsc photo resizer',
+    relatedQueries: [
+      'gpsc photo size',
+      'gpsc exam photo resize',
+      'gpsc application photo requirements',
+      'gpsc photo 200kb',
+      'gpsc photo pixels',
+    ],
+    intent: 'transactional',
+    topicCluster: 'exam-photos',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-24',

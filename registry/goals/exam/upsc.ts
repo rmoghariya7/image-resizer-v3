@@ -80,6 +80,18 @@ export const upscGoal = {
     'signature-resize-20kb',
     'compress-image-20kb',
   ],
+  search: {
+    primaryQuery: 'upsc photo resizer',
+    relatedQueries: [
+      'upsc photo size pixels',
+      'upsc exam photo resize',
+      'upsc application photo 413x531',
+      'ias photo requirements',
+      'upsc photo under 300kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'exam-photos',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-24',

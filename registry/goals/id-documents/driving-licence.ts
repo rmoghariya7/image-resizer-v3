@@ -80,6 +80,18 @@ export const drivingLicenceGoal = {
     'aadhaar-photo-resizer',
     'voter-id-photo-resizer',
   ],
+  search: {
+    primaryQuery: 'driving licence photo resizer',
+    relatedQueries: [
+      'driving licence photo size',
+      'dl photo resize online',
+      'driving licence photo requirements',
+      'rto photo size',
+      'driving licence photo kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'id-documents',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-23',

@@ -81,6 +81,18 @@ export const signature30kbGoal = {
     'ibps-photo-resizer',
     'ugc-net-photo-resizer',
   ],
+  search: {
+    primaryQuery: 'signature resize to 30kb',
+    relatedQueries: [
+      'compress signature to 30kb',
+      'signature image 30kb',
+      'ibps signature 30kb',
+      'signature resize online 30kb',
+      'signature file 30kb',
+    ],
+    intent: 'transactional',
+    topicCluster: 'signature-tools',
+  },
   status: 'active',
   priority: 'high',
   updatedAt: '2026-06-24',
