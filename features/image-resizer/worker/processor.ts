@@ -1,32 +1,7 @@
 import type { Preset } from '@/types/registry'
-import type { AcceptedMimeType } from '../types'
+import type { AcceptedMimeType, ResizeOperation } from '../types'
 import type { CompressionStatus } from '../types'
-
-// ─── Geometry ─────────────────────────────────────────────────────────────────
-
-interface DrawParams {
-  sx: number; sy: number; sw: number; sh: number
-  dx: number; dy: number; dw: number; dh: number
-}
-
-function coverFit(
-  srcW: number, srcH: number,
-  dstW: number, dstH: number,
-): DrawParams {
-  const srcRatio = srcW / srcH
-  const dstRatio = dstW / dstH
-  let sx = 0, sy = 0, sw = srcW, sh = srcH
-
-  if (srcRatio > dstRatio) {
-    sw = Math.round(srcH * dstRatio)
-    sx = Math.round((srcW - sw) / 2)
-  } else {
-    sh = Math.round(srcW / dstRatio)
-    sy = Math.round((srcH - sh) / 2)
-  }
-
-  return { sx, sy, sw, sh, dx: 0, dy: 0, dw: dstW, dh: dstH }
-}
+import { coverFit, resolveOutputDimensions } from '../lib/resize-geometry'
 
 // ─── Quality binary search ────────────────────────────────────────────────────
 // Returns the candidate closest to targetBytes across the explored quality range.
@@ -170,6 +145,67 @@ export async function processImagePreset(
   )
   onProgress(100)
   return blob
+}
+
+// ─── Custom resize operation ──────────────────────────────────────────────────
+// Free-form resize for the /image-resizer flagship tool. Single-pass encode —
+// no quality binary search, the user controls quality directly.
+//
+// Modes:
+//   stretch — output is exactly targetW×targetH; source is distorted if the
+//             aspect ratio differs.
+//   fit     — output is the largest size that fits INSIDE the target while
+//             preserving aspect ratio (no crop, no distortion, no letterbox).
+//   fill    — output is exactly targetW×targetH; source is center-cropped to
+//             cover it (same coverFit used by document presets).
+
+export async function processResizeOperation(
+  bitmap: ImageBitmap,
+  op: ResizeOperation,
+  onProgress: (percent: number) => void,
+): Promise<{ blob: Blob; width: number; height: number }> {
+  const mimeType = `image/${op.format}`
+
+  onProgress(10)
+
+  const { width, height } = resolveOutputDimensions(
+    bitmap.width, bitmap.height,
+    op.targetWidth, op.targetHeight,
+    op.mode,
+  )
+
+  let canvas: OffscreenCanvas
+  if (op.mode === 'fill') {
+    // Exact target dimensions, source center-cropped to cover them.
+    if (typeof OffscreenCanvas === 'undefined') {
+      throw new Error('Your browser does not support image processing. Please update to iOS 16.4+, Chrome 69+, or Firefox 105+.')
+    }
+    canvas = new OffscreenCanvas(width, height)
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('OffscreenCanvas 2D context not available in this environment.')
+    if (mimeType === 'image/jpeg') {
+      // JPEG has no alpha channel — fill white so transparency never turns black.
+      ctx.fillStyle = '#ffffff'
+      ctx.fillRect(0, 0, width, height)
+    }
+    const fit = coverFit(bitmap.width, bitmap.height, width, height)
+    ctx.drawImage(bitmap, fit.sx, fit.sy, fit.sw, fit.sh, fit.dx, fit.dy, fit.dw, fit.dh)
+  } else {
+    // stretch: canvas = target dims (full-bitmap draw distorts as needed).
+    // fit: canvas = contained dims (full-bitmap draw is proportional).
+    canvas = drawToCanvas(bitmap, width, height, mimeType)
+  }
+  bitmap.close()
+
+  onProgress(60)
+
+  const blob = await canvas.convertToBlob({
+    type: mimeType,
+    quality: op.quality / 100,
+  })
+
+  onProgress(100)
+  return { blob, width, height }
 }
 
 // ─── Pure helpers (exported for unit tests) ───────────────────────────────────

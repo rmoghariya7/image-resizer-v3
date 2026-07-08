@@ -66,13 +66,15 @@ export function buildSearchIndex(): SearchIndex {
   const tools: ToolSearchItem[] = getAllTools().map((tool) => ({
     type: 'tool',
     key: tool.key,
-    href: `/tools/${tool.key}`,
+    // Tools with a dedicated page link there; the rest go to the tools listing.
+    href: tool.route ?? '/tools',
     label: tool.name,
     description: tool.description,
     keywords: [
       tool.name.toLowerCase(),
       tool.description.toLowerCase(),
       ...tool.capabilities.map((c) => c.toLowerCase()),
+      ...(tool.keywords ?? []).map((k) => k.toLowerCase()),
     ],
   }))
 

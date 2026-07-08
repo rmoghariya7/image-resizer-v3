@@ -63,6 +63,13 @@ export const toolDefinitionSchema = z.object({
   maxBatchSize: z.number().int().positive(),
 
   capabilities: z.array(toolCapabilitySchema).min(1),
+
+  // Public route of the tool's dedicated page, when one exists
+  // (e.g. '/image-resizer'). Used by the search index and internal linking.
+  route: z.string().startsWith('/').optional(),
+
+  // Extra search-index keywords beyond name/description/capabilities.
+  keywords: z.array(z.string().min(2)).optional(),
 })
 
 export type ToolDefinition = z.infer<typeof toolDefinitionSchema>

@@ -166,6 +166,26 @@ export function getResultRecommendations(goalSlug: string): ResultScreenRecommen
   return { smaller: quick.slice(0, 3), larger: quick.slice(3), complementary }
 }
 
+// ─── Image Resizer (flagship tool) helpers ────────────────────────────────────
+
+/**
+ * Result-screen recommendations for the generic /image-resizer tool.
+ * After resizing, users most often need to hit a file-size cap next (compress
+ * goals) or prepare a matching document photo (complementary goals).
+ */
+export function getImageResizerResultRecommendations(): ResultScreenRecommendations {
+  const quick = getQuickCompressGoals()
+  const complementary = [
+    'upsc-photo-resizer',
+    'passport-photo-maker',
+    'signature-resize-20kb',
+  ]
+    .map(slug => getGoal(slug))
+    .filter((g): g is GoalDefinition => g !== undefined)
+
+  return { smaller: quick.slice(0, 3), larger: quick.slice(3, 6), complementary }
+}
+
 // ─── Homepage helpers ─────────────────────────────────────────────────────────
 
 /** High-priority non-compress goals for the homepage "Popular Tools" section. */

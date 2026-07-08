@@ -4,6 +4,15 @@ import { buildGoalHref } from '@/lib/recommendations/engine'
 
 const FOOTER_SECTIONS = [
   {
+    heading: 'Tools',
+    links: [
+      // Non-goal slugs fall through getGoal() and resolve to /<slug> directly.
+      { label: 'Image Resizer', slug: 'image-resizer' },
+      { label: 'All Tools', slug: 'tools' },
+      { label: 'Learn', slug: 'learn' },
+    ],
+  },
+  {
     heading: 'Exam Photos',
     links: [
       { label: 'UPSC Photo Resizer', slug: 'upsc-photo-resizer' },
@@ -52,7 +61,7 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         {/* Top grid */}
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
           {FOOTER_SECTIONS.map(section => (
             <div key={section.heading}>
               <p className="text-xs font-semibold uppercase tracking-wider text-foreground">

@@ -6,13 +6,21 @@ import type { ResultScreenRecommendations } from '@/lib/recommendations/engine'
 
 interface Props {
   recommendations: ResultScreenRecommendations
+  /**
+   * Link to the flagship /image-resizer tool for custom dimensions.
+   * Defaults to true; the Image Resizer page itself passes false.
+   */
+  showImageResizerLink?: boolean
 }
 
-export function ResultRecommendations({ recommendations }: Props) {
+export function ResultRecommendations({
+  recommendations,
+  showImageResizerLink = true,
+}: Props) {
   const { smaller, larger, complementary } = recommendations
 
   const hasSizes = smaller.length > 0 || larger.length > 0
-  const hasComplementary = complementary.length > 0
+  const hasComplementary = complementary.length > 0 || showImageResizerLink
 
   if (!hasSizes && !hasComplementary) return null
 
@@ -94,6 +102,14 @@ export function ResultRecommendations({ recommendations }: Props) {
                   {goal.shortTitle}
                 </Link>
               ))}
+              {showImageResizerLink && (
+                <Link
+                  href="/image-resizer"
+                  className="inline-flex rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 shadow-sm transition-colors hover:border-indigo-300 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                >
+                  Custom dimensions — Image Resizer
+                </Link>
+              )}
             </div>
           </div>
         )}

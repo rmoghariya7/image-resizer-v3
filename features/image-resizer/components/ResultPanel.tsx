@@ -207,7 +207,9 @@ export function ResultPanel({ original, result, onClear, onReplace }: Props) {
               >
                 {mobileView === 'before'
                   ? `${original.width} × ${original.height}px`
-                  : fmtKB(result.sizeKB)}
+                  : result.width && result.height
+                    ? `${result.width} × ${result.height}px · ${fmtKB(result.sizeKB)}`
+                    : fmtKB(result.sizeKB)}
               </span>
             </figcaption>
           </figure>
@@ -291,6 +293,12 @@ export function ResultPanel({ original, result, onClear, onReplace }: Props) {
                 {result.filename}
               </p>
               <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
+                {/* Output dimensions — present for custom resize operations */}
+                {result.width && result.height && (
+                  <span className="text-gray-500">
+                    {result.width} × {result.height}px
+                  </span>
+                )}
                 <span className="rounded-full bg-indigo-50 px-2 py-0.5 font-semibold text-indigo-700">
                   {fmtKB(result.sizeKB)}
                 </span>

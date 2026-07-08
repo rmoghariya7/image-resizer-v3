@@ -38,6 +38,16 @@ export function RelatedSizesSection({
             </li>
           ))}
         </ul>
+
+        <p className="mt-4 text-sm text-muted-foreground">
+          Need exact pixel dimensions instead?{' '}
+          <Link
+            href="/image-resizer"
+            className="font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Use the free Image Resizer
+          </Link>
+        </p>
       </div>
     </section>
   )

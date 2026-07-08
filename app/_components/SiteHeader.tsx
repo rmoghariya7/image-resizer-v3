@@ -18,6 +18,12 @@ export function SiteHeader() {
             aria-label="Main navigation"
           >
             <Link
+              href="/image-resizer"
+              className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              Image Resizer
+            </Link>
+            <Link
               href="/#tools"
               className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >

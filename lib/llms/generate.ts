@@ -107,6 +107,13 @@ export function generateLlmsTxt(): string {
   // ── Most important tools
   lines.push('## Most Important Tools')
   lines.push('')
+  lines.push(
+    link(
+      'Image Resizer',
+      '/image-resizer',
+      'Resize any image to exact pixel dimensions, by percentage, or with presets for social media, favicons, and government documents.',
+    ),
+  )
   for (const goal of highPriorityGoals) {
     lines.push(link(goal.title, `/${goal.slug}`, goal.description))
   }
@@ -196,6 +203,7 @@ export function generateLlmsFullTxt(): string {
   lines.push('## Core Pages')
   lines.push('')
   lines.push(link('Home', '/'))
+  lines.push(link('Image Resizer', '/image-resizer'))
   lines.push(link('All Tools', '/tools'))
   lines.push('')
 

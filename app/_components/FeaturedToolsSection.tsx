@@ -77,6 +77,34 @@ export function FeaturedToolsSection() {
           className="grid grid-cols-1 gap-4 sm:grid-cols-2"
           role="list"
         >
+          {/* Flagship generic tool — not a registry goal, linked statically */}
+          <li>
+            <Link
+              href="/image-resizer"
+              className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 shadow-sm ring-1 ring-foreground/5 transition-all hover:border-primary/30 hover:shadow-md"
+            >
+              <div className="flex-1 min-w-0">
+                <span className="inline-flex rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700">
+                  Resize
+                </span>
+                <span className="mt-2 block text-base font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
+                  Image Resizer
+                </span>
+                <span className="mt-1 block text-sm leading-snug text-muted-foreground line-clamp-2">
+                  Resize any image to exact pixel dimensions, by percentage, or
+                  with presets for Instagram, YouTube, favicons, and documents.
+                </span>
+                <span className="mt-2 block font-mono text-xs text-muted-foreground/70">
+                  Any dimensions · PNG, JPEG, WebP · 25+ presets
+                </span>
+              </div>
+              <ArrowRight
+                size={16}
+                className="mt-1 shrink-0 text-muted-foreground/50 transition-all group-hover:translate-x-0.5 group-hover:text-primary"
+                aria-hidden="true"
+              />
+            </Link>
+          </li>
           {goals.map(goal => {
             const spec = getSpecLine(goal)
             const categoryLabel = CATEGORY_LABELS[goal.category] ?? goal.category

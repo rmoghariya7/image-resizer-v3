@@ -55,6 +55,16 @@ export function RelatedSizesSection({ sizes }: Props) {
             </li>
           ))}
         </ul>
+
+        <p className="mt-6 text-sm text-muted-foreground">
+          Need exact pixel dimensions instead of a file size?{' '}
+          <Link
+            href="/image-resizer"
+            className="font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Use the free Image Resizer
+          </Link>
+        </p>
       </div>
     </section>
   )
