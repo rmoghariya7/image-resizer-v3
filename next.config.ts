@@ -7,8 +7,8 @@ import type { NextConfig } from 'next'
 // when new integrations are enabled.
 //
 // UPGRADING:
-//   Google Analytics  -- add to script-src: https://www.googletagmanager.com https://www.google-analytics.com
-//                        add to connect-src: https://www.google-analytics.com https://analytics.google.com
+//   Google Analytics  -- DONE (see script-src / connect-src below).
+//   Microsoft Clarity -- DONE (see script-src / connect-src below).
 //   Google AdSense    -- add to script-src: https://pagead2.googlesyndication.com https://*.googlesyndication.com
 //                        add to frame-src:  https://googleads.g.doubleclick.net https://tpc.googlesyndication.com
 //                        add to img-src:    https://googleads.g.doubleclick.net
@@ -25,8 +25,12 @@ const CSP_DIRECTIVES = [
   // Next.js App Router requires 'unsafe-inline' for its inline hydration scripts.
   // 'unsafe-eval' is NOT included in production - React/webpack only need it for
   // dev-mode Fast Refresh and eval-based source maps. Production builds never call eval().
-  // When adding Google Analytics or AdSense, append their script origins here.
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
+  // Google Analytics (via @next/third-parties/google) loads gtag.js from googletagmanager.com.
+  // Microsoft Clarity load-balances its tag script across lettered subdomains
+  // (a.clarity.ms ... z.clarity.ms) plus c.bing.com -- per Microsoft's official
+  // CSP guidance: https://learn.microsoft.com/en-us/clarity/setup-and-installation/clarity-csp
+  // When adding AdSense, also append its script origins here.
+  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com${isDev ? " 'unsafe-eval'" : ''}`,
 
   // Tailwind utility classes and shadcn/ui components inject inline styles.
   // Next.js also injects critical CSS inline. 'unsafe-inline' is required.
@@ -41,11 +45,13 @@ const CSP_DIRECTIVES = [
   // When adding a CDN for static assets, append the CDN origin here.
   "img-src 'self' data: blob:",
 
-  // All fetch/XHR calls are same-origin only.
+  // Fetch/XHR calls are same-origin only, plus Google Analytics' measurement
+  // endpoints and Microsoft Clarity's data-collection subdomains (same
+  // wildcard set as script-src -- Clarity load-balances across both).
   // 'ws:'/'wss:' in dev allow the Fast Refresh / HMR websocket, which can run
   // on a different port than the page (e.g. LAN access, custom dev ports).
-  // When adding PostHog, Sentry, or Analytics, append their ingest endpoints.
-  `connect-src 'self'${isDev ? ' ws: wss:' : ''}`,
+  // When adding PostHog or Sentry, append their ingest endpoints.
+  `connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://*.clarity.ms https://c.bing.com${isDev ? ' ws: wss:' : ''}`,
 
   // The image-processing Web Worker is created from a blob: URL at runtime.
   // 'self' covers worker scripts served from /_next/static/; blob: covers

@@ -109,6 +109,8 @@ No `/.well-known/security.txt` for responsible disclosure.
 ### Vercel configuration
 
 - [ ] Set `NEXT_PUBLIC_BASE_URL=https://presetly.app` in Vercel environment variables
+- [ ] Set `NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX` in Vercel environment variables (Production environment)
+- [ ] Set `NEXT_PUBLIC_CLARITY_PROJECT_ID=xxxxxxxxxx` in Vercel environment variables (Production environment)
 - [ ] Confirm domain is connected and TLS is active (required for HSTS header to be safe)
 - [ ] Set Node.js version to 20.x or 22.x in Vercel settings
 
@@ -131,6 +133,8 @@ No `/.well-known/security.txt` for responsible disclosure.
 | Variable | Required | Purpose | Default |
 |---|---|---|---|
 | `NEXT_PUBLIC_BASE_URL` | Yes (production) | Canonical URL for SEO, OG images, sitemap | `https://presetly.app` |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | No | Google Analytics 4 (loads in production only) | — |
+| `NEXT_PUBLIC_CLARITY_PROJECT_ID` | No | Microsoft Clarity session recordings (loads in production only) | — |
 | `NEXT_PUBLIC_POSTHOG_KEY` | No | PostHog analytics | — |
 | `NEXT_PUBLIC_POSTHOG_HOST` | No | PostHog ingest host | — |
 | `NEXT_PUBLIC_SENTRY_DSN` | No | Sentry error reporting | — |

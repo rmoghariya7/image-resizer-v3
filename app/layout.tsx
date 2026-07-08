@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@/components/analytics/analytics";
 import { SearchProvider } from "@/features/search";
 import { GlobalSearch } from "@/features/search";
 import { buildSearchIndex } from "@/features/search";
@@ -84,6 +85,7 @@ export default function RootLayout({
           <GlobalSearch />
         </SearchProvider>
       </body>
+      <Analytics />
     </html>
   );
 }
