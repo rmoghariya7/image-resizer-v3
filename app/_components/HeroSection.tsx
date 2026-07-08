@@ -30,7 +30,7 @@ export function HeroSection() {
       aria-label="Hero"
       className="relative border-b border-border/50 bg-linear-to-b from-background to-muted/30"
     >
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
         <div className="mx-auto max-w-3xl text-center">
           {/* Eyebrow */}
           <p className="mb-6 text-xs font-semibold uppercase tracking-[0.15em] text-primary">
@@ -39,7 +39,7 @@ export function HeroSection() {
           </p>
 
           {/* Headline */}
-          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
             Compress images to{" "}
             <span className="text-primary">the exact size you need</span>
           </h1>

@@ -212,6 +212,7 @@ export function SearchCommandPalette({
 
   // Reset active index when results change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: one-shot reset on query change
     setActiveIndex(-1)
   }, [debouncedQuery])
 

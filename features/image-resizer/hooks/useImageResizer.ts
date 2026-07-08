@@ -36,6 +36,7 @@ export function useImageResizer(preset: Preset): UseImageResizerReturn {
 
   // Keep preset current without recreating the worker
   const presetRef = useRef(preset)
+  // eslint-disable-next-line react-hooks/refs -- intentional latest-ref sync during render
   presetRef.current = preset
 
   useEffect(() => {
@@ -109,6 +110,9 @@ export function useImageResizer(preset: Preset): UseImageResizerReturn {
     setState({ status: 'loading' })
 
     try {
+      if (typeof createImageBitmap === 'undefined') {
+        throw new Error('Your browser does not support image processing. Please update to iOS 15+ or use Chrome/Firefox.')
+      }
       const bitmap = await createImageBitmap(file)
       const { width, height } = bitmap // Read before transfer
 

@@ -14,6 +14,13 @@ export const metadata: Metadata = {
     url: `${BASE_URL}/contact`,
     type: 'website',
     siteName: 'Presetly',
+    images: [{ url: `${BASE_URL}/opengraph-image`, width: 1200, height: 630, type: 'image/png' as const }],
+  },
+  twitter: {
+    card:        'summary_large_image',
+    title:       'Contact Presetly',
+    description: 'Get in touch with questions, bug reports, or feedback about Presetly.',
+    images:      [`${BASE_URL}/opengraph-image`],
   },
 }
 

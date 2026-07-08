@@ -14,6 +14,13 @@ export const metadata: Metadata = {
     url: `${BASE_URL}/privacy-policy`,
     type: 'website',
     siteName: 'Presetly',
+    images: [{ url: `${BASE_URL}/opengraph-image`, width: 1200, height: 630, type: 'image/png' as const }],
+  },
+  twitter: {
+    card:        'summary_large_image',
+    title:       'Privacy Policy — Presetly',
+    description: 'Your images are never uploaded. Presetly processes everything in your browser with zero server contact.',
+    images:      [`${BASE_URL}/opengraph-image`],
   },
 }
 

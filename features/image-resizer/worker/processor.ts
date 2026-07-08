@@ -104,7 +104,15 @@ async function binarySearchQuality(
 
 // ─── Shared canvas factory ────────────────────────────────────────────────────
 
+// OffscreenCanvas is required. It has been available in all major browsers
+// (Chrome 69+, Firefox 105+, Safari 16.4+) since March 2023.
+// If a user is on an older browser the worker will throw and the UI will surface
+// a clear error message — there is no silent fallback because canvas encoding
+// APIs are not available on the main thread without OffscreenCanvas.
 function drawToCanvas(bitmap: ImageBitmap, w: number, h: number, outputMime: string): OffscreenCanvas {
+  if (typeof OffscreenCanvas === 'undefined') {
+    throw new Error('Your browser does not support image processing. Please update to iOS 16.4+, Chrome 69+, or Firefox 105+.')
+  }
   const canvas = new OffscreenCanvas(w, h)
   const ctx = canvas.getContext('2d')
   if (!ctx) throw new Error('OffscreenCanvas 2D context not available in this environment.')

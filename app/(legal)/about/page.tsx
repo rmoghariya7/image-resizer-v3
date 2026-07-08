@@ -15,6 +15,13 @@ export const metadata: Metadata = {
     url: `${BASE_URL}/about`,
     type: 'website',
     siteName: 'Presetly',
+    images: [{ url: `${BASE_URL}/opengraph-image`, width: 1200, height: 630, type: 'image/png' as const }],
+  },
+  twitter: {
+    card:        'summary_large_image',
+    title:       'About Presetly',
+    description: 'Free browser-based image resizer for Indian government portal applications. No uploads, no sign-up.',
+    images:      [`${BASE_URL}/opengraph-image`],
   },
 }
 
@@ -23,7 +30,7 @@ const TOOLS = [
   { label: 'Aadhaar Photo Resizer', href: '/aadhaar-photo-resizer' },
   { label: 'PAN Card Photo Resizer', href: '/pan-card-photo-resizer' },
   { label: 'Passport Photo Maker', href: '/passport-photo-maker' },
-  { label: 'Compress Image to 50 KB', href: '/compress-image-to-50kb' },
+  { label: 'Compress Image to 50 KB', href: '/compress-image-under-50kb' },
   { label: 'Signature Resize to 20 KB', href: '/signature-resize-20kb' },
 ]
 

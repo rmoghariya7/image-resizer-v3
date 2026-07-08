@@ -1,25 +1,26 @@
-'use client'
+"use client";
 
-import type { Preset } from '@/types/registry'
-import type { ResultScreenRecommendations } from '@/lib/recommendations/engine'
-import { useImageResizer } from '../hooks/useImageResizer'
-import { useDropZone } from '../hooks/useDropZone'
-import { DropZone } from './DropZone'
-import { ProcessingOverlay } from './ProcessingOverlay'
-import { ResultPanel } from './ResultPanel'
-import { ResultRecommendations } from './ResultRecommendations'
+import type { Preset } from "@/types/registry";
+import type { ResultScreenRecommendations } from "@/lib/recommendations/engine";
+import { useImageResizer } from "../hooks/useImageResizer";
+import { useDropZone } from "../hooks/useDropZone";
+import { DropZone } from "./DropZone";
+import { ProcessingOverlay } from "./ProcessingOverlay";
+import { ResultPanel } from "./ResultPanel";
+import { ResultRecommendations } from "./ResultRecommendations";
 
 interface Props {
-  preset: Preset
+  preset: Preset;
   /** Pre-computed by the server; determines what links appear after compression. */
-  recommendations?: ResultScreenRecommendations
+  recommendations?: ResultScreenRecommendations;
 }
 
 export function ImageResizerTool({ preset, recommendations }: Props) {
-  const { state, processFile, reset } = useImageResizer(preset)
+  const { state, processFile, reset } = useImageResizer(preset);
 
-  const isInteractive = state.status === 'idle' || state.status === 'error'
-  const isProcessing = state.status === 'loading' || state.status === 'processing'
+  const isInteractive = state.status === "idle" || state.status === "error";
+  const isProcessing =
+    state.status === "loading" || state.status === "processing";
 
   const {
     status: dropStatus,
@@ -33,9 +34,9 @@ export function ImageResizerTool({ preset, recommendations }: Props) {
   } = useDropZone({
     onFile: processFile,
     disabled: !isInteractive,
-  })
+  });
 
-  if (state.status === 'done') {
+  if (state.status === "done") {
     return (
       <div>
         <ResultPanel original={state.original} result={state.result} />
@@ -47,21 +48,21 @@ export function ImageResizerTool({ preset, recommendations }: Props) {
             <button
               type="button"
               onClick={reset}
-              className="w-full rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-500 shadow-sm transition-colors hover:border-gray-300 hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              className="w-full rounded-xl border cursor-pointer border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-500 shadow-sm transition-colors hover:border-gray-300 hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               Process another image
             </button>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <>
       <DropZone
-        status={isProcessing ? 'idle' : dropStatus}
-        validationError={state.status === 'error' ? null : validationError}
+        status={isProcessing ? "idle" : dropStatus}
+        validationError={state.status === "error" ? null : validationError}
         disabled={!isInteractive}
         containerProps={containerProps}
         fileInputRef={fileInputRef}
@@ -72,13 +73,13 @@ export function ImageResizerTool({ preset, recommendations }: Props) {
       >
         {isProcessing && (
           <ProcessingOverlay
-            progress={state.status === 'loading' ? 0 : state.progress}
+            progress={state.status === "loading" ? 0 : state.progress}
           />
         )}
       </DropZone>
 
       {/* Processing error */}
-      {state.status === 'error' && (
+      {state.status === "error" && (
         <div className="mx-auto mt-4 max-w-2xl px-4 sm:px-6">
           <div
             role="alert"
@@ -101,7 +102,9 @@ export function ImageResizerTool({ preset, recommendations }: Props) {
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
             <div>
-              <p className="text-sm font-medium text-red-700">{state.message}</p>
+              <p className="text-sm font-medium text-red-700">
+                {state.message}
+              </p>
               <button
                 type="button"
                 onClick={reset}
@@ -114,5 +117,5 @@ export function ImageResizerTool({ preset, recommendations }: Props) {
         </div>
       )}
     </>
-  )
+  );
 }

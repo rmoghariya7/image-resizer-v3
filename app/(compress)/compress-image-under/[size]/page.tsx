@@ -1,140 +1,169 @@
-import { notFound } from 'next/navigation'
-import type { Metadata } from 'next'
-import { generateCompressMetadata } from '@/lib/metadata/generators'
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { generateCompressMetadata } from "@/lib/metadata/generators";
 import {
   getSizeTarget,
   getAllSizeParams,
   generateFaqs,
   generateHowItWorks,
   getRelatedSizes,
-} from '@/registry/size-presets'
-import { getCommonErrors } from '@/content/errors'
-import { getCompressPageGoalLinks, buildGoalHref } from '@/lib/recommendations/engine'
-import { SizeToolSection } from './_components/SizeToolSection'
+} from "@/registry/size-presets";
+import { getCommonErrors } from "@/content/errors";
+import {
+  getCompressPageGoalLinks,
+  buildGoalHref,
+} from "@/lib/recommendations/engine";
+import { SizeToolSection } from "./_components/SizeToolSection";
 
 const CATEGORY_NAMES: Record<string, string> = {
-  exam: 'Exam',
-  'id-documents': 'ID Document',
-  signature: 'Signature',
-  compress: 'Compression',
-}
-import { RelatedSizesSection } from './_components/RelatedSizesSection'
+  exam: "Exam",
+  "id-documents": "ID Document",
+  signature: "Signature",
+  compress: "Compression",
+};
+import { RelatedSizesSection } from "./_components/RelatedSizesSection";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://presetly.app";
 
 interface Props {
-  params: Promise<{ size: string }>
+  params: Promise<{ size: string }>;
 }
 
 export function generateStaticParams() {
-  return getAllSizeParams().map(size => ({ size }))
+  return getAllSizeParams().map((size) => ({ size }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { size } = await params
-  const target = getSizeTarget(size)
-  if (!target) return {}
+  const { size } = await params;
+  const target = getSizeTarget(size);
+  if (!target) return {};
 
-  const canonical = `${BASE_URL}/compress-image-under-${target.sizeParam}`
-  return generateCompressMetadata(target, canonical)
+  const canonical = `${BASE_URL}/compress-image-under-${target.sizeParam}`;
+  return generateCompressMetadata(target, canonical);
 }
 
 export default async function CompressImageUnderSizePage({ params }: Props) {
-  const { size } = await params
-  const target = getSizeTarget(size)
-  if (!target) notFound()
+  const { size } = await params;
+  const target = getSizeTarget(size);
+  if (!target) notFound();
 
-  const faqs = generateFaqs(target)
-  const steps = generateHowItWorks(target)
-  const relatedSizes = getRelatedSizes(target)
-  const commonErrors = getCommonErrors('compress')
-  const popularGoals = getCompressPageGoalLinks(4)
-  const canonicalUrl = `${BASE_URL}/compress-image-under-${target.sizeParam}`
+  const faqs = generateFaqs(target);
+  const steps = generateHowItWorks(target);
+  const relatedSizes = getRelatedSizes(target);
+  const commonErrors = getCommonErrors("compress");
+  const popularGoals = getCompressPageGoalLinks(4);
+  const canonicalUrl = `${BASE_URL}/compress-image-under-${target.sizeParam}`;
 
   // ─── Structured data ─────────────────────────────────────────────────────────
 
   const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Compress Image', item: `${BASE_URL}/categories/compress` },
-      { '@type': 'ListItem', position: 3, name: target.title, item: canonicalUrl },
+      { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Compress Image",
+        item: `${BASE_URL}/categories/compress`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: target.title,
+        item: canonicalUrl,
+      },
     ],
-  }
+  };
 
   const howToSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'HowTo',
+    "@context": "https://schema.org",
+    "@type": "HowTo",
     name: target.title,
     description: target.description,
     step: steps.map((step, i) => ({
-      '@type': 'HowToStep',
+      "@type": "HowToStep",
       position: i + 1,
       name: step.title,
       text: step.body,
     })),
-  }
+  };
 
   const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map(faq => ({
-      '@type': 'Question',
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
       name: faq.question,
-      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
     })),
-  }
+  };
 
   const softwareSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
     name: target.title,
     description: target.description,
-    applicationCategory: 'MultimediaApplication',
-    operatingSystem: 'Any',
-    browserRequirements: 'Requires a modern web browser with Canvas API support',
+    applicationCategory: "MultimediaApplication",
+    operatingSystem: "Any",
+    browserRequirements:
+      "Requires a modern web browser with Canvas API support",
     url: canonicalUrl,
     featureList: [
-      'Browser-based image compression — no server upload',
-      'Free to use — no sign-up required',
+      "Browser-based image compression — no server upload",
+      "Free to use — no sign-up required",
       `Compresses any image to under ${target.displaySize}`,
-      'Auto quality optimisation using binary search algorithm',
+      "Auto quality optimisation using binary search algorithm",
     ],
     offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
     },
     provider: {
-      '@type': 'Organization',
-      name: 'Presetly',
+      "@type": "Organization",
+      name: "Presetly",
       url: BASE_URL,
     },
-  }
+  };
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+      />
 
       <article>
         {/* ── Page header ─────────────────────────────────────────────────────── */}
-        <header className="border-b border-border/50 bg-linear-to-b from-background to-muted/30 px-4 py-10 sm:px-6 sm:py-14">
+        <header className="border-b border-border/50 bg-linear-to-b from-background to-muted/30 px-4 py-5 sm:px-6 sm:py-14">
           <div className="mx-auto max-w-3xl text-center">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-primary">
               Free · No upload · Browser-based
             </p>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               {target.title}
             </h1>
-            <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-muted-foreground">
+            <p className="sr-only sm:not-sr-only sm:block sm:mx-auto sm:mt-4 sm:max-w-xl sm:text-lg sm:leading-8 sm:text-muted-foreground">
               {target.description}
             </p>
             <p className="mt-3 text-sm text-muted-foreground">
-              Used for: <span className="font-medium text-foreground">{target.useCase}</span>
+              Used for:{" "}
+              <span className="font-medium text-foreground">
+                {target.useCase}
+              </span>
             </p>
           </div>
         </header>
@@ -203,14 +232,23 @@ export default async function CompressImageUnderSizePage({ params }: Props) {
             </div>
             <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {[
-                { label: 'Target size', value: `Under ${target.displaySize}` },
-                { label: 'Format', value: target.targetKB <= 40 ? 'JPEG (best for small sizes)' : 'Original format preserved' },
-                { label: 'Quality', value: 'Auto-optimised' },
-                { label: 'Processing', value: 'Browser-only' },
-                { label: 'Upload', value: 'None — private' },
-                { label: 'Cost', value: 'Free forever' },
-              ].map(spec => (
-                <div key={spec.label} className="rounded-xl border border-border/60 bg-muted/40 px-4 py-4">
+                { label: "Target size", value: `Under ${target.displaySize}` },
+                {
+                  label: "Format",
+                  value:
+                    target.targetKB <= 40
+                      ? "JPEG (best for small sizes)"
+                      : "Original format preserved",
+                },
+                { label: "Quality", value: "Auto-optimised" },
+                { label: "Processing", value: "Browser-only" },
+                { label: "Upload", value: "None — private" },
+                { label: "Cost", value: "Free forever" },
+              ].map((spec) => (
+                <div
+                  key={spec.label}
+                  className="rounded-xl border border-border/60 bg-muted/40 px-4 py-4"
+                >
                   <dt className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                     {spec.label}
                   </dt>
@@ -242,31 +280,47 @@ export default async function CompressImageUnderSizePage({ params }: Props) {
                 </h2>
               </div>
               <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2" role="list">
-                {commonErrors.map(error => (
+                {commonErrors.map((error) => (
                   <li
                     key={error.id}
                     className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm"
                   >
                     <div className="flex items-start gap-3 border-b border-border/60 bg-amber-50/60 px-5 py-3.5">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 size-4 shrink-0 text-amber-600" aria-hidden="true">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="mt-0.5 size-4 shrink-0 text-amber-600"
+                        aria-hidden="true"
+                      >
                         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
                         <line x1="12" y1="9" x2="12" y2="13" />
                         <line x1="12" y1="17" x2="12.01" y2="17" />
                       </svg>
-                      <h3 className="text-sm font-semibold text-foreground">{error.title}</h3>
+                      <h3 className="text-sm font-semibold text-foreground">
+                        {error.title}
+                      </h3>
                     </div>
                     <div className="space-y-3 px-5 py-4">
                       <div>
                         <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                           What you see
                         </p>
-                        <p className="text-sm leading-relaxed text-muted-foreground">{error.symptom}</p>
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          {error.symptom}
+                        </p>
                       </div>
                       <div>
                         <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                           How to fix it
                         </p>
-                        <p className="text-sm leading-relaxed text-foreground">{error.fix}</p>
+                        <p className="text-sm leading-relaxed text-foreground">
+                          {error.fix}
+                        </p>
                       </div>
                     </div>
                   </li>
@@ -296,7 +350,7 @@ export default async function CompressImageUnderSizePage({ params }: Props) {
             </div>
 
             <dl className="divide-y divide-border rounded-xl border border-border bg-card shadow-sm">
-              {faqs.map(faq => (
+              {faqs.map((faq) => (
                 <details key={faq.question} className="group px-5 py-4">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-medium text-foreground marker:hidden [&::-webkit-details-marker]:hidden">
                     <dt>{faq.question}</dt>
@@ -344,12 +398,16 @@ export default async function CompressImageUnderSizePage({ params }: Props) {
                   Photo resizing tools
                 </h2>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Need to resize for a specific portal? These tools apply the exact specifications automatically.
+                  Need to resize for a specific portal? These tools apply the
+                  exact specifications automatically.
                 </p>
               </div>
 
-              <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4" role="list">
-                {popularGoals.map(goal => (
+              <ul
+                className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4"
+                role="list"
+              >
+                {popularGoals.map((goal) => (
                   <li key={goal.slug}>
                     <a
                       href={buildGoalHref(goal)}
@@ -373,5 +431,5 @@ export default async function CompressImageUnderSizePage({ params }: Props) {
         )}
       </article>
     </>
-  )
+  );
 }

@@ -21,11 +21,13 @@ export const metadata: Metadata = {
     url:         canonical,
     type:        'website',
     siteName:    'Presetly',
+    images:      [{ url: `${BASE_URL}/opengraph-image`, width: 1200, height: 630, type: 'image/png' as const }],
   },
   twitter: {
     card:        'summary_large_image',
     title:       'Learn | Image guides | Presetly',
     description: 'Guides on image compression, government portal photo requirements, JPEG vs PNG, and more.',
+    images: [`${BASE_URL}/opengraph-image`],
   },
   robots: { index: true, follow: true },
 }

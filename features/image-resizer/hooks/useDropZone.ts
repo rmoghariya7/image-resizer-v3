@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   ACCEPTED_MIME_TYPES,
-  ACCEPTED_EXTENSIONS,
   MAX_FILE_SIZE_MB,
   MAX_FILE_SIZE_BYTES,
   type AcceptedMimeType,

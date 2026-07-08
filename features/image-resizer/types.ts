@@ -1,4 +1,4 @@
-import type { Preset, PresetKey } from '@/types/registry'
+import type { Preset } from '@/types/registry'
 
 export type AcceptedMimeType = 'image/jpeg' | 'image/png' | 'image/webp'
 

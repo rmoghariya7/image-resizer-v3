@@ -1,46 +1,156 @@
-'use client'
+"use client";
 
-import { useCallback, useEffect, useRef, useState } from 'react'
-import type { CompressPresetKey } from '@/registry/presets/schema'
-import { useDropZone } from '../hooks/useDropZone'
-import { useSizeFirstResizer } from '../hooks/useSizeFirstResizer'
-import { DropZone } from './DropZone'
-import { ProcessingOverlay } from './ProcessingOverlay'
-import { ResultPanel } from './ResultPanel'
-import { SizePresetSelector } from './SizePresetSelector'
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { CompressPresetKey } from "@/registry/presets/schema";
+import { useDropZone } from "../hooks/useDropZone";
+import { useSizeFirstResizer } from "../hooks/useSizeFirstResizer";
+import { DropZone } from "./DropZone";
+import { ProcessingOverlay } from "./ProcessingOverlay";
+import { ResultPanel } from "./ResultPanel";
+import { SizePresetSelector } from "./SizePresetSelector";
+
+// ─── Scroll diagnostic (enabled via ?debug=scroll in the URL) ────────────────
+// Logs window.scrollY, document.activeElement, and getBoundingClientRect() for
+// the upload section, target-size card, and Quick Start section — before the
+// preset-select re-render (captured synchronously in the click handler) and
+// after React commits (captured in a useEffect).
+//
+// To use: open the page with ?debug=scroll appended to the URL, open DevTools,
+// select a preset, and read the [ScrollDiag] groups in the console.
+
+interface DiagSnapshot {
+  scrollY: number;
+  activeEl: string;
+  uploadRect: Pick<DOMRect, "top" | "height"> | null;
+  targetSizeRect: Pick<DOMRect, "top" | "height"> | null;
+  quickStartRect: Pick<DOMRect, "top" | "height"> | null;
+}
+
+function rectSummary(el: Element | null): Pick<DOMRect, "top" | "height"> | null {
+  if (!el) return null;
+  const r = el.getBoundingClientRect();
+  return { top: Math.round(r.top), height: Math.round(r.height) };
+}
+
+function elLabel(el: Element | null): string {
+  if (!el) return "(none)";
+  const tag = el.tagName.toLowerCase();
+  const label =
+    el.getAttribute("aria-label") ??
+    el.getAttribute("aria-labelledby") ??
+    (el as HTMLElement).innerText?.slice(0, 40) ??
+    "";
+  return label ? `${tag}[${label}]` : tag;
+}
+
+function captureSnapshot(sizeCardEl: HTMLElement | null): DiagSnapshot {
+  return {
+    scrollY: Math.round(window.scrollY),
+    activeEl: elLabel(document.activeElement),
+    uploadRect: rectSummary(
+      document.querySelector(
+        '[aria-label="Image upload"], [aria-label="Compressing image"], [aria-label="Choose compression target"]'
+      )
+    ),
+    targetSizeRect: rectSummary(sizeCardEl),
+    quickStartRect: rectSummary(
+      document.querySelector('[aria-labelledby="quick-steps-heading"]')
+    ),
+  };
+}
+
+function logDiag(before: DiagSnapshot, after: DiagSnapshot, label: string) {
+  // eslint-disable-next-line no-console
+  console.group(`[ScrollDiag] ${label}`);
+  // eslint-disable-next-line no-console
+  console.log(
+    `scrollY      before=${before.scrollY}  after=${after.scrollY}  Δ=${after.scrollY - before.scrollY}`
+  );
+  // eslint-disable-next-line no-console
+  console.log(
+    `activeElement  before="${before.activeEl}"  after="${after.activeEl}"`
+  );
+  for (const key of ["uploadRect", "targetSizeRect", "quickStartRect"] as const) {
+    const b = before[key];
+    const a = after[key];
+    if (b && a) {
+      // eslint-disable-next-line no-console
+      console.log(
+        `${key}  top: ${b.top}→${a.top} (Δ${a.top - b.top})  height: ${b.height}→${a.height} (Δ${a.height - b.height})`
+      );
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(`${key}  (not found in DOM)`);
+    }
+  }
+  // eslint-disable-next-line no-console
+  console.groupEnd();
+}
+
+function useScrollDiag(sizeCardRef: React.RefObject<HTMLDivElement | null>) {
+  const diagRef = useRef<{ before: DiagSnapshot; label: string } | null>(null);
+  const isDebug =
+    typeof window !== "undefined" &&
+    window.location.search.includes("debug=scroll");
+
+  const capture = useCallback(
+    (label: string) => {
+      if (!isDebug) return;
+      diagRef.current = {
+        before: captureSnapshot(sizeCardRef.current),
+        label,
+      };
+    },
+    [isDebug, sizeCardRef]
+  );
+
+  // Runs after every commit — consumes the pending capture if one exists.
+  useEffect(() => {
+    if (!diagRef.current) return;
+    const { before, label } = diagRef.current;
+    diagRef.current = null;
+    const after = captureSnapshot(sizeCardRef.current);
+    logDiag(before, after, label);
+  });
+
+  return { capture };
+}
 
 interface Props {
-  defaultPresetKey: CompressPresetKey
+  defaultPresetKey: CompressPresetKey;
 }
 
 function formatSize(kb: number): string {
-  if (kb >= 1024) return `${(kb / 1024).toFixed(1)} MB`
-  return `${kb} KB`
+  if (kb >= 1024) return `${(kb / 1024).toFixed(1)} MB`;
+  return `${kb} KB`;
 }
 
 export function SizeFirstTool({ defaultPresetKey }: Props) {
-  const { state, loadFile, process, reset } = useSizeFirstResizer()
+  const { state, loadFile, process, reset } = useSizeFirstResizer();
 
   // Tracks which preset the user has chosen in the idle-state selector.
   // Initialized to the page's preset; can be changed before upload.
-  const [pendingPreset, setPendingPreset] = useState<CompressPresetKey>(defaultPresetKey)
+  const [pendingPreset, setPendingPreset] =
+    useState<CompressPresetKey>(defaultPresetKey);
   // Ref so the auto-process effect always reads the latest value without
   // making pendingPreset a dep that would re-register the effect on every change.
-  const pendingPresetRef = useRef<CompressPresetKey>(pendingPreset)
-  pendingPresetRef.current = pendingPreset
+  const pendingPresetRef = useRef<CompressPresetKey>(pendingPreset);
+  // eslint-disable-next-line react-hooks/refs -- intentional latest-ref sync during render
+  pendingPresetRef.current = pendingPreset;
 
   // Auto-process: fires once each time a new file finishes loading.
   // 'ready' → call process() → 'processing' → 'done'. No loop risk because
   // process() only runs from 'ready' or 'done' (guard inside the hook), and
   // the effect condition is only true for 'ready'.
   useEffect(() => {
-    if (state.status === 'ready') {
-      process(pendingPresetRef.current)
+    if (state.status === "ready") {
+      process(pendingPresetRef.current);
     }
-  }, [state.status, process])
+  }, [state.status, process]);
 
-  const isDroppable = state.status === 'idle' || state.status === 'error'
-  const isProcessing = state.status === 'loading' || state.status === 'processing'
+  const isDroppable = state.status === "idle" || state.status === "error";
+  const isProcessing =
+    state.status === "loading" || state.status === "processing";
 
   const {
     status: dropStatus,
@@ -54,18 +164,23 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
   } = useDropZone({
     onFile: loadFile,
     disabled: !isDroppable,
-  })
+  });
+
+  // Ref for the SizePresetSelector wrapper — used by the diagnostic hook to
+  // measure the card's bounding rect before and after preset selection.
+  const sizeCardRef = useRef<HTMLDivElement>(null);
+  const { capture } = useScrollDiag(sizeCardRef);
 
   const handleReprocess = useCallback(
     (presetKey: CompressPresetKey) => {
-      process(presetKey)
+      process(presetKey);
     },
     [process],
-  )
+  );
 
   // ─── Done: before/after + download → size picker → reset ────────────────────
 
-  if (state.status === 'done') {
+  if (state.status === "done") {
     return (
       <div>
         {/* Priority 1 — Download result */}
@@ -76,11 +191,15 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
           aria-label="Choose another target size"
           className="bg-gray-50 px-4 pb-6 sm:px-6"
         >
-          <div className="mx-auto max-w-2xl">
+          {/* sizeCardRef: measured by useScrollDiag to detect height changes */}
+          <div className="mx-auto max-w-2xl" ref={sizeCardRef}>
             <SizePresetSelector
               activePresetKey={state.activePresetKey}
               currentSizeKB={state.result.sizeKB}
-              onSelect={handleReprocess}
+              onSelect={(key) => {
+                capture("done: handleReprocess");
+                handleReprocess(key);
+              }}
               heading="Choose another target size:"
             />
           </div>
@@ -92,19 +211,19 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
             <button
               type="button"
               onClick={reset}
-              className="w-full rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-500 shadow-sm transition-colors hover:border-gray-300 hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              className="w-full cursor-pointer rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-500 shadow-sm transition-colors hover:border-gray-300 hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               Process another image
             </button>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   // ─── Ready: file info card → size picker ─────────────────────────────────────
 
-  if (state.status === 'ready') {
+  if (state.status === "ready") {
     return (
       <section
         aria-label="Choose compression target"
@@ -125,7 +244,7 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
                   {state.file.name}
                 </p>
                 <p className="mt-0.5 text-sm text-muted-foreground">
-                  {formatSize(state.sizeKB)}{' '}
+                  {formatSize(state.sizeKB)}{" "}
                   <span className="text-muted-foreground/60">
                     · {state.width} × {state.height}px
                   </span>
@@ -164,12 +283,12 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
           />
         </div>
       </section>
-    )
+    );
   }
 
   // ─── Processing ──────────────────────────────────────────────────────────────
 
-  if (state.status === 'processing') {
+  if (state.status === "processing") {
     return (
       <section
         aria-label="Compressing image"
@@ -181,7 +300,7 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
           </div>
         </div>
       </section>
-    )
+    );
   }
 
   // ─── Idle / error — drop zone + preset selector ──────────────────────────────
@@ -189,8 +308,8 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
   return (
     <>
       <DropZone
-        status={isProcessing ? 'idle' : dropStatus}
-        validationError={state.status === 'error' ? null : validationError}
+        status={isProcessing ? "idle" : dropStatus}
+        validationError={state.status === "error" ? null : validationError}
         disabled={!isDroppable}
         containerProps={containerProps}
         fileInputRef={fileInputRef}
@@ -204,16 +323,20 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
 
       {/* Preset selector — lets users change target before uploading */}
       <div className="bg-gray-50 px-4 pb-6 sm:px-6">
-        <div className="mx-auto max-w-2xl">
+        {/* sizeCardRef: measured by useScrollDiag to detect height changes */}
+        <div className="mx-auto max-w-2xl" ref={sizeCardRef}>
           <SizePresetSelector
             activePresetKey={pendingPreset}
-            onSelect={setPendingPreset}
+            onSelect={(key) => {
+              capture("idle: setPendingPreset");
+              setPendingPreset(key);
+            }}
             heading="Target size:"
           />
         </div>
       </div>
 
-      {state.status === 'error' && (
+      {state.status === "error" && (
         <div className="mx-auto mt-4 max-w-2xl px-4 sm:px-6">
           <div
             role="alert"
@@ -236,7 +359,9 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
             <div>
-              <p className="text-sm font-medium text-red-700">{state.message}</p>
+              <p className="text-sm font-medium text-red-700">
+                {state.message}
+              </p>
               <button
                 type="button"
                 onClick={reset}
@@ -249,5 +374,5 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
         </div>
       )}
     </>
-  )
+  );
 }

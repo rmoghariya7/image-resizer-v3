@@ -17,6 +17,8 @@ const geistMono = Geist_Mono({
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 
+const OG_IMAGE = { url: `${BASE_URL}/opengraph-image`, width: 1200, height: 630, type: 'image/png' as const }
+
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: 'Presetly: free photo resizer for Indian government portals',
@@ -25,17 +27,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: BASE_URL,
   },
-  keywords: [
-    'photo resizer',
-    'image compressor',
-    'upsc photo size',
-    'aadhaar photo resize',
-    'pan card photo size',
-    'passport photo maker',
-    'government form photo',
-    'compress image to 50kb',
-    'signature resize',
-  ],
   openGraph: {
     type: 'website',
     siteName: 'Presetly',
@@ -43,20 +34,33 @@ export const metadata: Metadata = {
     description:
       'Every Indian portal photo tool in one place. Exam photos, Aadhaar, PAN card, Passport Seva, Voter ID, signature resize, and image compression. Runs in your browser, no upload.',
     url: BASE_URL,
+    images: [OG_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'All photo tools for Indian portals | Presetly',
     description:
       'Exam photos, Aadhaar, PAN, Passport, signature resize, image compression. All free, all browser-only.',
+    images: [OG_IMAGE.url],
   },
   robots: { index: true, follow: true },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/favicon.svg',
+  },
+  manifest: '/site.webmanifest',
 }
+
+// Compute the search index once at module load time (static registry data — never changes).
+// Calling buildSearchIndex() inside RootLayout would re-run it on every SSR request.
+const searchIndex = buildSearchIndex()
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const searchIndex = buildSearchIndex()
 
   return (
     <html

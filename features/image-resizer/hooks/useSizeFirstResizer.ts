@@ -59,6 +59,7 @@ function buildFilename(presetKey: CompressPresetKey, mimeType: string): string {
 export function useSizeFirstResizer(): UseSizeFirstResizerReturn {
   const [state, setState] = useState<SizeFirstState>({ status: 'idle' })
   const stateRef = useRef<SizeFirstState>(state)
+  // eslint-disable-next-line react-hooks/refs -- intentional latest-ref sync during render
   stateRef.current = state
 
   const workerRef = useRef<Worker | null>(null)
@@ -139,6 +140,9 @@ export function useSizeFirstResizer(): UseSizeFirstResizerReturn {
     setState({ status: 'loading' })
 
     try {
+      if (typeof createImageBitmap === 'undefined') {
+        throw new Error('Your browser does not support image processing. Please update to iOS 15+ or use Chrome/Firefox.')
+      }
       const bitmap = await createImageBitmap(file)
       const { width, height } = bitmap
       bitmap.close()
@@ -188,6 +192,9 @@ export function useSizeFirstResizer(): UseSizeFirstResizerReturn {
     }
 
     try {
+      if (typeof createImageBitmap === 'undefined') {
+        throw new Error('Your browser does not support image processing. Please update to iOS 15+ or use Chrome/Firefox.')
+      }
       const bitmap = await createImageBitmap(file)
 
       const originalMime: AcceptedMimeType = ACCEPTED_MIME_TYPES.includes(

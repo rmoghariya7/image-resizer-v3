@@ -48,6 +48,7 @@ function StepCard({ step, index, total }: StepCardProps) {
             {stepNum}
           </div>
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+            {/* eslint-disable-next-line react-hooks/static-components -- static lookup from STEP_ICONS array */}
             <Icon className="size-4 text-primary" aria-hidden="true" />
           </div>
         </div>
@@ -95,6 +96,7 @@ function MobileStep({ step, index, isLast }: MobileStepProps) {
       <div className="pb-8 pt-1">
         <div className="mb-2 flex items-center gap-2">
           <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/10">
+            {/* eslint-disable-next-line react-hooks/static-components -- static lookup from STEP_ICONS array */}
             <Icon className="size-3.5 text-primary" aria-hidden="true" />
           </div>
         </div>

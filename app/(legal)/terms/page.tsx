@@ -14,6 +14,13 @@ export const metadata: Metadata = {
     url: `${BASE_URL}/terms`,
     type: 'website',
     siteName: 'Presetly',
+    images: [{ url: `${BASE_URL}/opengraph-image`, width: 1200, height: 630, type: 'image/png' as const }],
+  },
+  twitter: {
+    card:        'summary_large_image',
+    title:       'Terms of Service — Presetly',
+    description: 'Terms governing your use of Presetly, a free browser-based image resizer.',
+    images:      [`${BASE_URL}/opengraph-image`],
   },
 }
 

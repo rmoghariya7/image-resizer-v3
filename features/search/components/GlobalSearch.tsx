@@ -18,7 +18,6 @@ import { useSearch } from '../context'
 import { filterSearchIndex } from '../search-index'
 import type { GoalSearchItem, CategorySearchItem, ToolSearchItem, LearnSearchItem } from '../types'
 import type { GoalCategory } from '@/types/registry'
-import { LEARN_CATEGORY_LABELS } from '@/registry/learn/schema'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
