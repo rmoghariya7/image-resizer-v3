@@ -43,7 +43,7 @@ export function DropZone({
   return (
     <section
       aria-label="Image upload"
-      className="bg-gray-50 px-4 py-4 sm:px-6 sm:py-16"
+      className="bg-gray-50 px-4 py-3 sm:px-6 md:py-16"
     >
       <div className="mx-auto max-w-2xl">
         {/* Drop area */}
@@ -55,7 +55,7 @@ export function DropZone({
           aria-disabled={disabled}
           className={[
             "relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed",
-            "px-6 py-4 text-center shadow-sm transition-colors duration-150 sm:py-14",
+            "px-6 py-4 text-center shadow-sm transition-colors duration-150 md:py-14",
             disabled ? "cursor-default opacity-60" : "cursor-pointer",
             areaStyles,
           ].join(" ")}
@@ -78,7 +78,7 @@ export function DropZone({
           <div
             aria-hidden="true"
             className={[
-              "mb-5 flex h-14 w-14 items-center justify-center rounded-full transition-colors",
+              "mb-3 flex h-12 w-12 items-center justify-center rounded-full transition-colors md:mb-5 md:h-14 md:w-14",
               status === "active" ? "bg-indigo-100" : "bg-indigo-50",
             ].join(" ")}
           >
@@ -91,7 +91,7 @@ export function DropZone({
               strokeLinecap="round"
               strokeLinejoin="round"
               className={[
-                "h-7 w-7 transition-colors",
+                "h-6 w-6 transition-colors md:h-7 md:w-7",
                 status === "active" ? "text-indigo-600" : "text-indigo-500",
               ].join(" ")}
               aria-hidden="true"
@@ -105,7 +105,7 @@ export function DropZone({
           <p className="text-base font-semibold text-gray-900">
             {status === "active" ? "Drop to upload" : "Drop your image here"}
           </p>
-          <p className="mt-1 text-xs sm:text-sm text-gray-500">
+          <p className="mt-1 text-xs text-gray-500 md:text-sm">
             or click to select &bull; paste from clipboard supported
           </p>
           <p className="mt-2 text-xs text-gray-400">
@@ -113,7 +113,7 @@ export function DropZone({
           </p>
 
           {/* Action buttons */}
-          <div className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3 md:mt-6">
             <button
               type="button"
               disabled={disabled}
@@ -153,7 +153,7 @@ export function DropZone({
             </button>
           </div>
 
-          <p className="mt-5 text-xs text-gray-400">
+          <p className="mt-3 text-xs text-gray-400 md:mt-5">
             Processed entirely in your browser &mdash; nothing leaves your
             device.
           </p>

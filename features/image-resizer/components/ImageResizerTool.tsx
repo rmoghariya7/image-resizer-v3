@@ -1,9 +1,12 @@
 "use client";
 
+import { useRef } from "react";
 import type { Preset } from "@/types/registry";
 import type { ResultScreenRecommendations } from "@/lib/recommendations/engine";
+import { ACCEPTED_EXTENSIONS } from "../types";
 import { useImageResizer } from "../hooks/useImageResizer";
 import { useDropZone } from "../hooks/useDropZone";
+import { useScrollToToolOnLoad } from "../hooks/useScrollToToolOnLoad";
 import { DropZone } from "./DropZone";
 import { ProcessingOverlay } from "./ProcessingOverlay";
 import { ResultPanel } from "./ResultPanel";
@@ -18,9 +21,20 @@ interface Props {
 export function ImageResizerTool({ preset, recommendations }: Props) {
   const { state, processFile, reset } = useImageResizer(preset);
 
+  // Tool container — scroll anchor with sticky-header compensation via
+  // `scroll-mt-16` (site header is h-14 = 56px). Mirrors SizeFirstTool.
+  const toolRootRef = useRef<HTMLDivElement>(null);
+
+  // All viewports: auto-scroll to the tool once per page load so the upload
+  // area is immediately visible. Never re-triggers afterwards.
+  useScrollToToolOnLoad(toolRootRef);
+
   const isInteractive = state.status === "idle" || state.status === "error";
   const isProcessing =
     state.status === "loading" || state.status === "processing";
+  // Files are also accepted in the done state — dropping, pasting, or picking
+  // a new image replaces the current one immediately, no confirmation.
+  const canAcceptFile = isInteractive || state.status === "done";
 
   const {
     status: dropStatus,
@@ -33,33 +47,44 @@ export function ImageResizerTool({ preset, recommendations }: Props) {
     onInputChange,
   } = useDropZone({
     onFile: processFile,
-    disabled: !isInteractive,
+    disabled: !canAcceptFile,
   });
 
   if (state.status === "done") {
     return (
-      <div>
-        <ResultPanel original={state.original} result={state.result} />
+      // containerProps: dragging a new image anywhere onto the tool replaces
+      // the current one immediately — no confirmation (Canva/Figma-style).
+      <div ref={toolRootRef} className="scroll-mt-16" {...containerProps}>
+        {/* The image card carries the × (clear) action; "Replace image" sits
+            next to the download button. */}
+        <ResultPanel
+          original={state.original}
+          result={state.result}
+          onClear={reset}
+          onReplace={openFilePicker}
+        />
         {recommendations && (
           <ResultRecommendations recommendations={recommendations} />
         )}
-        <div className="bg-gray-50 px-4 pb-12 sm:px-6">
-          <div className="mx-auto max-w-2xl">
-            <button
-              type="button"
-              onClick={reset}
-              className="w-full rounded-xl border cursor-pointer border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-500 shadow-sm transition-colors hover:border-gray-300 hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            >
-              Process another image
-            </button>
-          </div>
-        </div>
+        {/* Bottom breathing room previously provided by the removed button */}
+        <div aria-hidden="true" className="h-8 bg-gray-50 md:h-12" />
+        {/* Hidden picker input — the DropZone (which owns the usual inputs)
+            isn't mounted in the done state, so "Replace image" needs its own. */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={ACCEPTED_EXTENSIONS}
+          className="sr-only"
+          aria-hidden="true"
+          tabIndex={-1}
+          onChange={onInputChange}
+        />
       </div>
     );
   }
 
   return (
-    <>
+    <div ref={toolRootRef} className="scroll-mt-16">
       <DropZone
         status={isProcessing ? "idle" : dropStatus}
         validationError={state.status === "error" ? null : validationError}
@@ -116,6 +141,6 @@ export function ImageResizerTool({ preset, recommendations }: Props) {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

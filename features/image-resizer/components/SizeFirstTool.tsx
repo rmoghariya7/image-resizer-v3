@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CompressPresetKey } from "@/registry/presets/schema";
+import { ACCEPTED_EXTENSIONS } from "../types";
 import { useDropZone } from "../hooks/useDropZone";
+import { useScrollToToolOnLoad } from "../hooks/useScrollToToolOnLoad";
 import { useSizeFirstResizer } from "../hooks/useSizeFirstResizer";
 import { DropZone } from "./DropZone";
 import { ProcessingOverlay } from "./ProcessingOverlay";
@@ -151,6 +153,20 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
   const isDroppable = state.status === "idle" || state.status === "error";
   const isProcessing =
     state.status === "loading" || state.status === "processing";
+  // Files are also accepted in the done state — dropping, pasting, or picking
+  // a new image replaces the current one immediately (Canva/Figma-style),
+  // with no confirmation prompt.
+  const canAcceptFile = isDroppable || state.status === "done";
+
+  // Single entry point for every incoming file (drop, paste, picker, camera).
+  // When replacing from the done state, the most recently used preset is
+  // carried over so the new image is processed with the same target size.
+  const handleIncomingFile = (file: File) => {
+    if (state.status === "done") {
+      setPendingPreset(state.activePresetKey);
+    }
+    loadFile(file);
+  };
 
   const {
     status: dropStatus,
@@ -162,14 +178,44 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
     openCamera,
     onInputChange,
   } = useDropZone({
-    onFile: loadFile,
-    disabled: !isDroppable,
+    onFile: handleIncomingFile,
+    disabled: !canAcceptFile,
   });
 
   // Ref for the SizePresetSelector wrapper — used by the diagnostic hook to
   // measure the card's bounding rect before and after preset selection.
   const sizeCardRef = useRef<HTMLDivElement>(null);
   const { capture } = useScrollDiag(sizeCardRef);
+
+  // ─── Tool-root scroll anchor ─────────────────────────────────────────────────
+  // Wraps every state's UI so the container exists across re-renders. The
+  // sticky site header (h-14 = 56px) is compensated via `scroll-mt-16` on the
+  // wrapper — no hard-coded pixel offsets in JS.
+  const toolRootRef = useRef<HTMLDivElement>(null);
+
+  // All viewports: auto-scroll to the tool once per page load so the preset
+  // selector is immediately visible. Never re-triggers afterwards — preset
+  // changes / uploads / processing update state without remounting.
+  useScrollToToolOnLoad(toolRootRef);
+
+  // Scrolls the top of the tool into view. Called ONLY from explicit
+  // user-initiated preset changes (never on mount / initial page load), so the
+  // page stays stable everywhere else. Runs in rAF so it fires after React has
+  // committed the new state — the layout has already settled, avoiding jumps
+  // mid-smooth-scroll. Respects prefers-reduced-motion.
+  const scrollToToolTop = useCallback(() => {
+    requestAnimationFrame(() => {
+      const el = toolRootRef.current;
+      if (!el) return;
+      const prefersReduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      el.scrollIntoView({
+        behavior: prefersReduced ? "auto" : "smooth",
+        block: "start",
+      });
+    });
+  }, []);
 
   const handleReprocess = useCallback(
     (presetKey: CompressPresetKey) => {
@@ -178,18 +224,38 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
     [process],
   );
 
+  // Shared wrapper — attaches the scroll anchor + sticky-header offset to
+  // whichever state UI is currently rendered.
+  const wrap = (children: React.ReactNode) => (
+    <div ref={toolRootRef} className="scroll-mt-16">
+      {children}
+    </div>
+  );
+
   // ─── Done: before/after + download → size picker → reset ────────────────────
 
   if (state.status === "done") {
-    return (
-      <div>
-        {/* Priority 1 — Download result */}
-        <ResultPanel original={state.original} result={state.result} />
+    return wrap(
+      // containerProps: dragging a new image anywhere onto the tool replaces
+      // the current one immediately — no confirmation (Canva/Figma-style).
+      <div {...containerProps}>
+        {/* Priority 1 — Download result. The image card carries the × (clear)
+            action; "Replace image" sits next to the download button. */}
+        <ResultPanel
+          original={state.original}
+          result={state.result}
+          onClear={() => {
+            // Back to the upload screen, keeping the current preset selected.
+            setPendingPreset(state.activePresetKey);
+            reset();
+          }}
+          onReplace={openFilePicker}
+        />
 
         {/* Priority 2 — Change target size (immediately visible after download) */}
         <section
           aria-label="Choose another target size"
-          className="bg-gray-50 px-4 pb-6 sm:px-6"
+          className="bg-gray-50 px-4 pb-8 sm:px-6 md:pb-12"
         >
           {/* sizeCardRef: measured by useScrollDiag to detect height changes */}
           <div className="mx-auto max-w-2xl" ref={sizeCardRef}>
@@ -199,24 +265,25 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
               onSelect={(key) => {
                 capture("done: handleReprocess");
                 handleReprocess(key);
+                // Explicit user preset change → bring the tool back into view.
+                scrollToToolTop();
               }}
               heading="Choose another target size:"
             />
           </div>
         </section>
 
-        {/* Priority 3 — Process a new image (lowest, after size picker) */}
-        <div className="bg-gray-50 px-4 pb-12 sm:px-6">
-          <div className="mx-auto max-w-2xl">
-            <button
-              type="button"
-              onClick={reset}
-              className="w-full cursor-pointer rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-500 shadow-sm transition-colors hover:border-gray-300 hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            >
-              Process another image
-            </button>
-          </div>
-        </div>
+        {/* Hidden picker input — the DropZone (which owns the usual inputs)
+            isn't mounted in the done state, so "Replace image" needs its own. */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={ACCEPTED_EXTENSIONS}
+          className="sr-only"
+          aria-hidden="true"
+          tabIndex={-1}
+          onChange={onInputChange}
+        />
       </div>
     );
   }
@@ -224,10 +291,10 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
   // ─── Ready: file info card → size picker ─────────────────────────────────────
 
   if (state.status === "ready") {
-    return (
+    return wrap(
       <section
         aria-label="Choose compression target"
-        className="bg-gray-50 px-4 py-4 sm:px-6 sm:py-16"
+        className="bg-gray-50 px-4 py-3 sm:px-6 md:py-16"
       >
         <div className="mx-auto max-w-2xl space-y-3">
           {/* File info */}
@@ -278,7 +345,11 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
           <SizePresetSelector
             activePresetKey={pendingPreset}
             currentSizeKB={state.sizeKB}
-            onSelect={process}
+            onSelect={(key) => {
+              process(key);
+              // Explicit user preset change → bring the tool back into view.
+              scrollToToolTop();
+            }}
             heading="Choose target size:"
           />
         </div>
@@ -289,10 +360,10 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
   // ─── Processing ──────────────────────────────────────────────────────────────
 
   if (state.status === "processing") {
-    return (
+    return wrap(
       <section
         aria-label="Compressing image"
-        className="bg-gray-50 px-4 py-4 sm:px-6 sm:py-16"
+        className="bg-gray-50 px-4 py-3 sm:px-6 md:py-16"
       >
         <div className="mx-auto max-w-2xl">
           <div className="relative flex flex-col items-center justify-center rounded-2xl border border-border bg-white px-6 py-14 shadow-sm">
@@ -305,24 +376,14 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
 
   // ─── Idle / error — drop zone + preset selector ──────────────────────────────
 
-  return (
-    <>
-      <DropZone
-        status={isProcessing ? "idle" : dropStatus}
-        validationError={state.status === "error" ? null : validationError}
-        disabled={!isDroppable}
-        containerProps={containerProps}
-        fileInputRef={fileInputRef}
-        cameraInputRef={cameraInputRef}
-        onInputChange={onInputChange}
-        onOpenFilePicker={openFilePicker}
-        onOpenCamera={openCamera}
-      >
-        {isProcessing && <ProcessingOverlay progress={0} />}
-      </DropZone>
-
-      {/* Preset selector — lets users change target before uploading */}
-      <div className="bg-gray-50 px-4 pb-6 sm:px-6">
+  return wrap(
+    // Mobile-first workflow: Select Preset → Upload. The preset selector comes
+    // first in the DOM (matching the mobile visual + tab order); on md+ the
+    // CSS `order` utilities restore the original desktop arrangement
+    // (drop zone first) so the desktop layout is pixel-identical.
+    <div className="flex flex-col">
+      {/* Step 1 (mobile) — Preset selector near the top of the tool */}
+      <div className="order-1 bg-gray-50 px-4 pt-3 pb-1 sm:px-6 md:order-2 md:pt-0 md:pb-6">
         {/* sizeCardRef: measured by useScrollDiag to detect height changes */}
         <div className="mx-auto max-w-2xl" ref={sizeCardRef}>
           <SizePresetSelector
@@ -330,14 +391,33 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
             onSelect={(key) => {
               capture("idle: setPendingPreset");
               setPendingPreset(key);
+              // Explicit user preset change → keep the tool top in view.
+              scrollToToolTop();
             }}
             heading="Target size:"
           />
         </div>
       </div>
 
+      {/* Step 2 (mobile) — Upload */}
+      <div className="order-2 md:order-1">
+        <DropZone
+          status={isProcessing ? "idle" : dropStatus}
+          validationError={state.status === "error" ? null : validationError}
+          disabled={!isDroppable}
+          containerProps={containerProps}
+          fileInputRef={fileInputRef}
+          cameraInputRef={cameraInputRef}
+          onInputChange={onInputChange}
+          onOpenFilePicker={openFilePicker}
+          onOpenCamera={openCamera}
+        >
+          {isProcessing && <ProcessingOverlay progress={0} />}
+        </DropZone>
+      </div>
+
       {state.status === "error" && (
-        <div className="mx-auto mt-4 max-w-2xl px-4 sm:px-6">
+        <div className="order-3 mx-auto mt-4 max-w-2xl px-4 sm:px-6">
           <div
             role="alert"
             aria-live="assertive"
@@ -373,6 +453,6 @@ export function SizeFirstTool({ defaultPresetKey }: Props) {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
