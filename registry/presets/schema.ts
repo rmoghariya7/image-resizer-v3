@@ -31,6 +31,7 @@ export const IMAGE_PRESET_KEY_SCHEMA = z.enum([
 ])
 
 export const COMPRESS_PRESET_KEY_SCHEMA = z.enum([
+  'compress-10kb',
   'compress-15kb',
   'compress-20kb',
   'compress-25kb',

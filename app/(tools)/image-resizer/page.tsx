@@ -155,7 +155,10 @@ const RELATED_TOOL_SLUGS = [
 export default function ImageResizerPage() {
   const recommendations = getImageResizerResultRecommendations()
   const governmentRows = getGovernmentRows()
-  const socialPresets = getResizePresetsByCategory('social')
+  // The social category only holds dimension presets; the filter narrows the type.
+  const socialPresets = getResizePresetsByCategory('social').filter(
+    p => p.kind === 'dimensions',
+  )
   const relatedTools = RELATED_TOOL_SLUGS
     .map(slug => getGoal(slug))
     .filter((g): g is GoalDefinition => g !== undefined)

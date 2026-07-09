@@ -1,4 +1,5 @@
 import type { CompressPreset } from '@/registry/presets/schema'
+import { compress10kbPreset } from './compress-10kb'
 import { compress15kbPreset } from './compress-15kb'
 import { compress20kbPreset } from './compress-20kb'
 import { compress25kbPreset } from './compress-25kb'
@@ -13,6 +14,7 @@ import { compress500kbPreset } from './compress-500kb'
 import { compress1mbPreset } from './compress-1mb'
 
 export const compressPresets: readonly CompressPreset[] = [
+  compress10kbPreset,
   compress15kbPreset,
   compress20kbPreset,
   compress25kbPreset,

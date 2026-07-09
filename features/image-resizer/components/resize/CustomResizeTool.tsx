@@ -1,13 +1,23 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import type { ResultScreenRecommendations } from '@/lib/recommendations/engine'
+import { getCompressPreset } from '@/registry/presets'
+import { getResizePreset } from '@/registry/resize-presets'
 import { ACCEPTED_EXTENSIONS } from '../../types'
 import { useCustomResizer } from '../../hooks/useCustomResizer'
 import { useDropZone } from '../../hooks/useDropZone'
 import { useScrollToToolOnLoad } from '../../hooks/useScrollToToolOnLoad'
+import { formatKB } from '../../lib/format-size'
 import {
   defaultResizeSettings,
+  sameResizeOperation,
   settingsWithPreset,
   toResizeOperation,
   type ResizeSettings,
@@ -18,6 +28,7 @@ import { DropZone } from '../DropZone'
 import { ProcessingOverlay } from '../ProcessingOverlay'
 import { ResultPanel } from '../ResultPanel'
 import { ResultRecommendations } from '../ResultRecommendations'
+import { ResizeActionBar } from './ResizeActionBar'
 import { ResizeEditor } from './ResizeEditor'
 import { ResizePresetPicker } from './ResizePresetPicker'
 
@@ -33,12 +44,13 @@ function mimeOf(file: File): AcceptedMimeType {
 }
 
 /**
- * The flagship /image-resizer tool. Reuses the shared upload flow (DropZone,
- * paste, camera), the shared Web Worker, and the shared ResultPanel — only the
- * editor in the middle is new.
+ * The flagship /image-resizer tool — Presetly's preset-first reference
+ * implementation. Reuses the shared upload flow (DropZone, paste, camera),
+ * the shared Web Worker, and the shared ResultPanel.
  *
- * Flow: upload → editor (dimensions / percentage / mode / format) → worker →
- * result (download / adjust & resize again / replace image).
+ * Flow: upload → pick a destination preset (primary) → Resize → result.
+ * Advanced controls (dimensions / scale / mode / format / quality) live
+ * collapsed under "Need custom dimensions?" — power users only.
  */
 export function CustomResizeTool({ recommendations }: Props) {
   const { state, loadFile, process, backToEditor, reset } = useCustomResizer()
@@ -156,32 +168,54 @@ export function CustomResizeTool({ recommendations }: Props) {
 
   if ((state.status === 'ready' || state.status === 'processing') && original && settings) {
     const processing = state.status === 'processing'
+    const activePreset = settings.presetId ? getResizePreset(settings.presetId) ?? null : null
+    // Nothing chosen yet: settings still produce exactly what upload defaults do.
+    const pristine =
+      settings.presetId === null &&
+      sameResizeOperation(
+        toResizeOperation(settings),
+        toResizeOperation(
+          defaultResizeSettings(original.width, original.height, mimeOf(original.file)),
+        ),
+      )
+
+    // A compression goal runs the existing compress engine via its registry
+    // preset; everything else goes through the resize pipeline.
+    const submit = () => {
+      if (activePreset?.kind === 'compress') {
+        void process({
+          kind: 'compress',
+          preset: getCompressPreset(activePreset.presetKey),
+          originalMime: mimeOf(original.file),
+        })
+      } else {
+        void process({ kind: 'resize', operation: toResizeOperation(settings) })
+      }
+    }
 
     return wrap(
       <section
         aria-label="Resize settings"
         className="relative bg-gray-50 px-4 py-3 sm:px-6 md:py-10"
       >
-        <div className="mx-auto max-w-2xl space-y-3">
-          {/* File info card */}
+        <div className="mx-auto max-w-2xl space-y-2 md:space-y-3">
+          {/* File info card — compact on mobile */}
           <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
-            <div className="flex items-center gap-4 px-5 py-4">
+            <div className="flex items-center gap-3 px-3 py-2.5 md:gap-4 md:px-5 md:py-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={original.objectUrl}
                 alt="Uploaded image preview"
-                className="h-14 w-14 shrink-0 rounded-lg object-cover"
+                className="h-10 w-10 shrink-0 rounded-lg object-cover md:h-14 md:w-14"
               />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-foreground">
                   {original.file.name}
                 </p>
-                <p className="mt-0.5 text-sm text-muted-foreground">
+                <p className="mt-0.5 text-xs text-muted-foreground md:text-sm">
                   {original.width} × {original.height}px
                   <span className="text-muted-foreground/60">
-                    {' '}· {original.sizeKB >= 1024
-                      ? `${(original.sizeKB / 1024).toFixed(1)} MB`
-                      : `${original.sizeKB} KB`}
+                    {' '}· {formatKB(original.sizeKB)}
                   </span>
                 </p>
               </div>
@@ -211,21 +245,51 @@ export function CustomResizeTool({ recommendations }: Props) {
             </div>
           </div>
 
-          {/* Editor — above the fold on mobile */}
-          <ResizeEditor
-            original={original}
-            settings={settings}
-            onChange={setSettings}
-            onSubmit={() => process(toResizeOperation(settings))}
-            disabled={processing}
-          />
-
-          {/* Quick presets — selecting one populates the editor immediately */}
+          {/* Quick presets — THE primary interaction. Selecting a destination
+              configures dimensions, crop mode, and format automatically. */}
           <ResizePresetPicker
             activePresetId={settings.presetId}
             disabled={processing}
             onSelect={preset => setSettings(settingsWithPreset(settings, preset))}
           />
+
+          {/* Selection status + live summary + sticky Resize CTA */}
+          <ResizeActionBar
+            original={original}
+            settings={settings}
+            activePreset={activePreset}
+            pristine={pristine}
+            disabled={processing}
+            lastResult={state.status === 'ready' ? state.lastResult : undefined}
+            onSubmit={submit}
+          />
+
+          {/* Advanced controls — progressive disclosure, collapsed by default.
+              Any manual edit inside deselects the preset (Custom Configuration). */}
+          <div className="overflow-hidden rounded-2xl border border-border bg-white px-4 shadow-sm md:px-5">
+            <Accordion>
+              <AccordionItem className="border-none">
+                <AccordionTrigger className="py-3 hover:no-underline md:py-4">
+                  <span>
+                    <span className="block text-sm font-semibold text-foreground">
+                      Need custom dimensions?
+                    </span>
+                    <span className="mt-0.5 hidden text-xs font-normal text-muted-foreground md:block">
+                      Width, height, scale, resize mode, format &amp; quality
+                    </span>
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="pb-5">
+                  <ResizeEditor
+                    original={original}
+                    settings={settings}
+                    onChange={setSettings}
+                    disabled={processing}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
         </div>
 
         {/* Processing overlay — covers the whole editor area */}

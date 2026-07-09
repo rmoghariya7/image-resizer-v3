@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type {
   OriginalImage,
   ProcessedResult,
-  ResizeOperation,
+  ResizeJob,
   WorkerRequest,
   WorkerResponse,
 } from '../types'
@@ -13,18 +13,25 @@ import type {
 // idle → loading → ready (editor visible) → processing → done
 //                     ↑______________________________________|  backToEditor()
 
+/**
+ * Size of the last completed job, kept when returning to the editor so the
+ * output summary can show the real file size. `job` identifies what produced
+ * it — the UI only shows the size while the current config still matches.
+ */
+export type LastResult = { sizeKB: number; job: ResizeJob }
+
 export type CustomResizeState =
   | { status: 'idle' }
   | { status: 'loading' }
-  | { status: 'ready'; original: OriginalImage }
-  | { status: 'processing'; progress: number; original: OriginalImage; operation: ResizeOperation }
-  | { status: 'done'; original: OriginalImage; result: ProcessedResult; operation: ResizeOperation }
+  | { status: 'ready'; original: OriginalImage; lastResult?: LastResult }
+  | { status: 'processing'; progress: number; original: OriginalImage; job: ResizeJob }
+  | { status: 'done'; original: OriginalImage; result: ProcessedResult; job: ResizeJob }
   | { status: 'error'; message: string }
 
 export interface UseCustomResizerReturn {
   state: CustomResizeState
   loadFile: (file: File) => Promise<void>
-  process: (operation: ResizeOperation) => Promise<void>
+  process: (job: ResizeJob) => Promise<void>
   /** From 'done' back to 'ready' keeping the uploaded image (adjust & re-run). */
   backToEditor: () => void
   reset: () => void
@@ -70,22 +77,42 @@ export function useCustomResizer(): UseCustomResizerReturn {
 
           setState(prev => {
             if (prev.status !== 'processing') return prev
-            const width = msg.width ?? prev.operation.targetWidth
-            const height = msg.height ?? prev.operation.targetHeight
-            const result: ProcessedResult = {
-              blob: msg.blob,
-              objectUrl: resultUrl,
-              sizeKB: msg.sizeKB,
-              width,
-              height,
-              filename: `presetly-resized-${width}x${height}.${extensionFor(msg.blob.type)}`,
-              mimeType: msg.blob.type,
+            const ext = extensionFor(msg.blob.type)
+
+            let result: ProcessedResult
+            if (prev.job.kind === 'resize') {
+              const width = msg.width ?? prev.job.operation.targetWidth
+              const height = msg.height ?? prev.job.operation.targetHeight
+              result = {
+                blob: msg.blob,
+                objectUrl: resultUrl,
+                sizeKB: msg.sizeKB,
+                width,
+                height,
+                filename: `presetly-resized-${width}x${height}.${ext}`,
+                mimeType: msg.blob.type,
+              }
+            } else {
+              // Compression goal — the engine decides dimensions; targetKB and
+              // compressionStatus drive the target/actual UI in ResultPanel.
+              result = {
+                blob: msg.blob,
+                objectUrl: resultUrl,
+                sizeKB: msg.sizeKB,
+                targetKB: msg.targetKB,
+                compressionStatus: msg.compressionStatus,
+                width: msg.width,
+                height: msg.height,
+                filename: `presetly-under-${prev.job.preset.targetKB}kb.${ext}`,
+                mimeType: msg.blob.type,
+              }
             }
+
             return {
               status: 'done',
               original: prev.original,
               result,
-              operation: prev.operation,
+              job: prev.job,
             }
           })
           break
@@ -146,12 +173,12 @@ export function useCustomResizer(): UseCustomResizerReturn {
     }
   }, [])
 
-  const process = useCallback(async (operation: ResizeOperation) => {
+  const process = useCallback(async (job: ResizeJob) => {
     const cur = stateRef.current
     if (cur.status !== 'ready' && cur.status !== 'done') return
 
     const original = cur.original
-    setState({ status: 'processing', progress: 0, original, operation })
+    setState({ status: 'processing', progress: 0, original, job })
 
     try {
       if (typeof createImageBitmap === 'undefined') {
@@ -159,12 +186,15 @@ export function useCustomResizer(): UseCustomResizerReturn {
       }
       const bitmap = await createImageBitmap(original.file)
 
-      const request: WorkerRequest = {
-        type: 'RESIZE',
-        id: Math.random().toString(36).slice(2),
-        bitmap,
-        operation,
-      }
+      // Both job kinds share the one worker: free-form RESIZE operations, and
+      // PROCESS with a registry compress preset (the existing binary-search
+      // compression engine).
+      const id = Math.random().toString(36).slice(2)
+      const request: WorkerRequest =
+        job.kind === 'resize'
+          ? { type: 'RESIZE', id, bitmap, operation: job.operation }
+          : { type: 'PROCESS', id, bitmap, preset: job.preset, originalMime: job.originalMime }
+
       // Transfer bitmap — zero-copy move to worker
       workerRef.current?.postMessage(request, [request.bitmap])
     } catch {
@@ -180,7 +210,11 @@ export function useCustomResizer(): UseCustomResizerReturn {
       URL.revokeObjectURL(resultUrlRef.current)
       resultUrlRef.current = null
     }
-    setState({ status: 'ready', original: cur.original })
+    setState({
+      status: 'ready',
+      original: cur.original,
+      lastResult: { sizeKB: cur.result.sizeKB, job: cur.job },
+    })
   }, [])
 
   const reset = useCallback(() => {

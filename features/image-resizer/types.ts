@@ -1,4 +1,4 @@
-import type { Preset } from '@/types/registry'
+import type { CompressPreset, Preset } from '@/types/registry'
 import type { OutputFormat } from '@/registry/presets/schema'
 
 export type AcceptedMimeType = 'image/jpeg' | 'image/png' | 'image/webp'
@@ -34,6 +34,16 @@ export type ResizeOperation = {
   /** 1–100. Applied to lossy encoders (JPEG/WebP); ignored for PNG. */
   quality: number
 }
+
+// ─── Custom tool job ──────────────────────────────────────────────────────────
+// What the /image-resizer tool asks the worker to do. A dimension preset or
+// the custom editor produces a 'resize' job; a compression goal preset runs
+// the existing compress engine (binary-search quality pipeline) via its
+// registry preset — no duplicated logic.
+
+export type ResizeJob =
+  | { kind: 'resize'; operation: ResizeOperation }
+  | { kind: 'compress'; preset: CompressPreset; originalMime: AcceptedMimeType }
 
 // ─── Worker message protocol ──────────────────────────────────────────────────
 

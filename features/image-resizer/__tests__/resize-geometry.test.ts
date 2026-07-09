@@ -21,8 +21,12 @@ import {
   settingsWithHeight,
   settingsWithPercent,
   settingsWithPreset,
+  settingsWithMode,
+  settingsWithFormat,
+  settingsWithQuality,
   validateSettings,
   toResizeOperation,
+  sameResizeOperation,
   getResizeWarnings,
 } from '../lib/resize-settings'
 import type { ResizePreset } from '@/registry/resize-presets'
@@ -245,12 +249,15 @@ describe('settingsWithPercent', () => {
 
 describe('settingsWithPreset', () => {
   const preset: ResizePreset = {
+    kind: 'dimensions',
     id: 'youtube-thumbnail',
     label: 'YouTube Thumbnail',
     width: 1280,
     height: 720,
     category: 'social',
     hint: '16:9',
+    description: 'Perfect for YouTube videos',
+    icon: 'youtube',
   }
 
   it('populates the editor with the preset dimensions', () => {
@@ -259,6 +266,65 @@ describe('settingsWithPreset', () => {
     expect(s.height).toBe(720)
     expect(s.presetId).toBe('youtube-thumbnail')
     expect(s.percent).toBeNull()
+  })
+
+  it('smart-configures fill mode so the output is exactly the preset size', () => {
+    expect(settingsWithPreset(baseSettings(), preset).mode).toBe('fill')
+  })
+
+  it('applies the preset output format when the destination requires one', () => {
+    const government: ResizePreset = { ...preset, id: 'upsc', format: 'jpeg' }
+    const s = settingsWithPreset({ ...baseSettings(), format: 'png' }, government)
+    expect(s.format).toBe('jpeg')
+  })
+
+  it('keeps the current format when the preset does not require one', () => {
+    const s = settingsWithPreset({ ...baseSettings(), format: 'webp' }, preset)
+    expect(s.format).toBe('webp')
+  })
+
+  it('selecting a compression goal marks it active without touching dimension settings', () => {
+    const compressPreset: ResizePreset = {
+      kind: 'compress',
+      id: 'under-50kb',
+      label: 'Under 50 KB',
+      targetKB: 50,
+      presetKey: 'compress-50kb',
+      category: 'compression',
+      hint: '≤ 50 KB',
+      description: 'Email & web forms',
+      icon: 'file-down',
+    }
+    const before = { ...baseSettings(), width: 800, height: 600, mode: 'stretch' as const }
+    const s = settingsWithPreset(before, compressPreset)
+    expect(s.presetId).toBe('under-50kb')
+    // The compress engine ignores these — they must survive for later custom use.
+    expect(s.width).toBe(800)
+    expect(s.height).toBe(600)
+    expect(s.mode).toBe('stretch')
+    expect(s.format).toBe('jpeg')
+  })
+})
+
+describe('manual edits leave preset mode', () => {
+  const presetActive = () => ({ ...baseSettings(), presetId: 'upsc' })
+
+  it('changing the resize mode clears the preset', () => {
+    const s = settingsWithMode(presetActive(), 'stretch')
+    expect(s.mode).toBe('stretch')
+    expect(s.presetId).toBeNull()
+  })
+
+  it('changing the output format clears the preset', () => {
+    const s = settingsWithFormat(presetActive(), 'webp')
+    expect(s.format).toBe('webp')
+    expect(s.presetId).toBeNull()
+  })
+
+  it('changing the quality clears the preset', () => {
+    const s = settingsWithQuality(presetActive(), 55)
+    expect(s.quality).toBe(55)
+    expect(s.presetId).toBeNull()
   })
 })
 
@@ -289,6 +355,21 @@ describe('toResizeOperation', () => {
       format: 'jpeg',
       quality: 75,
     })
+  })
+})
+
+describe('sameResizeOperation', () => {
+  const op = () => toResizeOperation({ ...baseSettings(), width: 800, height: 600 })
+
+  it('is true for identical operations', () => {
+    expect(sameResizeOperation(op(), op())).toBe(true)
+  })
+
+  it('is false when any output-affecting field differs', () => {
+    expect(sameResizeOperation(op(), { ...op(), targetWidth: 801 })).toBe(false)
+    expect(sameResizeOperation(op(), { ...op(), mode: 'fill' })).toBe(false)
+    expect(sameResizeOperation(op(), { ...op(), format: 'png' })).toBe(false)
+    expect(sameResizeOperation(op(), { ...op(), quality: 80 })).toBe(false)
   })
 })
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { formatKB as fmtKB } from '../lib/format-size'
 import type { OriginalImage, ProcessedResult } from '../types'
 
 interface Props {
@@ -16,12 +17,6 @@ interface Props {
    * Renders a secondary "Replace image" button next to Download when provided.
    */
   onReplace?: () => void
-}
-
-function fmtKB(kb: number): string {
-  if (kb >= 1024) return `${(kb / 1024).toFixed(1)} MB`
-  // Show one decimal for values that have a fractional part; integer otherwise.
-  return `${Number.isInteger(kb) ? kb : kb.toFixed(1)} KB`
 }
 
 /**

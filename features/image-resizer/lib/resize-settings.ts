@@ -115,18 +115,49 @@ export function settingsWithPercent(
   }
 }
 
-/** Quick preset card: populates the editor with the preset's dimensions. */
+/**
+ * Preset card: configures EVERYTHING the destination needs. A dimension
+ * preset sets the size, the resize mode that guarantees the exact output
+ * without distortion, and the required output format (government portals).
+ * A compression goal only marks itself active — the compress engine works
+ * from the original image and decides quality/scaling itself, so the
+ * dimension settings are left untouched underneath.
+ * The user should not have to touch anything else.
+ */
 export function settingsWithPreset(
   s: ResizeSettings,
   preset: ResizePreset,
 ): ResizeSettings {
+  if (preset.kind === 'compress') {
+    return { ...s, presetId: preset.id }
+  }
   return {
     ...s,
     width: preset.width,
     height: preset.height,
+    // Presets are destinations: the output must be exactly this size. Fill
+    // keeps proportions and crops overflow instead of distorting.
+    mode: 'fill',
+    format: preset.format ?? s.format,
     presetId: preset.id,
     percent: null,
   }
+}
+
+// Manual edits to mode / format / quality leave preset mode: the destination
+// no longer fully defines the output, so the config is custom now. Dimension
+// and percentage edits already do this in their own transitions above.
+
+export function settingsWithMode(s: ResizeSettings, mode: ResizeMode): ResizeSettings {
+  return { ...s, mode, presetId: null }
+}
+
+export function settingsWithFormat(s: ResizeSettings, format: OutputFormat): ResizeSettings {
+  return { ...s, format, presetId: null }
+}
+
+export function settingsWithQuality(s: ResizeSettings, quality: number): ResizeSettings {
+  return { ...s, quality, presetId: null }
 }
 
 // ─── Validation ───────────────────────────────────────────────────────────────
@@ -149,6 +180,20 @@ export function toResizeOperation(s: ResizeSettings): ResizeOperation {
     format: s.format,
     quality: s.quality,
   }
+}
+
+/**
+ * True when two operations produce an identical output. Used to decide
+ * whether a previously processed result still describes the current settings.
+ */
+export function sameResizeOperation(a: ResizeOperation, b: ResizeOperation): boolean {
+  return (
+    a.targetWidth === b.targetWidth &&
+    a.targetHeight === b.targetHeight &&
+    a.mode === b.mode &&
+    a.format === b.format &&
+    a.quality === b.quality
+  )
 }
 
 // ─── Warnings ─────────────────────────────────────────────────────────────────
