@@ -59,6 +59,32 @@ The system should configure everything automatically.
 
 ---
 
+## Core Tools
+
+Not every tool should become a goal page.
+
+If the primary search intent is generic:
+
+- Image Resizer
+- Image Compressor
+- Video to Audio
+- Crop Image
+- Rotate Image
+
+implement it as a Core Tool.
+
+If the search intent is specific:
+
+- UPSC Photo Resizer
+- Compress Image Under 20KB
+- Passport Photo
+
+implement it as a Goal Tool.
+
+Goal Tools should reuse Core Tool engines whenever possible.
+
+---
+
 # Product Goals
 
 1. Fastest document preparation platform.

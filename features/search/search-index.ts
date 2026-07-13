@@ -66,7 +66,9 @@ export function buildSearchIndex(): SearchIndex {
   const tools: ToolSearchItem[] = getAllTools().map((tool) => ({
     type: 'tool',
     key: tool.key,
-    href: `/tools/${tool.key}`,
+    // Standalone tools declare their own route; the rest fall back to the
+    // legacy /tools/<key> pattern.
+    href: tool.route ?? `/tools/${tool.key}`,
     label: tool.name,
     description: tool.description,
     keywords: [

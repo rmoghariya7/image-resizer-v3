@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import { buildGoalHref } from '@/lib/recommendations/engine'
-import type { GoalDefinition } from '@/types/registry'
+import type { GoalDefinition, ToolDefinition } from '@/types/registry'
 
 interface Props {
   goals: GoalDefinition[]
+  /** Standalone tools (own route, no goal slug) shown in a "Converters" column. */
+  tools?: ToolDefinition[]
 }
 
 const CATEGORY_NAMES: Record<string, string> = {
@@ -25,8 +27,9 @@ function groupByCategory(goals: GoalDefinition[]): [string, GoalDefinition[]][] 
     .map(cat => [cat, map.get(cat)!] as [string, GoalDefinition[]])
 }
 
-export function ExploreMoreToolsSection({ goals }: Props) {
-  if (goals.length === 0) return null
+export function ExploreMoreToolsSection({ goals, tools = [] }: Props) {
+  const standaloneTools = tools.filter(t => t.route !== undefined)
+  if (goals.length === 0 && standaloneTools.length === 0) return null
 
   const columns = groupByCategory(goals)
 
@@ -68,6 +71,24 @@ export function ExploreMoreToolsSection({ goals }: Props) {
               </ul>
             </div>
           ))}
+
+          {standaloneTools.length > 0 && (
+            <div>
+              <p className="mb-3 text-xs font-semibold text-foreground">Converters</p>
+              <ul className="space-y-2" role="list">
+                {standaloneTools.map(tool => (
+                  <li key={tool.key}>
+                    <Link
+                      href={tool.route!}
+                      className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                    >
+                      {tool.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </section>

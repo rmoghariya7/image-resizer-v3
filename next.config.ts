@@ -25,12 +25,15 @@ const CSP_DIRECTIVES = [
   // Next.js App Router requires 'unsafe-inline' for its inline hydration scripts.
   // 'unsafe-eval' is NOT included in production - React/webpack only need it for
   // dev-mode Fast Refresh and eval-based source maps. Production builds never call eval().
+  // 'wasm-unsafe-eval' allows WebAssembly compilation ONLY (not JS eval) — required
+  // by the FFmpeg WASM engine (video-to-audio) in production. This CSP also applies
+  // to /ffmpeg/worker.js, whose worker scope compiles ffmpeg-core.wasm.
   // Google Analytics (via @next/third-parties/google) loads gtag.js from googletagmanager.com.
   // Microsoft Clarity load-balances its tag script across lettered subdomains
   // (a.clarity.ms ... z.clarity.ms) plus c.bing.com -- per Microsoft's official
   // CSP guidance: https://learn.microsoft.com/en-us/clarity/setup-and-installation/clarity-csp
   // When adding AdSense, also append its script origins here.
-  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com${isDev ? " 'unsafe-eval'" : ''}`,
+  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com${isDev ? " 'unsafe-eval'" : ''}`,
 
   // Tailwind utility classes and shadcn/ui components inject inline styles.
   // Next.js also injects critical CSS inline. 'unsafe-inline' is required.
@@ -44,6 +47,11 @@ const CSP_DIRECTIVES = [
   // Preview thumbnails may use data: URLs for small inline previews.
   // When adding a CDN for static assets, append the CDN origin here.
   "img-src 'self' data: blob:",
+
+  // The video-to-audio tool previews extracted audio via <audio src="blob:...">
+  // and reads video metadata via <video src="blob:...">. Without an explicit
+  // media-src, browsers fall back to default-src 'self' and block blob: media.
+  "media-src 'self' blob:",
 
   // Fetch/XHR calls are same-origin only, plus Google Analytics' measurement
   // endpoints and Microsoft Clarity's data-collection subdomains (same
@@ -98,6 +106,15 @@ const nextConfig: NextConfig = {
       // Apply security headers to all routes.
       source: '/(.*)',
       headers: securityHeaders,
+    },
+    {
+      // FFmpeg WASM runtime (~31 MB) — cache hard so returning visitors never
+      // re-download it. Not `immutable`: the filenames are unversioned, so a
+      // week-long TTL bounds staleness after an @ffmpeg/core upgrade.
+      source: '/ffmpeg/:path*',
+      headers: [
+        { key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' },
+      ],
     },
   ],
 

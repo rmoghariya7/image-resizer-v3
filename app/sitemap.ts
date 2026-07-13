@@ -4,6 +4,7 @@ import { getAllCategories } from '@/registry/categories'
 import { getAllSizeParams } from '@/registry/size-presets'
 import { getAllGuides } from '@/content/guides'
 import { getLearnSitemapEntries } from '@/registry/learn'
+import { getStandaloneTools } from '@/lib/recommendations/engine'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 
@@ -25,6 +26,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
   ]
+
+  // Standalone tool pages (e.g. /video-to-audio) — registry-driven: any
+  // ToolDefinition with a `route` is included automatically.
+  const standaloneToolPages: MetadataRoute.Sitemap = getStandaloneTools().map(tool => ({
+    url: `${BASE_URL}${tool.route}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
 
   // Legal pages
   const legalPages: MetadataRoute.Sitemap = LEGAL_PAGES.map(path => ({
@@ -89,6 +99,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...home,
+    ...standaloneToolPages,
     ...learnIndex,
     ...categoryPages,
     ...compressionPages,

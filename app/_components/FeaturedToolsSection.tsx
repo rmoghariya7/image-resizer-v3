@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react'
 import { getGoal } from '@/registry/goals'
 import { getPreset } from '@/registry/presets'
 import { isImagePreset, isCompressPreset } from '@/types/registry'
-import { buildGoalHref } from '@/lib/recommendations/engine'
+import { buildGoalHref, getStandaloneTools } from '@/lib/recommendations/engine'
 import type { GoalDefinition } from '@/types/registry'
 
 const FEATURED_SLUGS = [
@@ -44,10 +44,17 @@ function getSpecLine(goal: GoalDefinition): string {
   return ''
 }
 
+// Standalone tools rendered as featured cards alongside the goal cards.
+// Registry-driven: any ToolDefinition with a `route` appears automatically.
+const STANDALONE_SPEC_LINES: Record<string, string> = {
+  'video-to-audio': 'MP4 · MOV · MKV → MP3 · WAV · AAC',
+}
+
 export function FeaturedToolsSection() {
   const goals = FEATURED_SLUGS
     .map(slug => getGoal(slug))
     .filter((g): g is GoalDefinition => g !== undefined)
+  const standaloneTools = getStandaloneTools()
 
   return (
     <section
@@ -77,6 +84,36 @@ export function FeaturedToolsSection() {
           className="grid grid-cols-1 gap-4 sm:grid-cols-2"
           role="list"
         >
+          {standaloneTools.map(tool => (
+            <li key={tool.key}>
+              <Link
+                href={tool.route!}
+                className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 shadow-sm ring-1 ring-foreground/5 transition-all hover:border-primary/30 hover:shadow-md"
+              >
+                <div className="flex-1 min-w-0">
+                  <span className="inline-flex rounded-full bg-rose-50 px-2 py-0.5 text-xs font-medium text-rose-700">
+                    Video
+                  </span>
+                  <span className="mt-2 block text-base font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
+                    {tool.name}
+                  </span>
+                  <span className="mt-1 block text-sm leading-snug text-muted-foreground line-clamp-2">
+                    {tool.description}
+                  </span>
+                  {STANDALONE_SPEC_LINES[tool.key] && (
+                    <span className="mt-2 block font-mono text-xs text-muted-foreground/70">
+                      {STANDALONE_SPEC_LINES[tool.key]}
+                    </span>
+                  )}
+                </div>
+                <ArrowRight
+                  size={16}
+                  className="mt-1 shrink-0 text-muted-foreground/50 transition-all group-hover:translate-x-0.5 group-hover:text-primary"
+                  aria-hidden="true"
+                />
+              </Link>
+            </li>
+          ))}
           {goals.map(goal => {
             const spec = getSpecLine(goal)
             const categoryLabel = CATEGORY_LABELS[goal.category] ?? goal.category

@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored FFmpeg WASM runtime copied from node_modules (see scripts/copy-ffmpeg-assets.mjs)
+    "public/ffmpeg/**",
   ]),
 ]);
 

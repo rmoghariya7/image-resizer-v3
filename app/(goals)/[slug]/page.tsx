@@ -10,6 +10,7 @@ import { getCommonErrors } from '@/content/errors'
 import {
   getGoalPageRecommendations,
   getResultRecommendations,
+  getStandaloneTools,
 } from '@/lib/recommendations/engine'
 import { GoalHeader } from './_components/GoalHeader'
 import { ToolSection } from './_components/ToolSection'
@@ -115,7 +116,7 @@ export default async function GoalPage({ params }: Props) {
         <RelatedGoalsSection goals={relatedGoals} />
 
         {/* 10. Explore More Tools — broad discovery at page bottom */}
-        <ExploreMoreToolsSection goals={pageRecs.exploreMore} />
+        <ExploreMoreToolsSection goals={pageRecs.exploreMore} tools={getStandaloneTools()} />
       </article>
     </>
   )

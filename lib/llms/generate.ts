@@ -19,6 +19,7 @@ import { getAllCategories } from '@/registry/categories'
 import { SIZE_TARGETS } from '@/registry/size-presets'
 import { getAllGuides } from '@/content/guides'
 import { getAllLearnArticles } from '@/registry/learn'
+import { getStandaloneTools } from '@/lib/recommendations/engine'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -114,6 +115,10 @@ export function generateLlmsTxt(): string {
   const compress50 = getCompressPages().find((p) => p.slug === 'compress-image-under-50kb')
   if (compress50) {
     lines.push(link(compress50.title, `/${compress50.slug}`, compress50.description))
+  }
+  // Standalone tools (own route outside the goal registry, e.g. /video-to-audio)
+  for (const tool of getStandaloneTools()) {
+    lines.push(link(tool.name, tool.route!, tool.description))
   }
   lines.push('')
 
@@ -222,6 +227,17 @@ export function generateLlmsFullTxt(): string {
       for (const goal of goals) {
         lines.push(link(goal.title, `/${goal.slug}`, goal.description))
       }
+    }
+    lines.push('')
+  }
+
+  // ── Standalone converter tools
+  const standaloneTools = getStandaloneTools()
+  if (standaloneTools.length > 0) {
+    lines.push('## Converter Tools')
+    lines.push('')
+    for (const tool of standaloneTools) {
+      lines.push(link(tool.name, tool.route!, tool.description))
     }
     lines.push('')
   }

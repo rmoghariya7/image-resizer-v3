@@ -2,6 +2,7 @@ import { type ToolDefinition, type ToolKey } from '@/registry/tools/schema'
 import { imageResizerTool } from './image-resizer'
 import { pdfCompressorTool } from './pdf-compressor'
 import { passportPhotoTool } from './passport-photo'
+import { videoToAudioTool } from './video-to-audio'
 
 // ─── Registry map ─────────────────────────────────────────────────────────────
 
@@ -9,6 +10,7 @@ const ALL_TOOLS: readonly ToolDefinition[] = Object.freeze([
   imageResizerTool,
   pdfCompressorTool,
   passportPhotoTool,
+  videoToAudioTool,
 ])
 
 const TOOL_MAP = new Map<ToolKey, ToolDefinition>(

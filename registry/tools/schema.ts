@@ -7,6 +7,7 @@ export const TOOL_KEY_SCHEMA = z.enum([
   'image-resizer',
   'pdf-compressor',
   'passport-photo',
+  'video-to-audio',
 ])
 
 export type ToolKey = z.infer<typeof TOOL_KEY_SCHEMA>
@@ -28,6 +29,7 @@ export const toolCapabilitySchema = z.enum([
   'convert',
   'crop',
   'background-fill',
+  'extract-audio',
 ])
 
 export type ToolCapability = z.infer<typeof toolCapabilitySchema>
@@ -37,6 +39,12 @@ export const mimeTypeSchema = z.enum([
   'image/png',
   'image/webp',
   'application/pdf',
+  'video/mp4',
+  'video/quicktime',
+  'video/x-msvideo',
+  'video/x-matroska',
+  'video/webm',
+  'video/x-m4v',
 ])
 
 export type MimeType = z.infer<typeof mimeTypeSchema>
@@ -47,6 +55,10 @@ export const toolDefinitionSchema = z.object({
   key: TOOL_KEY_SCHEMA,
   name: z.string().min(3),
   description: z.string().min(20),
+
+  // Public route for standalone tool pages (e.g. '/video-to-audio').
+  // Tools without a route are only reachable through goal pages.
+  route: z.string().startsWith('/').optional(),
 
   // Resolves to features/<featurePath>/components/<componentName>
   // Used by the static TOOL_MAP in the goal page to dynamic-import the UI

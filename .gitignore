@@ -20,6 +20,9 @@
 # production
 /build
 
+# FFmpeg WASM runtime — copied from node_modules by scripts/copy-ffmpeg-assets.mjs
+/public/ffmpeg/
+
 # misc
 .DS_Store
 *.pem

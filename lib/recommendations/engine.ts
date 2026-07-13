@@ -10,8 +10,10 @@ import {
   getSizeTargetByPresetKey,
   QUICK_ACTION_SIZES,
 } from '@/registry/size-presets'
+import { getAllTools } from '@/registry/tools'
 import type { GoalDefinition } from '@/registry/goals/schema'
 import type { CompressPresetKey } from '@/registry/presets/schema'
+import type { ToolDefinition } from '@/registry/tools/schema'
 
 // ─── Single source of truth for goal URLs ────────────────────────────────────
 // All link components must call this helper. Public URLs are /[slug] — the word
@@ -185,5 +187,27 @@ export function getCompressPageGoalLinks(count = 4): GoalDefinition[] {
         (g.category === 'exam' || g.category === 'id-documents') &&
         g.priority === 'high',
     )
+    .slice(0, count)
+}
+
+// ─── Standalone tool pages ────────────────────────────────────────────────────
+
+/**
+ * Tools that own a public route outside the goal registry (e.g.
+ * /video-to-audio). Registering a ToolDefinition with a `route` automatically
+ * surfaces it in every section fed by this helper.
+ */
+export function getStandaloneTools(): ToolDefinition[] {
+  return getAllTools().filter(t => t.route !== undefined)
+}
+
+/**
+ * Cross-category discovery links for standalone tool pages, which have no
+ * goal slug to seed getGoalPageRecommendations with.
+ */
+export function getStandaloneToolPageGoals(count = 12): GoalDefinition[] {
+  const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 } as const
+  return [...getAllGoals()]
+    .sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority])
     .slice(0, count)
 }
