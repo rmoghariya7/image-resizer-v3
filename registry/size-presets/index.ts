@@ -9,8 +9,8 @@ export type SizeTarget = {
   readonly slug: string            // Full slug: "compress-image-under-15kb"
   readonly targetKB: number
   readonly displaySize: string     // "15 KB"
-  readonly title: string           // "Compress Image Under 15KB"
-  readonly shortTitle: string      // "Under 15KB"
+  readonly title: string           // "Compress Image to 15KB"
+  readonly shortTitle: string      // "To 15KB"
   readonly metaTitle: string
   readonly description: string     // SEO meta description
   readonly useCase: string         // One-line usage context
@@ -33,8 +33,8 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
     slug: 'compress-image-under-15kb',
     targetKB: 15,
     displaySize: '15 KB',
-    title: 'Compress Image Under 15KB',
-    shortTitle: 'Under 15KB',
+    title: 'Compress Image to 15KB',
+    shortTitle: 'To 15KB',
     metaTitle: 'Compress image to 15 KB for strict exam portals | Presetly',
     description:
       'UPSC, NDA, and GPSC portals cap photo uploads at 15 KB. This tool compresses any JPEG or PNG to fit under 15 KB in your browser. Nothing uploaded, nothing stored.',
@@ -69,8 +69,8 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
     slug: 'compress-image-under-20kb',
     targetKB: 20,
     displaySize: '20 KB',
-    title: 'Compress Image Under 20KB',
-    shortTitle: 'Under 20KB',
+    title: 'Compress Image to 20KB',
+    shortTitle: 'To 20KB',
     metaTitle: 'Compress image to 20 KB for UPSC, GPSC portals | Presetly',
     description:
       'Government exam portals including UPSC and GPSC set a 20 KB limit on some photo and signature uploads. Drop your image here and it compresses under 20 KB. Free, browser-only.',
@@ -106,8 +106,8 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
     slug: 'compress-image-under-25kb',
     targetKB: 25,
     displaySize: '25 KB',
-    title: 'Compress Image Under 25KB',
-    shortTitle: 'Under 25KB',
+    title: 'Compress Image to 25KB',
+    shortTitle: 'To 25KB',
     metaTitle: 'Compress image to 25 KB for signatures and forms | Presetly',
     description:
       'Signature uploads and small profile photos on government forms often cap at 25 KB. This tool compresses your image under 25 KB. Works on JPEG, PNG, and WebP. Nothing leaves your device.',
@@ -141,8 +141,8 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
     slug: 'compress-image-under-30kb',
     targetKB: 30,
     displaySize: '30 KB',
-    title: 'Compress Image Under 30KB',
-    shortTitle: 'Under 30KB',
+    title: 'Compress Image to 30KB',
+    shortTitle: 'To 30KB',
     metaTitle: 'Compress image to 30 KB for IBPS, scholarship portals | Presetly',
     description:
       'IBPS and many scholarship portals cap signature images at 30 KB. Upload your image and this tool finds the best quality that still fits under 30 KB. Browser-based, no sign-up. Free.',
@@ -176,8 +176,8 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
     slug: 'compress-image-under-40kb',
     targetKB: 40,
     displaySize: '40 KB',
-    title: 'Compress Image Under 40KB',
-    shortTitle: 'Under 40KB',
+    title: 'Compress Image to 40KB',
+    shortTitle: 'To 40KB',
     metaTitle: 'Compress image to 40 KB for form submissions | Presetly',
     description:
       'Many state government forms and department portals set a 40 KB upload limit. This tool compresses your image to stay under 40 KB while keeping it as clear as possible. Free.',
@@ -210,8 +210,8 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
     slug: 'compress-image-under-50kb',
     targetKB: 50,
     displaySize: '50 KB',
-    title: 'Compress Image Under 50KB',
-    shortTitle: 'Under 50KB',
+    title: 'Compress Image to 50KB',
+    shortTitle: 'To 50KB',
     metaTitle: 'Compress image to 50 KB: Aadhaar, PAN card, Voter ID | Presetly',
     description:
       'Aadhaar (UIDAI), PAN card (NSDL), and Voter ID portals all require photos under 50 KB. This tool finds the best quality that still fits under 50 KB. Free, browser-only, instant.',
@@ -248,8 +248,8 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
     slug: 'compress-image-under-75kb',
     targetKB: 75,
     displaySize: '75 KB',
-    title: 'Compress Image Under 75KB',
-    shortTitle: 'Under 75KB',
+    title: 'Compress Image to 75KB',
+    shortTitle: 'To 75KB',
     metaTitle: 'Compress image to 75 KB for college admissions | Presetly',
     description:
       'College admission portals and institutional photo uploads usually cap at 75 KB. This tool compresses your photo to fit under 75 KB. JPEG stays JPEG. No server, no account.',
@@ -282,8 +282,8 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
     slug: 'compress-image-under-100kb',
     targetKB: 100,
     displaySize: '100 KB',
-    title: 'Compress Image Under 100KB',
-    shortTitle: 'Under 100KB',
+    title: 'Compress Image to 100KB',
+    shortTitle: 'To 100KB',
     metaTitle: 'Compress image to 100 KB: Passport Seva, NTA | Presetly',
     description:
       'Passport Seva and NTA exam portals cap photo uploads at 100 KB. This tool compresses your image under 100 KB at the best quality possible. Runs locally in your browser. Free.',
@@ -319,8 +319,8 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
     slug: 'compress-image-under-150kb',
     targetKB: 150,
     displaySize: '150 KB',
-    title: 'Compress Image Under 150KB',
-    shortTitle: 'Under 150KB',
+    title: 'Compress Image to 150KB',
+    shortTitle: 'To 150KB',
     metaTitle: 'Compress image to 150 KB for email and web upload | Presetly',
     description:
       'Sharing photos over email or uploading to websites works best under 150 KB. This tool compresses any image to fit under that limit. No quality slider needed. Free.',
@@ -353,8 +353,8 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
     slug: 'compress-image-under-200kb',
     targetKB: 200,
     displaySize: '200 KB',
-    title: 'Compress Image Under 200KB',
-    shortTitle: 'Under 200KB',
+    title: 'Compress Image to 200KB',
+    shortTitle: 'To 200KB',
     metaTitle: 'Compress image to 200 KB for job portals | Presetly',
     description:
       'Job portals, LinkedIn photos, and CMS platforms often allow up to 200 KB. Compress your image to meet that limit without visible quality loss. Browser-based, free.',
@@ -388,8 +388,8 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
     slug: 'compress-image-under-500kb',
     targetKB: 500,
     displaySize: '500 KB',
-    title: 'Compress Image Under 500KB',
-    shortTitle: 'Under 500KB',
+    title: 'Compress Image to 500KB',
+    shortTitle: 'To 500KB',
     metaTitle: 'Compress image to 500 KB for blogs and product photos | Presetly',
     description:
       'Blog posts and e-commerce product images need to stay under 500 KB for fast page loads. This tool compresses your photo to fit. Works on JPEG, PNG, and WebP. Free.',
@@ -423,8 +423,8 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
     slug: 'compress-image-under-1mb',
     targetKB: 1024,
     displaySize: '1 MB',
-    title: 'Compress Image Under 1MB',
-    shortTitle: 'Under 1MB',
+    title: 'Compress Image to 1MB',
+    shortTitle: 'To 1MB',
     metaTitle: 'Compress image under 1 MB: reduce large photos free | Presetly',
     description:
       'Large RAW exports and high-resolution photos from DSLR cameras can be reduced to under 1 MB for easy sharing. Upload any size image and download a compressed version. Free.',

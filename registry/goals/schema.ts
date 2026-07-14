@@ -93,6 +93,12 @@ export const goalDefinitionSchema = z.object({
   status: goalStatusSchema,
   priority: goalPrioritySchema,
   updatedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be YYYY-MM-DD'),
+  // indexable: set false for goals that are genuine content duplicates of
+  // another canonical page (e.g. the compress-image-to-* goals duplicate the
+  // compress-image-under-* size-preset pages). Defaults to true — only use
+  // this for true duplicates with no unique content, never to hide a normal
+  // low-priority page. Read by generateGoalMetadata to set `robots.index`.
+  indexable: z.boolean().optional(),
 
   // Search intent (optional) -- powers metadata hints, internal linking, and recommendations.
   // See docs/search-intent.md.

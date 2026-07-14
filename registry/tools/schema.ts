@@ -9,6 +9,8 @@ export const TOOL_KEY_SCHEMA = z.enum([
   'passport-photo',
   'video-to-audio',
   'image-cropper',
+  'image-converter',
+  'add-name-and-date-on-photo',
 ])
 
 export type ToolKey = z.infer<typeof TOOL_KEY_SCHEMA>
@@ -31,6 +33,7 @@ export const toolCapabilitySchema = z.enum([
   'crop',
   'background-fill',
   'extract-audio',
+  'annotate', // draws a text/date/name overlay onto an image (add-name-and-date-on-photo)
 ])
 
 export type ToolCapability = z.infer<typeof toolCapabilitySchema>
@@ -57,6 +60,7 @@ export const mimeTypeSchema = z.enum([
   'image/jpeg',
   'image/png',
   'image/webp',
+  'image/avif',
   'application/pdf',
   'video/mp4',
   'video/quicktime',

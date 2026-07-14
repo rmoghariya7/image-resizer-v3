@@ -86,6 +86,12 @@ export function generateCompressGoal(
     status: 'active',
     priority,
     updatedAt: '2026-06-01',
+    // This goal renders the exact same FAQs, steps, and preset as the
+    // canonical /compress-image-under-{size} page (registry/size-presets) —
+    // a true content duplicate, not just a related page. Kept active (still
+    // usable for internal linking/cross-references from exam/ID goals) but
+    // excluded from search indexing to avoid duplicate-content dilution.
+    indexable: false,
   } satisfies GoalDefinition
 }
 

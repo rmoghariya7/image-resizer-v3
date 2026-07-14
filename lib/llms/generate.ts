@@ -8,8 +8,9 @@
  * LLM-aware crawlers understand a website's structure.
  *
  * Rules applied here (must mirror sitemap.ts):
- *  - Goals with slug prefix `compress-image-to-` are noindex.
- *    Their canonical URL is /compress-image-under-{size} (served by size-presets).
+ *  - Goals with `indexable === false` are excluded (true content duplicates
+ *    of another canonical page, e.g. compress-image-to-* duplicates the
+ *    compress-image-under-{size} pages served by size-presets).
  *  - Only `status === 'active'` goals are included.
  *  - No duplicate URLs.
  */
@@ -25,15 +26,13 @@ import { getStandaloneTools } from '@/lib/recommendations/engine'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 
-/** Slugs that are noindex — their canonical lives at a different URL. */
-const NOINDEX_SLUG_PREFIX = 'compress-image-to-'
-
 // Core Tool pages that reuse the image-resizer engine but aren't backed by
-// their own ToolDefinition route, so getStandaloneTools() can't surface them
-// automatically (mirrors the same list in app/sitemap.ts).
+// their own ToolDefinition route, so getStandaloneTools() can't surface it
+// automatically (mirrors the same list in app/sitemap.ts). /convert-image has
+// its own 'image-converter' ToolDefinition now, so it's covered by
+// getStandaloneTools() and no longer needs a manual entry here.
 const EXTRA_CORE_TOOL_PAGES = [
   { title: 'Compress Image', path: '/compress-image', description: 'Compress any image to a target file size.' },
-  { title: 'Convert Image', path: '/convert-image', description: 'Convert images between JPEG, PNG, and WebP.' },
 ]
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -49,11 +48,9 @@ function link(title: string, path: string, description?: string): string {
 
 // ─── Canonical goal URLs ──────────────────────────────────────────────────────
 
-/** Active goals with canonical URLs (noindex compress-image-to-* excluded). */
+/** Active goals with canonical URLs (indexable === false duplicates excluded, e.g. compress-image-to-*). */
 export function getCanonicalGoals() {
-  return getAllGoals().filter(
-    (g) => !g.slug.startsWith(NOINDEX_SLUG_PREFIX),
-  )
+  return getAllGoals().filter((g) => g.indexable !== false)
 }
 
 /** Goals by category, canonical only. */
@@ -65,7 +62,7 @@ export function getCanonicalGoalsByCategory(category: string) {
 export function getCompressPages() {
   return SIZE_TARGETS.map((t) => ({
     slug: t.slug,              // "compress-image-under-15kb"
-    title: t.title,            // "Compress Image Under 15KB"
+    title: t.title,            // "Compress Image to 15KB"
     description: t.useCase,   // one-line use case
   }))
 }

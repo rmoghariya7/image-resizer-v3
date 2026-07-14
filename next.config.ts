@@ -118,6 +118,23 @@ const nextConfig: NextConfig = {
     },
   ],
 
+  redirects: async () => [
+    // Renamed for SEO: the top-ranking competitors for this tool (Pi7,
+    // WebUtility.io, Pixellize.io, Pokecut) all use the exact-match URL
+    // slug `add-name-and-date-on-photo` for the query "add name and date
+    // to photo" — see app/(goals)/add-name-and-date-on-photo/content.ts.
+    {
+      source: '/photo-date-stamp',
+      destination: '/add-name-and-date-on-photo',
+      permanent: true,
+    },
+    {
+      source: '/photo-date-stamp/:path*',
+      destination: '/add-name-and-date-on-photo/:path*',
+      permanent: true,
+    },
+  ],
+
   rewrites: async () => [
     // Public URL /compress-image-under-15kb is rewritten internally to
     // /compress-image-under/15kb so the App Router routes it to

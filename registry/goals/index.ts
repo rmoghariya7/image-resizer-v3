@@ -82,7 +82,12 @@ export function getGoalChunk(offset: number, size: number): readonly GoalDefinit
 }
 
 /**
- * Returns sitemap entries for all active goals.
+ * Returns sitemap entries for all active, indexable goals.
+ * `indexable === false` marks a true content duplicate of another canonical
+ * page (e.g. the compress-image-to-* goals duplicate the size-preset
+ * compress-image-under-* pages) — excluded here so any future duplicate goal
+ * is automatically kept out of the sitemap without a slug-pattern filter at
+ * the call site.
  * Suitable for passing to next-sitemap or a custom sitemap route.
  */
 export function getSitemapEntries(): Array<{
@@ -90,11 +95,13 @@ export function getSitemapEntries(): Array<{
   priority: GoalDefinition['priority']
   updatedAt: string
 }> {
-  return ALL_GOALS.filter((g) => g.status === 'active').map((g) => ({
-    slug: g.slug,
-    priority: g.priority,
-    updatedAt: g.updatedAt,
-  }))
+  return ALL_GOALS
+    .filter((g) => g.status === 'active' && g.indexable !== false)
+    .map((g) => ({
+      slug: g.slug,
+      priority: g.priority,
+      updatedAt: g.updatedAt,
+    }))
 }
 
 /**

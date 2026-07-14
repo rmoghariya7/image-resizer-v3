@@ -4,6 +4,8 @@ import { pdfCompressorTool } from './pdf-compressor'
 import { passportPhotoTool } from './passport-photo'
 import { videoToAudioTool } from './video-to-audio'
 import { imageCropperTool } from './image-cropper'
+import { imageConverterTool } from './image-converter'
+import { addNameAndDateOnPhotoTool } from './add-name-and-date-on-photo'
 
 // ─── Registry map ─────────────────────────────────────────────────────────────
 
@@ -13,6 +15,8 @@ const ALL_TOOLS: readonly ToolDefinition[] = Object.freeze([
   passportPhotoTool,
   videoToAudioTool,
   imageCropperTool,
+  imageConverterTool,
+  addNameAndDateOnPhotoTool,
 ])
 
 const TOOL_MAP = new Map<ToolKey, ToolDefinition>(

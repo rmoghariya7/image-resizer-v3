@@ -8,6 +8,7 @@ import {
   IdCard,
   PenLine,
   SlidersHorizontal,
+  CalendarClock,
 } from 'lucide-react'
 import type { ElementType } from 'react'
 import { getGoal } from '@/registry/goals'
@@ -42,6 +43,7 @@ function buildQuickActions(): QuickAction[] {
     { label: 'Crop Image', href: '/crop-image', Icon: Crop },
     { label: 'Convert Image', href: '/convert-image', Icon: RefreshCw },
     { label: 'Extract Audio', href: '/video-to-audio', Icon: Music },
+    { label: 'Add Name & Date', href: '/add-name-and-date-on-photo', Icon: CalendarClock },
   ]
 
   if (passportGoal) {

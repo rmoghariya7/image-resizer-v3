@@ -32,7 +32,13 @@ export function buildSearchIndex(): SearchIndex {
 
   const goals: GoalSearchItem[] = [
     ...sizeGoals,
-    ...getAllGoals().map((goal) => ({
+    // indexable === false goals (e.g. the compress-image-to-* shadow goals)
+    // are true content duplicates of a canonical page already represented
+    // above via sizeGoals — surfacing both would show the same destination
+    // twice in the search dropdown for the same query.
+    ...getAllGoals()
+      .filter((goal) => goal.indexable !== false)
+      .map((goal) => ({
     type: 'goal' as const,
     slug: goal.slug,
     href: `/${goal.slug}`,

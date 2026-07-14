@@ -11,11 +11,13 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 const LEGAL_PAGES = ['/about', '/contact', '/privacy-policy', '/terms']
 
 // Core Tool pages that reuse the image-resizer engine but aren't backed by
-// their own ToolDefinition route (they share the 'image-resizer' registry
+// their own ToolDefinition route (it shares the 'image-resizer' registry
 // entry, which already points its `route` at /resize-image) — so
-// getStandaloneTools() can't pick them up automatically. Listed manually
-// until each gets a dedicated ToolDefinition.
-const EXTRA_CORE_TOOL_PAGES = ['/compress-image', '/convert-image']
+// getStandaloneTools() can't pick it up automatically. Listed manually until
+// it gets a dedicated ToolDefinition. (/convert-image has its own
+// 'image-converter' ToolDefinition now, so it flows through
+// getStandaloneTools() automatically and no longer needs to be listed here.)
+const EXTRA_CORE_TOOL_PAGES = ['/compress-image']
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // Home page
@@ -59,11 +61,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.4,
   }))
 
-  // Goal pages — excludes compress goals which are noindex (canonical → /compress-image-under-*)
-  // Compress goal slugs always start with 'compress-image-to-'
+  // Goal pages — getSitemapEntries() already excludes non-indexable goals
+  // (e.g. the compress-image-to-* duplicates of /compress-image-under-*)
   const PRIORITY_MAP: Record<string, number> = { high: 0.8, medium: 0.7, low: 0.6 }
   const goalPages: MetadataRoute.Sitemap = getSitemapEntries()
-    .filter(goal => !goal.slug.startsWith('compress-image-to-'))
     .map(goal => ({
       url: `${BASE_URL}/${goal.slug}`,
       lastModified: new Date(goal.updatedAt),

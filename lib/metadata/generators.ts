@@ -88,7 +88,10 @@ export function generateGoalMetadata(
       images:      [ogImage.url],
     },
     robots: {
-      index:  goal.status === 'active',
+      // indexable === false marks a genuine content duplicate of another
+      // canonical page (see GoalDefinition.indexable) — kept live and
+      // linkable, just excluded from search indexing.
+      index:  goal.status === 'active' && goal.indexable !== false,
       follow: true,
     },
     other: hints.primaryQuery
