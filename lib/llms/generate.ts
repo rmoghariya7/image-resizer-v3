@@ -28,6 +28,14 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 /** Slugs that are noindex — their canonical lives at a different URL. */
 const NOINDEX_SLUG_PREFIX = 'compress-image-to-'
 
+// Core Tool pages that reuse the image-resizer engine but aren't backed by
+// their own ToolDefinition route, so getStandaloneTools() can't surface them
+// automatically (mirrors the same list in app/sitemap.ts).
+const EXTRA_CORE_TOOL_PAGES = [
+  { title: 'Compress Image', path: '/compress-image', description: 'Compress any image to a target file size.' },
+  { title: 'Convert Image', path: '/convert-image', description: 'Convert images between JPEG, PNG, and WebP.' },
+]
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function url(path: string): string {
@@ -119,6 +127,10 @@ export function generateLlmsTxt(): string {
   // Standalone tools (own route outside the goal registry, e.g. /video-to-audio)
   for (const tool of getStandaloneTools()) {
     lines.push(link(tool.name, tool.route!, tool.description))
+  }
+  // Extra Core Tool pages not tied to a ToolDefinition route
+  for (const page of EXTRA_CORE_TOOL_PAGES) {
+    lines.push(link(page.title, page.path, page.description))
   }
   lines.push('')
 
@@ -233,11 +245,14 @@ export function generateLlmsFullTxt(): string {
 
   // ── Standalone converter tools
   const standaloneTools = getStandaloneTools()
-  if (standaloneTools.length > 0) {
+  if (standaloneTools.length > 0 || EXTRA_CORE_TOOL_PAGES.length > 0) {
     lines.push('## Converter Tools')
     lines.push('')
     for (const tool of standaloneTools) {
       lines.push(link(tool.name, tool.route!, tool.description))
+    }
+    for (const page of EXTRA_CORE_TOOL_PAGES) {
+      lines.push(link(page.title, page.path, page.description))
     }
     lines.push('')
   }

@@ -1,156 +1,89 @@
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import { getGoal } from '@/registry/goals'
-import { getPreset } from '@/registry/presets'
-import { isImagePreset, isCompressPreset } from '@/types/registry'
-import { buildGoalHref, getStandaloneTools } from '@/lib/recommendations/engine'
-import type { GoalDefinition } from '@/types/registry'
+import { ArrowRight, Image as ImageIcon, Video, FileText, Sparkles, ShieldCheck } from 'lucide-react'
+import type { ElementType } from 'react'
+import { getActiveTools } from '@/registry/tools'
+import type { PlatformCategory } from '@/registry/tools/schema'
 
-const FEATURED_SLUGS = [
-  'pan-card-photo-resizer',
-  'nda-photo-resizer',
-  'voter-id-photo-resizer',
-  'signature-resize-20kb',
-] as const
-
-const CATEGORY_LABELS: Record<string, string> = {
-  exam: 'Exam Photo',
-  'id-documents': 'ID Document',
-  compress: 'Compress',
-  signature: 'Signature',
+const CATEGORY_ICON: Record<PlatformCategory, ElementType> = {
+  image: ImageIcon,
+  video: Video,
+  document: FileText,
+  ai: Sparkles,
 }
 
-const CATEGORY_COLORS: Record<string, string> = {
-  exam: 'bg-violet-50 text-violet-700',
-  'id-documents': 'bg-blue-50 text-blue-700',
-  compress: 'bg-amber-50 text-amber-700',
-  signature: 'bg-emerald-50 text-emerald-700',
+const CATEGORY_LABEL: Record<PlatformCategory, string> = {
+  image: 'Image',
+  video: 'Video',
+  document: 'Document',
+  ai: 'AI',
 }
 
-function getSpecLine(goal: GoalDefinition): string {
-  try {
-    const preset = getPreset(goal.preset)
-    if (isImagePreset(preset)) {
-      const parts = [preset.displayDimensions, preset.displayFormat]
-      if (preset.displayMaxSize) parts.push(`Max ${preset.displayMaxSize}`)
-      return parts.join(' · ')
-    }
-    if (isCompressPreset(preset)) {
-      return `Target ${preset.displayMaxSize} · Quality-optimised`
-    }
-  } catch {
-    // no-op
-  }
-  return ''
+const CATEGORY_BADGE: Record<PlatformCategory, string> = {
+  image: 'bg-violet-50 text-violet-700',
+  video: 'bg-rose-50 text-rose-700',
+  document: 'bg-blue-50 text-blue-700',
+  ai: 'bg-emerald-50 text-emerald-700',
 }
 
-// Standalone tools rendered as featured cards alongside the goal cards.
-// Registry-driven: any ToolDefinition with a `route` appears automatically.
-const STANDALONE_SPEC_LINES: Record<string, string> = {
-  'video-to-audio': 'MP4 · MOV · MKV → MP3 · WAV · AAC',
-}
-
+/**
+ * Platform capabilities — every tool with a working implementation, shown as
+ * a single registry-driven grid. Distinct from Popular Goals: this section
+ * sells "what Presetly can do", not "what people search for". Adding a new
+ * tool with status: 'active' surfaces it here automatically.
+ */
 export function FeaturedToolsSection() {
-  const goals = FEATURED_SLUGS
-    .map(slug => getGoal(slug))
-    .filter((g): g is GoalDefinition => g !== undefined)
-  const standaloneTools = getStandaloneTools()
+  const tools = getActiveTools().filter((t) => t.route !== undefined)
+  if (tools.length === 0) return null
 
   return (
-    <section
-      aria-labelledby="featured-tools-heading"
-      className="bg-muted/30 py-16 sm:py-24"
-    >
+    <section aria-labelledby="featured-tools-heading" className="bg-muted/30 py-16 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="mb-10">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-            Complete toolkit
-          </p>
-          <h2
-            id="featured-tools-heading"
-            className="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
-          >
-            More tools
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">Complete toolkit</p>
+          <h2 id="featured-tools-heading" className="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+            Featured tools
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Every tool automatically applies the correct specifications — no
-            manual settings required.
+            Every tool runs entirely in your browser — no uploads, no accounts, no watermarks.
           </p>
         </div>
 
-        {/* Tool list — two column grid */}
-        <ul
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-          role="list"
-        >
-          {standaloneTools.map(tool => (
-            <li key={tool.key}>
-              <Link
-                href={tool.route!}
-                className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 shadow-sm ring-1 ring-foreground/5 transition-all hover:border-primary/30 hover:shadow-md"
-              >
-                <div className="flex-1 min-w-0">
-                  <span className="inline-flex rounded-full bg-rose-50 px-2 py-0.5 text-xs font-medium text-rose-700">
-                    Video
-                  </span>
-                  <span className="mt-2 block text-base font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
-                    {tool.name}
-                  </span>
-                  <span className="mt-1 block text-sm leading-snug text-muted-foreground line-clamp-2">
-                    {tool.description}
-                  </span>
-                  {STANDALONE_SPEC_LINES[tool.key] && (
-                    <span className="mt-2 block font-mono text-xs text-muted-foreground/70">
-                      {STANDALONE_SPEC_LINES[tool.key]}
-                    </span>
-                  )}
-                </div>
-                <ArrowRight
-                  size={16}
-                  className="mt-1 shrink-0 text-muted-foreground/50 transition-all group-hover:translate-x-0.5 group-hover:text-primary"
-                  aria-hidden="true"
-                />
-              </Link>
-            </li>
-          ))}
-          {goals.map(goal => {
-            const spec = getSpecLine(goal)
-            const categoryLabel = CATEGORY_LABELS[goal.category] ?? goal.category
-            const categoryColor = CATEGORY_COLORS[goal.category] ?? 'bg-gray-50 text-gray-700'
-
+        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" role="list">
+          {tools.map((tool) => {
+            const Icon = CATEGORY_ICON[tool.platformCategory]
             return (
-              <li key={goal.slug}>
+              <li key={tool.key}>
                 <Link
-                  href={buildGoalHref(goal)}
-                  className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 shadow-sm ring-1 ring-foreground/5 transition-all hover:border-primary/30 hover:shadow-md"
+                  href={tool.route!}
+                  className="group flex h-full flex-col rounded-xl border border-border bg-card p-5 shadow-sm ring-1 ring-foreground/5 transition-all hover:border-primary/30 hover:shadow-md"
                 >
-                  {/* Left: metadata */}
-                  <div className="flex-1 min-w-0">
-                    <span
-                      className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${categoryColor}`}
-                    >
-                      {categoryLabel}
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10" aria-hidden="true">
+                      <Icon className="size-5 text-primary" />
+                    </div>
+                    <span className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${CATEGORY_BADGE[tool.platformCategory]}`}>
+                      {CATEGORY_LABEL[tool.platformCategory]}
                     </span>
-                    <span className="mt-2 block text-base font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
-                      {goal.title}
-                    </span>
-                    <span className="mt-1 block text-sm leading-snug text-muted-foreground line-clamp-2">
-                      {goal.description}
-                    </span>
-                    {spec && (
-                      <span className="mt-2 block font-mono text-xs text-muted-foreground/70">
-                        {spec}
-                      </span>
-                    )}
                   </div>
 
-                  {/* Right: arrow */}
-                  <ArrowRight
-                    size={16}
-                    className="mt-1 shrink-0 text-muted-foreground/50 transition-all group-hover:translate-x-0.5 group-hover:text-primary"
-                    aria-hidden="true"
-                  />
+                  <span className="mt-4 block text-base font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
+                    {tool.name}
+                  </span>
+                  <span className="mt-1.5 block flex-1 text-sm leading-relaxed text-muted-foreground line-clamp-2">
+                    {tool.description}
+                  </span>
+
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      <ShieldCheck size={11} aria-hidden="true" />
+                      Browser-only
+                    </span>
+                    <ArrowRight
+                      size={14}
+                      className="shrink-0 text-muted-foreground/50 transition-all group-hover:translate-x-0.5 group-hover:text-primary"
+                      aria-hidden="true"
+                    />
+                  </div>
                 </Link>
               </li>
             )

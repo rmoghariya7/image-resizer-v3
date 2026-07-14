@@ -13,4 +13,9 @@ export const pdfCompressorTool = {
   maxFileSizeMB: 50,
   maxBatchSize: 1,
   capabilities: ['compress'],
+  platformCategory: 'document',
+  // No features/pdf-compressor implementation exists yet — keep out of any
+  // homepage section that showcases working capability until it ships.
+  status: 'coming-soon',
+  addedDate: '2026-06-19',
 } satisfies ToolDefinition

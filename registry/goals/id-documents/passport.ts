@@ -17,7 +17,12 @@ export const passportGoal = {
   category: 'id-documents',
   subcategory: 'central-ids',
   tags: ['passport', 'india passport', 'biometric photo', 'id document', 'photo resize'],
-  tool: 'passport-photo',
+  // Uses the image-resizer engine directly — the 'passport-photo' tool is
+  // registered for a future dedicated face-detection experience but has no
+  // feature module yet (see registry/tools/passport-photo.ts). The
+  // 'passport-india' preset already does everything this goal promises
+  // (600×600, white background fill, JPEG) through the working engine.
+  tool: 'image-resizer',
   preset: 'passport-india',
   keywords: [
     'india passport photo size',

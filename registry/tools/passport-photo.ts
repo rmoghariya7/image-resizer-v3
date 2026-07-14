@@ -13,4 +13,11 @@ export const passportPhotoTool = {
   maxFileSizeMB: 20,
   maxBatchSize: 1,
   capabilities: ['resize', 'crop', 'compress', 'background-fill'],
+  platformCategory: 'document',
+  // No features/passport-photo implementation exists yet — the
+  // passport-photo-maker goal currently falls through to ToolSection's
+  // "coming soon" placeholder. Keep out of homepage capability sections
+  // until a real feature module ships.
+  status: 'coming-soon',
+  addedDate: '2026-06-19',
 } satisfies ToolDefinition

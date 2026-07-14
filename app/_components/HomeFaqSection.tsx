@@ -2,27 +2,27 @@ const HOME_FAQS = [
   {
     question: 'What is Presetly?',
     answer:
-      'Presetly is a free browser-based image compression and resizing platform. You pick a target file size — 15 KB, 50 KB, 100 KB, or any other limit — upload your image, and download the compressed file in seconds. No sign-up, no server uploads, no watermarks.',
+      'Presetly is a free browser-based toolkit for preparing images, video and documents. Compress, resize, crop and convert images, extract audio from video, or generate exact-spec photos for Indian government portals — all without uploading anything to a server.',
   },
   {
-    question: 'Does my image get uploaded to a server?',
+    question: 'Does my file get uploaded to a server?',
     answer:
-      'No. All processing happens locally in your browser using Web Workers and the Canvas API. Your image never leaves your device. Nothing is stored, logged, or transmitted.',
+      'No. Every tool processes your file locally in your browser using Web Workers, WebAssembly, and the Canvas API. Your file never leaves your device. Nothing is stored, logged, or transmitted.',
   },
   {
-    question: 'What is the smallest file size I can compress to?',
+    question: 'What can I do on Presetly?',
     answer:
-      'The smallest supported target is 15 KB. For very small targets, the tool converts PNG images to JPEG — the most efficient format for photos at small sizes. Most images can reach 15 KB with acceptable visual quality.',
+      'Compress images to an exact file size, resize to custom dimensions, crop for social media or government photo requirements, convert between JPEG/PNG/WebP, and extract audio from video files — with more tools on the way.',
   },
   {
-    question: 'Which image formats are supported?',
+    question: 'Which formats are supported?',
     answer:
-      'JPEG, PNG, and WebP. Files up to 20 MB can be uploaded. The tool outputs JPEG for small size targets (under 40 KB) and preserves the original format for larger targets.',
+      'Images: JPEG, PNG, and WebP, up to 20 MB. Video: MP4, MOV, AVI, MKV, WEBM and M4V, up to 512 MB. Every tool page lists its exact supported formats.',
   },
   {
     question: 'Can I use this for government portal photo requirements?',
     answer:
-      'Yes. Presetly also supports photo resizing presets for UPSC, GPSC, NDA, Aadhaar, PAN card, Passport, and Voter ID — automatically setting the correct dimensions, DPI, and format for each portal.',
+      'Yes. Presetly supports photo presets for UPSC, GPSC, SSC, NDA, Aadhaar, PAN card, Passport, and Voter ID — automatically setting the correct dimensions, DPI, and file size for each portal.',
   },
   {
     question: 'Are all tools completely free?',
@@ -85,3 +85,5 @@ export function HomeFaqSection() {
     </section>
   )
 }
+
+export { HOME_FAQS }

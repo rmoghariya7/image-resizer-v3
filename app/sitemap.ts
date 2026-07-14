@@ -10,6 +10,13 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 
 const LEGAL_PAGES = ['/about', '/contact', '/privacy-policy', '/terms']
 
+// Core Tool pages that reuse the image-resizer engine but aren't backed by
+// their own ToolDefinition route (they share the 'image-resizer' registry
+// entry, which already points its `route` at /resize-image) — so
+// getStandaloneTools() can't pick them up automatically. Listed manually
+// until each gets a dedicated ToolDefinition.
+const EXTRA_CORE_TOOL_PAGES = ['/compress-image', '/convert-image']
+
 export default function sitemap(): MetadataRoute.Sitemap {
   // Home page
   const home: MetadataRoute.Sitemap = [
@@ -31,6 +38,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // ToolDefinition with a `route` is included automatically.
   const standaloneToolPages: MetadataRoute.Sitemap = getStandaloneTools().map(tool => ({
     url: `${BASE_URL}${tool.route}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
+
+  // Extra Core Tool pages not tied to a ToolDefinition route (see comment above)
+  const extraCoreToolPages: MetadataRoute.Sitemap = EXTRA_CORE_TOOL_PAGES.map(path => ({
+    url: `${BASE_URL}${path}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
@@ -100,6 +115,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...home,
     ...standaloneToolPages,
+    ...extraCoreToolPages,
     ...learnIndex,
     ...categoryPages,
     ...compressionPages,

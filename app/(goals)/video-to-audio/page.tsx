@@ -1,15 +1,15 @@
-import Link from 'next/link'
-import type { Metadata } from 'next'
-import { BASE_URL } from '@/lib/metadata/generators'
+import Link from "next/link";
+import type { Metadata } from "next";
+import { BASE_URL } from "@/lib/metadata/generators";
 import {
   getStandaloneToolPageGoals,
   getStandaloneTools,
-} from '@/lib/recommendations/engine'
-import { getTool } from '@/registry/tools'
-import { FaqSection } from '../[slug]/_components/FaqSection'
-import { QuickStepsSection } from '../[slug]/_components/QuickStepsSection'
-import { ExploreMoreToolsSection } from '../[slug]/_components/ExploreMoreToolsSection'
-import { VideoToAudioSection } from './_components/VideoToAudioSection'
+} from "@/lib/recommendations/engine";
+import { getTool } from "@/registry/tools";
+import { FaqSection } from "../[slug]/_components/FaqSection";
+import { QuickStepsSection } from "../[slug]/_components/QuickStepsSection";
+import { ExploreMoreToolsSection } from "../[slug]/_components/ExploreMoreToolsSection";
+import { VideoToAudioSection } from "./_components/VideoToAudioSection";
 import {
   DESCRIPTION,
   FAQS,
@@ -18,17 +18,17 @@ import {
   SEO_TITLE,
   SUPPORTED_INPUTS,
   SUPPORTED_OUTPUTS,
-} from './content'
+} from "./content";
 
-const CANONICAL = `${BASE_URL}/video-to-audio`
-const SITE_NAME = 'Presetly'
+const CANONICAL = `${BASE_URL}/video-to-audio`;
+const SITE_NAME = "Presetly";
 
 const OG_IMAGE = {
   url: `${CANONICAL}/opengraph-image`,
   width: 1200,
   height: 630,
-  type: 'image/png' as const,
-}
+  type: "image/png" as const,
+};
 
 export const metadata: Metadata = {
   title: SEO_TITLE,
@@ -38,91 +38,93 @@ export const metadata: Metadata = {
     title: SEO_TITLE,
     description: DESCRIPTION,
     url: CANONICAL,
-    type: 'website',
+    type: "website",
     siteName: SITE_NAME,
     images: [OG_IMAGE],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: `${PAGE_TITLE} | ${SITE_NAME}`,
     description: DESCRIPTION.slice(0, 150),
     images: [OG_IMAGE.url],
   },
   robots: { index: true, follow: true },
   other: {
-    'search:primaryQuery': 'video to audio converter online',
+    "search:primaryQuery": "video to audio converter online",
   },
-}
+};
 
 // ─── Structured data ──────────────────────────────────────────────────────────
 
 const breadcrumbSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-    { '@type': 'ListItem', position: 2, name: PAGE_TITLE, item: CANONICAL },
+    { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+    { "@type": "ListItem", position: 2, name: PAGE_TITLE, item: CANONICAL },
   ],
-}
+};
 
 const softwareSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
   name: PAGE_TITLE,
   description: DESCRIPTION,
-  applicationCategory: 'MultimediaApplication',
-  operatingSystem: 'Any',
-  browserRequirements: 'Requires a modern web browser with WebAssembly support',
+  applicationCategory: "MultimediaApplication",
+  operatingSystem: "Any",
+  browserRequirements: "Requires a modern web browser with WebAssembly support",
   url: CANONICAL,
   featureList: [
-    'Extract MP3, WAV, AAC, OGG and FLAC audio from video',
-    'Supports MP4, MOV, AVI, MKV, WEBM and M4V input',
-    'Runs entirely in the browser — videos are never uploaded',
-    'Adjustable bitrate, sample rate and channels',
-    'Free with no sign-up or watermarks',
+    "Extract MP3, WAV, AAC, OGG and FLAC audio from video",
+    "Supports MP4, MOV, AVI, MKV, WEBM and M4V input",
+    "Runs entirely in the browser — videos are never uploaded",
+    "Adjustable bitrate, sample rate and channels",
+    "Free with no sign-up or watermarks",
   ],
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-  provider: { '@type': 'Organization', name: SITE_NAME, url: BASE_URL },
-}
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  provider: { "@type": "Organization", name: SITE_NAME, url: BASE_URL },
+};
 
 const howToSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'HowTo',
+  "@context": "https://schema.org",
+  "@type": "HowTo",
   name: `How to extract audio from a video with ${SITE_NAME}`,
   step: HOW_IT_WORKS.map((step, index) => ({
-    '@type': 'HowToStep',
+    "@type": "HowToStep",
     position: index + 1,
     name: step.title,
     text: step.body,
   })),
-}
+};
 
 const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: FAQS.map(faq => ({
-    '@type': 'Question',
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((faq) => ({
+    "@type": "Question",
     name: faq.question,
-    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    acceptedAnswer: { "@type": "Answer", text: faq.answer },
   })),
-}
+};
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function VideoToAudioPage() {
-  const tool = getTool('video-to-audio')
-  const exploreGoals = getStandaloneToolPageGoals(12)
-  const otherTools = getStandaloneTools().filter(t => t.key !== tool.key)
+  const tool = getTool("video-to-audio");
+  const exploreGoals = getStandaloneToolPageGoals(12);
+  const otherTools = getStandaloneTools().filter((t) => t.key !== tool.key);
 
   return (
     <>
-      {[breadcrumbSchema, softwareSchema, howToSchema, faqSchema].map((schema, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      {[breadcrumbSchema, softwareSchema, howToSchema, faqSchema].map(
+        (schema, i) => (
+          <script
+            key={i}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ),
+      )}
 
       <article>
         {/* 1. Page header — deliberately compact so upload, format cards and
@@ -130,13 +132,21 @@ export default function VideoToAudioPage() {
         <div className="border-b border-gray-100 bg-white px-4 py-3 sm:px-6 sm:py-10">
           <div className="mx-auto max-w-3xl">
             <nav aria-label="Breadcrumb" className="mb-1.5 sm:mb-4">
-              <ol className="flex flex-wrap items-center gap-1.5 text-xs text-gray-500" role="list">
+              <ol
+                className="flex flex-wrap items-center gap-1.5 text-xs text-gray-500"
+                role="list"
+              >
                 <li>
-                  <Link href="/" className="transition-colors hover:text-indigo-600">
+                  <Link
+                    href="/"
+                    className="transition-colors hover:text-indigo-600"
+                  >
                     Home
                   </Link>
                 </li>
-                <li aria-hidden="true" className="select-none">/</li>
+                <li aria-hidden="true" className="select-none">
+                  /
+                </li>
                 <li className="font-medium text-gray-900" aria-current="page">
                   Video to Audio
                 </li>
@@ -149,20 +159,23 @@ export default function VideoToAudioPage() {
             {/* Description hidden on mobile — the upload area, format cards and
                 Extract button must all fit the first viewport (320px rule). */}
             <p className="mt-2 hidden text-base leading-relaxed text-gray-600 sm:mt-4 sm:block sm:text-lg">
-              Pull the audio out of any video as MP3, WAV, AAC, OGG or FLAC —
-              free, instant and 100% private.
+              Extract audio from a wide range of video file types, including
+              MP4, MOV, MKV, WEBM, AVI and more. Simply upload your video and
+              extract the audio as an MP3 file
             </p>
 
             {/* Tags hidden on mobile to keep the tool above the fold */}
             <div className="mt-4 hidden flex-wrap items-center gap-2 sm:flex">
-              {['video to mp3', 'extract audio', 'no upload', 'free'].map(tag => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
-                >
-                  {tag}
-                </span>
-              ))}
+              {["video to mp3", "extract audio", "no upload", "free"].map(
+                (tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+                  >
+                    {tag}
+                  </span>
+                ),
+              )}
             </div>
           </div>
         </div>
@@ -191,7 +204,7 @@ export default function VideoToAudioPage() {
                   Video input ({tool.maxFileSizeMB} MB max)
                 </h3>
                 <dl className="mt-3 space-y-2">
-                  {SUPPORTED_INPUTS.map(item => (
+                  {SUPPORTED_INPUTS.map((item) => (
                     <div key={item.format} className="flex gap-3 text-sm">
                       <dt className="w-20 shrink-0 font-mono font-semibold text-indigo-600">
                         {item.format}
@@ -202,9 +215,11 @@ export default function VideoToAudioPage() {
                 </dl>
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-gray-900">Audio output</h3>
+                <h3 className="text-sm font-semibold text-gray-900">
+                  Audio output
+                </h3>
                 <dl className="mt-3 space-y-2">
-                  {SUPPORTED_OUTPUTS.map(item => (
+                  {SUPPORTED_OUTPUTS.map((item) => (
                     <div key={item.format} className="flex gap-3 text-sm">
                       <dt className="w-20 shrink-0 font-mono font-semibold text-indigo-600">
                         {item.format}
@@ -257,5 +272,5 @@ export default function VideoToAudioPage() {
         <ExploreMoreToolsSection goals={exploreGoals} tools={otherTools} />
       </article>
     </>
-  )
+  );
 }

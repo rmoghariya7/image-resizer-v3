@@ -18,11 +18,14 @@ import {
   PenLine,
   TrendingUp,
   ArrowRight,
+  Wrench,
+  FolderOpen,
+  BookOpen,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useSearch } from '../context'
 import { filterSearchIndex } from '../search-index'
-import type { GoalSearchItem } from '../types'
+import type { GoalSearchItem, ToolSearchItem, CategorySearchItem, LearnSearchItem } from '../types'
 import type { GoalCategory } from '@/types/registry'
 
 // ─── Config ───────────────────────────────────────────────────────────────────
@@ -65,6 +68,12 @@ const CATEGORY_ICON_STYLE: Record<GoalCategory, IconConfig> = {
 }
 
 const CATEGORY_ORDER: GoalCategory[] = ['exam', 'id-documents', 'signature', 'compress']
+
+// Icon styling for the non-goal result groups (tools/categories/learn share a
+// simpler row shape — no per-item category badge, just a group header).
+const TOOL_ROW_ICON = { bg: 'bg-sky-100', text: 'text-sky-600' }
+const CATEGORY_ROW_ICON = { bg: 'bg-fuchsia-100', text: 'text-fuchsia-600' }
+const LEARN_ROW_ICON = { bg: 'bg-teal-100', text: 'text-teal-600' }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -153,6 +162,74 @@ function GoalRow({
   )
 }
 
+// Generic row for Tool/Category/Learn results — same shape as GoalRow minus
+// the per-item category badge (these types don't share GoalCategory).
+function SimpleRow({
+  id,
+  item,
+  isActive,
+  onSelect,
+  onMouseEnter,
+  Icon,
+  iconBg,
+  iconText,
+}: {
+  id: string
+  item: ToolSearchItem | CategorySearchItem | LearnSearchItem
+  isActive: boolean
+  onSelect: () => void
+  onMouseEnter: () => void
+  Icon: ElementType
+  iconBg: string
+  iconText: string
+}) {
+  return (
+    <Link
+      id={id}
+      href={item.href}
+      role="option"
+      aria-selected={isActive}
+      onClick={onSelect}
+      onMouseEnter={onMouseEnter}
+      className={cn(
+        'group flex w-full items-center gap-3 px-3 py-2.5 transition-colors duration-100',
+        isActive ? 'bg-accent' : 'hover:bg-muted/50',
+      )}
+    >
+      <div
+        className={cn('flex h-8 w-8 shrink-0 items-center justify-center rounded-lg', iconBg)}
+        aria-hidden="true"
+      >
+        <Icon className={cn('size-4', iconText)} />
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <p
+          className={cn(
+            'truncate text-sm font-medium leading-tight',
+            isActive ? 'text-accent-foreground' : 'text-foreground',
+          )}
+        >
+          {item.label}
+        </p>
+        {item.description && (
+          <p className="mt-0.5 truncate text-xs text-muted-foreground">
+            {item.description}
+          </p>
+        )}
+      </div>
+
+      <ArrowRight
+        className={cn(
+          'size-3.5 shrink-0 text-muted-foreground/40 transition-transform duration-100',
+          isActive && 'translate-x-0.5 text-muted-foreground',
+        )}
+        aria-hidden="true"
+      />
+    </Link>
+  )
+}
+
 function EmptyState({
   query,
   onSuggest,
@@ -223,15 +300,34 @@ export function SearchCommandPalette({
     [index.goals],
   )
 
-  const filteredGoals = useMemo(
-    () =>
-      isSearching
-        ? filterSearchIndex(index, debouncedQuery).goals.slice(0, maxResults)
-        : [],
-    [index, debouncedQuery, isSearching, maxResults],
+  // Single filter pass shared by all four result types — filterSearchIndex
+  // already partitions goals/tools/categories/learn, so there's no need to
+  // call it once per type.
+  const filteredIndex = useMemo(
+    () => (isSearching ? filterSearchIndex(index, debouncedQuery) : null),
+    [index, debouncedQuery, isSearching],
   )
 
-  const displayItems = isSearching ? filteredGoals : popularGoals
+  const filteredGoals = useMemo(
+    () => filteredIndex?.goals.slice(0, maxResults) ?? [],
+    [filteredIndex, maxResults],
+  )
+  const filteredTools = useMemo(
+    () => filteredIndex?.tools.slice(0, 4) ?? [],
+    [filteredIndex],
+  )
+  const filteredCategories = useMemo(
+    () => filteredIndex?.categories.slice(0, 3) ?? [],
+    [filteredIndex],
+  )
+  const filteredLearn = useMemo(
+    () => filteredIndex?.learn.slice(0, 3) ?? [],
+    [filteredIndex],
+  )
+
+  const displayItems = isSearching
+    ? [...filteredGoals, ...filteredTools, ...filteredCategories, ...filteredLearn]
+    : popularGoals
   const hasResults = displayItems.length > 0
   const showDropdown = open && (hasResults || isSearching)
 
@@ -357,32 +453,118 @@ export function SearchCommandPalette({
               }}
             />
           ) : isSearching ? (
-            groupedResults.map(([cat, goals], groupIdx) => (
-              <div key={cat}>
-                <div
-                  className={cn(
-                    'px-3 pb-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground',
-                    groupIdx === 0 ? 'pt-3' : 'pt-2.5',
-                  )}
-                  aria-hidden="true"
-                >
-                  {CATEGORY_LABELS[cat]}
+            <>
+              {groupedResults.map(([cat, goals], groupIdx) => (
+                <div key={cat}>
+                  <div
+                    className={cn(
+                      'px-3 pb-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground',
+                      groupIdx === 0 ? 'pt-3' : 'pt-2.5',
+                    )}
+                    aria-hidden="true"
+                  >
+                    {CATEGORY_LABELS[cat]}
+                  </div>
+                  {goals.map(goal => {
+                    const idx = displayItems.indexOf(goal)
+                    return (
+                      <GoalRow
+                        key={goal.slug}
+                        id={`palette-item-${idx}`}
+                        goal={goal}
+                        isActive={activeIndex === idx}
+                        onSelect={cleanup}
+                        onMouseEnter={() => setActiveIndex(idx)}
+                      />
+                    )
+                  })}
                 </div>
-                {goals.map(goal => {
-                  const idx = displayItems.indexOf(goal)
-                  return (
-                    <GoalRow
-                      key={goal.slug}
-                      id={`palette-item-${idx}`}
-                      goal={goal}
-                      isActive={activeIndex === idx}
-                      onSelect={cleanup}
-                      onMouseEnter={() => setActiveIndex(idx)}
-                    />
-                  )
-                })}
-              </div>
-            ))
+              ))}
+
+              {filteredTools.length > 0 && (
+                <div>
+                  <div
+                    className="flex items-center gap-1.5 px-3 pb-1 pt-2.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground"
+                    aria-hidden="true"
+                  >
+                    <Wrench size={11} />
+                    Tools
+                  </div>
+                  {filteredTools.map(tool => {
+                    const idx = displayItems.indexOf(tool)
+                    return (
+                      <SimpleRow
+                        key={tool.href}
+                        id={`palette-item-${idx}`}
+                        item={tool}
+                        isActive={activeIndex === idx}
+                        onSelect={cleanup}
+                        onMouseEnter={() => setActiveIndex(idx)}
+                        Icon={Wrench}
+                        iconBg={TOOL_ROW_ICON.bg}
+                        iconText={TOOL_ROW_ICON.text}
+                      />
+                    )
+                  })}
+                </div>
+              )}
+
+              {filteredCategories.length > 0 && (
+                <div>
+                  <div
+                    className="flex items-center gap-1.5 px-3 pb-1 pt-2.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground"
+                    aria-hidden="true"
+                  >
+                    <FolderOpen size={11} />
+                    Categories
+                  </div>
+                  {filteredCategories.map(cat => {
+                    const idx = displayItems.indexOf(cat)
+                    return (
+                      <SimpleRow
+                        key={cat.href}
+                        id={`palette-item-${idx}`}
+                        item={cat}
+                        isActive={activeIndex === idx}
+                        onSelect={cleanup}
+                        onMouseEnter={() => setActiveIndex(idx)}
+                        Icon={FolderOpen}
+                        iconBg={CATEGORY_ROW_ICON.bg}
+                        iconText={CATEGORY_ROW_ICON.text}
+                      />
+                    )
+                  })}
+                </div>
+              )}
+
+              {filteredLearn.length > 0 && (
+                <div>
+                  <div
+                    className="flex items-center gap-1.5 px-3 pb-1 pt-2.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground"
+                    aria-hidden="true"
+                  >
+                    <BookOpen size={11} />
+                    Learn
+                  </div>
+                  {filteredLearn.map(item => {
+                    const idx = displayItems.indexOf(item)
+                    return (
+                      <SimpleRow
+                        key={item.href}
+                        id={`palette-item-${idx}`}
+                        item={item}
+                        isActive={activeIndex === idx}
+                        onSelect={cleanup}
+                        onMouseEnter={() => setActiveIndex(idx)}
+                        Icon={BookOpen}
+                        iconBg={LEARN_ROW_ICON.bg}
+                        iconText={LEARN_ROW_ICON.text}
+                      />
+                    )
+                  })}
+                </div>
+              )}
+            </>
           ) : (
             <>
               <div

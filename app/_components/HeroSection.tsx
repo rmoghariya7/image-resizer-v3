@@ -4,18 +4,20 @@ import { buildGoalHref } from "@/lib/recommendations/engine";
 import { SearchCommandPalette } from "@/features/search";
 
 const QUICK_LINK_CONFIGS = [
-  { slug: "compress-image-to-15kb", label: "Under 15 KB" },
-  { slug: "compress-image-to-20kb", label: "Under 20 KB" },
-  { slug: "compress-image-to-50kb", label: "Under 50 KB" },
-  { slug: "compress-image-to-100kb", label: "Under 100 KB" },
+  { slug: "compress-image-to-50kb", label: "Compress to 50 KB" },
   { slug: "passport-photo-maker", label: "Passport Photo" },
   { slug: "upsc-photo-resizer", label: "UPSC Photo" },
 ] as const;
 
+const QUICK_ROUTE_LINKS = [
+  { href: "/crop-image", label: "Crop Image" },
+  { href: "/video-to-audio", label: "Video to Audio" },
+] as const;
+
 const TRUST_BADGES = [
+  "Browser-only",
   "No uploads",
-  "No sign-up",
-  "Free forever",
+  "Private",
   "Mobile-friendly",
 ];
 
@@ -34,21 +36,21 @@ export function HeroSection() {
         <div className="mx-auto max-w-3xl text-center">
           {/* Eyebrow */}
           <p className="mb-6 text-xs font-semibold uppercase tracking-[0.15em] text-primary">
-            JPEG &nbsp;·&nbsp; PNG &nbsp;·&nbsp; WebP &nbsp;·&nbsp;
+            Image &nbsp;·&nbsp; Video &nbsp;·&nbsp; Document &nbsp;·&nbsp;
             Browser-based &nbsp;·&nbsp; Free
           </p>
 
           {/* Headline */}
           <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-            Compress images to{" "}
-            <span className="text-primary">the exact size you need</span>
+            Prepare images, video and documents{" "}
+            <span className="text-primary">right in your browser</span>
           </h1>
 
           {/* Subline */}
           <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
-            Pick a target size. Upload your image. Download the compressed
-            file&thinsp;—&thinsp;all in your browser, nothing uploaded to any
-            server.
+            Compress, resize, crop, convert and more — pick a tool, upload
+            your file, download the result&thinsp;—&thinsp;nothing is ever
+            uploaded to any server.
           </p>
 
           {/* Search bar */}
@@ -59,10 +61,19 @@ export function HeroSection() {
           {/* Quick links */}
           <div
             className="mt-5 flex flex-wrap items-center justify-center gap-2"
-            aria-label="Popular size targets"
+            aria-label="Popular destinations"
           >
             <span className="text-xs text-muted-foreground">Popular:</span>
             {quickLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
+              >
+                {link.label}
+              </Link>
+            ))}
+            {QUICK_ROUTE_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}

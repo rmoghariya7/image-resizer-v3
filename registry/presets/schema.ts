@@ -28,6 +28,10 @@ export const IMAGE_PRESET_KEY_SCHEMA = z.enum([
   'visa',
   'job-application',
   'resume-photo',
+  // 'custom' has no static file in registry/presets/image/ — it's constructed
+  // at runtime from user input on the /resize-image and /convert-image
+  // standalone Core Tool pages (see features/image-resizer/lib/custom-preset.ts).
+  'custom',
 ])
 
 export const COMPRESS_PRESET_KEY_SCHEMA = z.enum([

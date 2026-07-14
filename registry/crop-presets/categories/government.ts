@@ -1,0 +1,78 @@
+import type { CropPreset } from '../schema'
+
+// Dimensions mirror the equivalent presets in registry/presets/image — the
+// crop tool and the resize tool must always agree on the same specification.
+
+export const governmentCropPresets: CropPreset[] = [
+  {
+    id: 'gov-passport',
+    category: 'government',
+    name: 'Passport',
+    description: '600 × 600 px · 2×2 in (51×51 mm) · white background',
+    aspect: 1,
+    outputWidth: 600,
+    outputHeight: 600,
+    format: 'jpeg',
+    backgroundFill: '#FFFFFF',
+  },
+  {
+    id: 'gov-aadhaar',
+    category: 'government',
+    name: 'Aadhaar',
+    description: '200 × 200 px · UIDAI specification',
+    aspect: 1,
+    outputWidth: 200,
+    outputHeight: 200,
+    format: 'jpeg',
+  },
+  {
+    id: 'gov-pan-card',
+    category: 'government',
+    name: 'PAN Card',
+    description: '200 × 230 px · NSDL / UTIITSL specification',
+    aspect: 200 / 230,
+    outputWidth: 200,
+    outputHeight: 230,
+    format: 'jpeg',
+  },
+  {
+    id: 'gov-signature',
+    category: 'government',
+    name: 'Signature',
+    description: '140 × 60 px · standard exam & ID portal signature box',
+    aspect: 140 / 60,
+    outputWidth: 140,
+    outputHeight: 60,
+    format: 'jpeg',
+  },
+  {
+    id: 'gov-upsc',
+    category: 'government',
+    name: 'UPSC',
+    description: '413 × 531 px · 3.5×4.5 cm portrait',
+    aspect: 413 / 531,
+    outputWidth: 413,
+    outputHeight: 531,
+    format: 'jpeg',
+  },
+  {
+    id: 'gov-gpsc',
+    category: 'government',
+    name: 'GPSC',
+    description: '413 × 531 px · 3.5×4.5 cm portrait',
+    aspect: 413 / 531,
+    outputWidth: 413,
+    outputHeight: 531,
+    format: 'jpeg',
+  },
+  {
+    id: 'gov-ssc',
+    category: 'government',
+    name: 'SSC',
+    description: '413 × 531 px · 3.5×4.5 cm portrait',
+    aspect: 413 / 531,
+    outputWidth: 413,
+    outputHeight: 531,
+    format: 'jpeg',
+  },
+]

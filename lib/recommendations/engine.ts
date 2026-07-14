@@ -198,7 +198,7 @@ export function getCompressPageGoalLinks(count = 4): GoalDefinition[] {
  * surfaces it in every section fed by this helper.
  */
 export function getStandaloneTools(): ToolDefinition[] {
-  return getAllTools().filter(t => t.route !== undefined)
+  return getAllTools().filter(t => t.route !== undefined && t.status === 'active')
 }
 
 /**

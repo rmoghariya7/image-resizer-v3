@@ -21,4 +21,7 @@ export const videoToAudioTool = {
   maxFileSizeMB: 512,
   maxBatchSize: 1,
   capabilities: ['extract-audio', 'convert'],
+  platformCategory: 'video',
+  status: 'active',
+  addedDate: '2026-07-08',
 } satisfies ToolDefinition

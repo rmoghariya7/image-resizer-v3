@@ -6,6 +6,7 @@ export const imageResizerTool = {
   description:
     'Resizes and compresses images to exact pixel dimensions and file-size targets. ' +
     'All processing runs in a Web Worker — nothing leaves the device.',
+  route: '/resize-image',
   featurePath: 'features/image-resizer',
   componentName: 'ImageResizerTool',
   processor: 'canvas-worker',
@@ -13,4 +14,7 @@ export const imageResizerTool = {
   maxFileSizeMB: 20,
   maxBatchSize: 1,
   capabilities: ['resize', 'compress', 'convert'],
+  platformCategory: 'image',
+  status: 'active',
+  addedDate: '2026-06-19',
 } satisfies ToolDefinition

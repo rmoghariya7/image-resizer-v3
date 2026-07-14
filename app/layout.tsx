@@ -27,27 +27,26 @@ const OG_IMAGE = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-  title: "Presetly: free photo resizer for Indian government portals",
+  title: "Presetly: Free Browser-Based Image, Video & Document Tools",
   description:
-    "Resize and compress photos for UPSC, GPSC, Aadhaar, PAN card, Passport, and 10+ Indian government portals. Browser-based, no uploads, no sign-up, completely free.",
+    "Compress, resize, crop and convert images, extract audio from video, and generate exam and ID photos for UPSC, GPSC, Aadhaar, PAN card, Passport and more. Browser-based, no uploads, no sign-up, completely free.",
   alternates: {
     canonical: BASE_URL,
   },
   openGraph: {
     type: "website",
     siteName: "Presetly",
-    title:
-      "Exam photos, Aadhaar, PAN, Passport, signature resize, all free | Presetly",
+    title: "Compress, Resize, Crop, Convert & More — All Free | Presetly",
     description:
-      "Every Indian portal photo tool in one place. Exam photos, Aadhaar, PAN card, Passport Seva, Voter ID, signature resize, and image compression. Runs in your browser, no upload.",
+      "A complete browser-based toolkit: image compression, resizing, cropping, format conversion, video-to-audio, and government ID photo presets for UPSC, Aadhaar, PAN, Passport and more. Runs in your browser, no upload.",
     url: BASE_URL,
     images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-    title: "All photo tools for Indian portals | Presetly",
+    title: "Image, Video & Document Tools, Free | Presetly",
     description:
-      "Exam photos, Aadhaar, PAN, Passport, signature resize, image compression. All free, all browser-only.",
+      "Compress, resize, crop, convert images, extract audio from video, and generate government ID photos. All free, all browser-only.",
     images: [OG_IMAGE.url],
   },
   robots: { index: true, follow: true },
