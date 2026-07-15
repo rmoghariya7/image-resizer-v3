@@ -11,6 +11,7 @@ export const TOOL_KEY_SCHEMA = z.enum([
   'image-cropper',
   'image-converter',
   'add-name-and-date-on-photo',
+  'background-remover',
 ])
 
 export type ToolKey = z.infer<typeof TOOL_KEY_SCHEMA>
@@ -22,6 +23,7 @@ export const processorTypeSchema = z.enum([
   'canvas-worker', // OffscreenCanvas inside a Web Worker — default for image ops
   'wasm',          // WASM module inside a Web Worker — for PDF
   'canvas',        // Main-thread Canvas fallback (no Worker support)
+  'onnx-worker',   // ONNX Runtime Web (AI model) inside a Web Worker — for AI tools
 ])
 
 export type ProcessorType = z.infer<typeof processorTypeSchema>
@@ -34,6 +36,7 @@ export const toolCapabilitySchema = z.enum([
   'background-fill',
   'extract-audio',
   'annotate', // draws a text/date/name overlay onto an image (add-name-and-date-on-photo)
+  'remove-background', // AI-powered subject/background segmentation (background-remover)
 ])
 
 export type ToolCapability = z.infer<typeof toolCapabilitySchema>

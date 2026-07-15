@@ -6,6 +6,7 @@ import { videoToAudioTool } from './video-to-audio'
 import { imageCropperTool } from './image-cropper'
 import { imageConverterTool } from './image-converter'
 import { addNameAndDateOnPhotoTool } from './add-name-and-date-on-photo'
+import { backgroundRemoverTool } from './background-remover'
 
 // ─── Registry map ─────────────────────────────────────────────────────────────
 
@@ -17,6 +18,7 @@ const ALL_TOOLS: readonly ToolDefinition[] = Object.freeze([
   imageCropperTool,
   imageConverterTool,
   addNameAndDateOnPhotoTool,
+  backgroundRemoverTool,
 ])
 
 const TOOL_MAP = new Map<ToolKey, ToolDefinition>(

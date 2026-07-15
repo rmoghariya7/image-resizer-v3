@@ -14,6 +14,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Vendored FFmpeg WASM runtime copied from node_modules (see scripts/copy-ffmpeg-assets.mjs)
     "public/ffmpeg/**",
+    // Vendored ONNX Runtime Web WASM runtime + AI model, same rationale (see scripts/copy-bg-remover-assets.mjs)
+    "public/ort/**",
+    "public/models/**",
   ]),
 ]);
 

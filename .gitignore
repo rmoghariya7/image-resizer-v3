@@ -23,6 +23,11 @@
 # FFmpeg WASM runtime — copied from node_modules by scripts/copy-ffmpeg-assets.mjs
 /public/ffmpeg/
 
+# ONNX Runtime Web WASM runtime + AI background-removal model — fetched by
+# scripts/copy-bg-remover-assets.mjs (see that file for why these aren't committed)
+/public/ort/
+/public/models/
+
 # misc
 .DS_Store
 *.pem

@@ -116,6 +116,22 @@ const nextConfig: NextConfig = {
         { key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' },
       ],
     },
+    {
+      // ONNX Runtime Web WASM runtime (~13 MB) — same rationale as /ffmpeg/:path* above.
+      source: '/ort/:path*',
+      headers: [
+        { key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' },
+      ],
+    },
+    {
+      // AI background-removal model (~5 MB). The Background Remover tool also
+      // caches this in the Cache Storage API (see features/background-remover/lib/model-loader.ts)
+      // so it survives across sessions even if the HTTP cache is cleared.
+      source: '/models/:path*',
+      headers: [
+        { key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' },
+      ],
+    },
   ],
 
   redirects: async () => [
