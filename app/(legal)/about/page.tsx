@@ -30,7 +30,7 @@ const TOOLS = [
   { label: 'Aadhaar Photo Resizer', href: '/aadhaar-photo-resizer' },
   { label: 'PAN Card Photo Resizer', href: '/pan-card-photo-resizer' },
   { label: 'Passport Photo Maker', href: '/passport-photo-maker' },
-  { label: 'Compress Image to 50 KB', href: '/compress-image-under-50kb' },
+  { label: 'Compress Image to 50 KB', href: '/compress-image-to-50kb' },
   { label: 'Signature Resize to 20 KB', href: '/signature-resize-20kb' },
 ]
 

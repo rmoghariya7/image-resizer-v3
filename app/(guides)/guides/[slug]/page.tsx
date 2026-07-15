@@ -75,13 +75,14 @@ export default async function GuidePage({ params }: Props) {
     },
   }
 
-  // Breadcrumb: Home → Guide Title (no /guides index page exists)
+  // Breadcrumb: Home → Guides → Guide Title
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-      { '@type': 'ListItem', position: 2, name: guide.title, item: canonical },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: `${BASE_URL}/guides` },
+      { '@type': 'ListItem', position: 3, name: guide.title, item: canonical },
     ],
   }
 
@@ -97,6 +98,20 @@ export default async function GuidePage({ params }: Props) {
       />
 
       <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+        <nav aria-label="Breadcrumb" className="mb-6 text-sm text-gray-500">
+          <ol className="flex flex-wrap items-center gap-1.5">
+            <li>
+              <Link href="/" className="hover:text-indigo-600">Home</Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li>
+              <Link href="/guides" className="hover:text-indigo-600">Guides</Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" className="text-gray-900">{guide.title}</li>
+          </ol>
+        </nav>
+
         <header className="mb-10">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-indigo-600">
             Guide

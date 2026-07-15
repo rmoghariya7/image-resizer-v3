@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { getSitemapEntries } from '@/registry/goals'
 import { getAllCategories } from '@/registry/categories'
-import { getAllSizeParams } from '@/registry/size-presets'
 import { getAllGuides } from '@/content/guides'
 import { getLearnSitemapEntries } from '@/registry/learn'
 import { getStandaloneTools } from '@/lib/recommendations/engine'
@@ -61,8 +60,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.4,
   }))
 
-  // Goal pages — getSitemapEntries() already excludes non-indexable goals
-  // (e.g. the compress-image-to-* duplicates of /compress-image-under-*)
+  // Goal pages — getSitemapEntries() already excludes non-indexable goals.
+  // Compress goals (/compress-image-to-[size]) are canonical and included here;
+  // the old /compress-image-under-[size] URLs 301-redirect and are not listed.
   const PRIORITY_MAP: Record<string, number> = { high: 0.8, medium: 0.7, low: 0.6 }
   const goalPages: MetadataRoute.Sitemap = getSitemapEntries()
     .map(goal => ({
@@ -72,14 +72,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: PRIORITY_MAP[goal.priority] ?? 0.7,
     }))
 
-  // Compress-under pages — separate from goal pages, live at /compress-image-under-[size]
-  const compressionPages: MetadataRoute.Sitemap = getAllSizeParams().map(size => ({
-    url: `${BASE_URL}/compress-image-under-${size}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.8,
-  }))
-
   // Category pages
   const categoryPages: MetadataRoute.Sitemap = getAllCategories().map(cat => ({
     url: `${BASE_URL}/categories/${cat.slug}`,
@@ -87,6 +79,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))
+
+  // Guides index page
+  const guidesIndex: MetadataRoute.Sitemap = [{
+    url: `${BASE_URL}/guides`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }]
 
   // Guide pages — use per-guide updatedAt for accurate freshness signals
   const guidePages: MetadataRoute.Sitemap = getAllGuides().map(guide => ({
@@ -119,8 +119,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...extraCoreToolPages,
     ...learnIndex,
     ...categoryPages,
-    ...compressionPages,
     ...goalPages,
+    ...guidesIndex,
     ...guidePages,
     ...learnPages,
     ...legalPages,

@@ -180,8 +180,8 @@ export const imageOptimizationBestPracticesArticle: LearnArticle = {
     'common-image-upload-problems',
   ],
   relatedTools: [
-    'compress-image-under-100kb',
-    'compress-image-under-50kb',
+    'compress-image-to-100kb',
+    'compress-image-to-50kb',
     'upsc-photo-resizer',
   ],
 

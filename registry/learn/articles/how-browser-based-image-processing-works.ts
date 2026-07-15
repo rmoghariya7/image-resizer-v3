@@ -181,7 +181,7 @@ export const howBrowserBasedImageProcessingWorksArticle: LearnArticle = {
     'image-optimization-best-practices',
   ],
   relatedTools: [
-    'compress-image-under-50kb',
+    'compress-image-to-50kb',
     'upsc-photo-resizer',
     'passport-photo-maker',
   ],

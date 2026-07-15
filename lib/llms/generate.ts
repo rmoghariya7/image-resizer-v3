@@ -9,15 +9,13 @@
  *
  * Rules applied here (must mirror sitemap.ts):
  *  - Goals with `indexable === false` are excluded (true content duplicates
- *    of another canonical page, e.g. compress-image-to-* duplicates the
- *    compress-image-under-{size} pages served by size-presets).
+ *    of another canonical page).
  *  - Only `status === 'active'` goals are included.
  *  - No duplicate URLs.
  */
 
 import { getAllGoals } from '@/registry/goals'
 import { getAllCategories } from '@/registry/categories'
-import { SIZE_TARGETS } from '@/registry/size-presets'
 import { getAllGuides } from '@/content/guides'
 import { getAllLearnArticles } from '@/registry/learn'
 import { getStandaloneTools } from '@/lib/recommendations/engine'
@@ -56,15 +54,6 @@ export function getCanonicalGoals() {
 /** Goals by category, canonical only. */
 export function getCanonicalGoalsByCategory(category: string) {
   return getCanonicalGoals().filter((g) => g.category === category)
-}
-
-/** Compress-image-under-* canonical pages derived from size-presets registry. */
-export function getCompressPages() {
-  return SIZE_TARGETS.map((t) => ({
-    slug: t.slug,              // "compress-image-under-15kb"
-    title: t.title,            // "Compress Image to 15KB"
-    description: t.useCase,   // one-line use case
-  }))
 }
 
 // ─── /llms.txt (concise) ─────────────────────────────────────────────────────
@@ -115,11 +104,6 @@ export function generateLlmsTxt(): string {
   lines.push('')
   for (const goal of highPriorityGoals) {
     lines.push(link(goal.title, `/${goal.slug}`, goal.description))
-  }
-  // Add a representative compression tool
-  const compress50 = getCompressPages().find((p) => p.slug === 'compress-image-under-50kb')
-  if (compress50) {
-    lines.push(link(compress50.title, `/${compress50.slug}`, compress50.description))
   }
   // Standalone tools (own route outside the goal registry, e.g. /video-to-audio)
   for (const tool of getStandaloneTools()) {
@@ -184,7 +168,6 @@ export function generateLlmsTxt(): string {
 export function generateLlmsFullTxt(): string {
   const categories = getAllCategories()
   const guides = getAllGuides()
-  const compressPages = getCompressPages()
 
   const lines: string[] = []
 
@@ -202,7 +185,7 @@ export function generateLlmsFullTxt(): string {
   lines.push('')
   lines.push(
     'This document lists every canonical public URL on the site. ' +
-    'Noindex pages and duplicate routes (e.g. /compress-image-to-* redirects) are excluded.',
+    'Noindex pages and duplicate/redirected routes are excluded.',
   )
   lines.push('')
 
@@ -226,16 +209,9 @@ export function generateLlmsFullTxt(): string {
     lines.push(`## ${heading}`)
     lines.push('')
 
-    if (cat.slug === 'compress') {
-      // Canonical compress pages come from size-presets, not goals
-      for (const page of compressPages) {
-        lines.push(link(page.title, `/${page.slug}`, page.description))
-      }
-    } else {
-      const goals = getCanonicalGoalsByCategory(cat.slug)
-      for (const goal of goals) {
-        lines.push(link(goal.title, `/${goal.slug}`, goal.description))
-      }
+    const goals = getCanonicalGoalsByCategory(cat.slug)
+    for (const goal of goals) {
+      lines.push(link(goal.title, `/${goal.slug}`, goal.description))
     }
     lines.push('')
   }

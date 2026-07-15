@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import type { GoalDefinition } from '@/registry/goals/schema'
 import type { CategoryDefinition } from '@/registry/categories/schema'
-import type { SizeTarget } from '@/registry/size-presets'
 import type { SearchIntent } from '@/registry/shared/search-intent'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
@@ -129,44 +128,6 @@ export function generateCategoryMetadata(
       title:       ogTitle,
       description: ogDesc.slice(0, 150),
       images:      [ROOT_OG_IMAGE.url],
-    },
-    other: hints.primaryQuery
-      ? { 'search:primaryQuery': hints.primaryQuery, 'search:cluster': hints.topicCluster ?? '' }
-      : undefined,
-  }
-}
-
-// --- Compress size pages (/compress-image-under-[size]) ---
-
-export function generateCompressMetadata(
-  target: SizeTarget,
-  canonical: string,
-): Metadata {
-  const hints      = getSearchHints(target.search)
-  const ogDesc     = target.ogDescription ?? target.description
-  const twitterDesc = target.twitterDescription ?? target.description.slice(0, 150)
-  // Compress pages have app/(compress)/compress-image-under/[size]/opengraph-image.tsx.
-  // The rewrite /compress-image-under-:size/opengraph-image -> /compress-image-under/:size/opengraph-image
-  // ensures that the canonical OG image URL resolves correctly.
-  const ogImage    = routeOgImage(canonical)
-
-  return {
-    title:       target.metaTitle,
-    description: target.description,
-    alternates:  { canonical },
-    openGraph: {
-      title:       target.ogTitle ?? target.title,
-      description: ogDesc,
-      url:         canonical,
-      type:        'website',
-      siteName:    SITE_NAME,
-      images:      [ogImage],
-    },
-    twitter: {
-      card:        'summary_large_image',
-      title:       target.twitterTitle ?? target.shortTitle,
-      description: twitterDesc,
-      images:      [ogImage.url],
     },
     other: hints.primaryQuery
       ? { 'search:primaryQuery': hints.primaryQuery, 'search:cluster': hints.topicCluster ?? '' }

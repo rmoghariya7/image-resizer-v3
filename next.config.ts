@@ -136,19 +136,16 @@ const nextConfig: NextConfig = {
   ],
 
   rewrites: async () => [
-    // Public URL /compress-image-under-15kb is rewritten internally to
-    // /compress-image-under/15kb so the App Router routes it to
-    // app/(compress)/compress-image-under/[size]/page.tsx with params.size = '15kb'.
+    // /compress-image-to-[size] (a goal page under app/(goals)/[slug]/) is now
+    // the canonical, indexed URL for each size target. The old public URL
+    // /compress-image-under-15kb is rewritten internally to /compress-image-under/15kb
+    // so the App Router can extract params.size = '15kb' (App Router dynamic
+    // segments can't be embedded in a partially-static folder name), then
+    // app/(compress)/compress-image-under/[size]/page.tsx 301-redirects it to
+    // /compress-image-to-15kb.
     {
       source: '/compress-image-under-:size',
       destination: '/compress-image-under/:size',
-    },
-    // Rewrites the OG image path for compress pages so that social crawlers
-    // requesting /compress-image-under-50kb/opengraph-image are routed to the
-    // correct Next.js route handler at compress-image-under/[size]/opengraph-image.tsx.
-    {
-      source: '/compress-image-under-:size/opengraph-image',
-      destination: '/compress-image-under/:size/opengraph-image',
     },
   ],
 }

@@ -31,11 +31,11 @@ import type { GoalCategory } from '@/types/registry'
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const POPULAR_SLUGS = [
-  'compress-image-under-50kb',
+  'compress-image-to-50kb',
   'upsc-photo-resizer',
   'aadhaar-photo-resizer',
   'passport-photo-maker',
-  'compress-image-under-20kb',
+  'compress-image-to-20kb',
 ] as const
 
 const SUGGESTIONS = [

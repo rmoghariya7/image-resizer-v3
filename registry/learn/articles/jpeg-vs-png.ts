@@ -161,7 +161,7 @@ export const jpegVsPngArticle: LearnArticle = {
     'how-to-compress-images-to-exact-file-sizes',
   ],
   relatedTools: [
-    'compress-image-under-50kb',
+    'compress-image-to-50kb',
     'passport-photo-maker',
   ],
 

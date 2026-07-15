@@ -176,7 +176,7 @@ export const completePassportPhotoGuideArticle: LearnArticle = {
   relatedTools: [
     'passport-photo-maker',
     'aadhaar-photo-resizer',
-    'compress-image-under-100kb',
+    'compress-image-to-100kb',
   ],
 
   readingTime: 7,

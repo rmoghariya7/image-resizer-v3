@@ -1,7 +1,6 @@
 import { getAllGoals } from '@/registry/goals'
 import { getAllCategories } from '@/registry/categories'
 import { getAllTools } from '@/registry/tools'
-import { SIZE_TARGETS } from '@/registry/size-presets'
 import { getAllLearnArticles } from '@/registry/learn'
 import type { GoalCategory } from '@/registry/goals/schema'
 import type {
@@ -14,47 +13,27 @@ import type {
 } from './types'
 
 export function buildSearchIndex(): SearchIndex {
-  const sizeGoals: GoalSearchItem[] = SIZE_TARGETS.map((target) => ({
-    type: 'goal',
-    slug: target.slug,
-    href: `/compress-image-under-${target.sizeParam}`,
-    label: target.title,
-    shortLabel: target.shortTitle,
-    description: target.useCase,
-    category: 'compress' as GoalCategory,
-    keywords: [
-      target.title.toLowerCase(),
-      target.shortTitle.toLowerCase(),
-      target.displaySize.toLowerCase(),
-      ...target.keywords,
-    ],
-  }))
-
-  const goals: GoalSearchItem[] = [
-    ...sizeGoals,
-    // indexable === false goals (e.g. the compress-image-to-* shadow goals)
-    // are true content duplicates of a canonical page already represented
-    // above via sizeGoals — surfacing both would show the same destination
-    // twice in the search dropdown for the same query.
-    ...getAllGoals()
-      .filter((goal) => goal.indexable !== false)
-      .map((goal) => ({
-    type: 'goal' as const,
-    slug: goal.slug,
-    href: `/${goal.slug}`,
-    label: goal.title,
-    shortLabel: goal.shortTitle,
-    description: goal.description,
-    category: goal.category,
-    keywords: [
-      goal.title.toLowerCase(),
-      goal.shortTitle.toLowerCase(),
-      goal.category.toLowerCase(),
-      ...goal.tags.map((t) => t.toLowerCase()),
-      ...goal.keywords.map((k) => k.toLowerCase()),
-    ],
-  })),
-  ]
+  // indexable === false goals are true content duplicates of another
+  // canonical page — excluded so the dropdown never shows the same
+  // destination twice for the same query.
+  const goals: GoalSearchItem[] = getAllGoals()
+    .filter((goal) => goal.indexable !== false)
+    .map((goal) => ({
+      type: 'goal' as const,
+      slug: goal.slug,
+      href: `/${goal.slug}`,
+      label: goal.title,
+      shortLabel: goal.shortTitle,
+      description: goal.description,
+      category: goal.category,
+      keywords: [
+        goal.title.toLowerCase(),
+        goal.shortTitle.toLowerCase(),
+        goal.category.toLowerCase(),
+        ...goal.tags.map((t) => t.toLowerCase()),
+        ...goal.keywords.map((k) => k.toLowerCase()),
+      ],
+    }))
 
   const categories: CategorySearchItem[] = getAllCategories().map((cat) => ({
     type: 'category',

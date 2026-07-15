@@ -22,9 +22,9 @@ import type { GoalCategory } from '@/types/registry'
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const POPULAR_SLUGS = [
-  'compress-image-under-50kb',
-  'compress-image-under-20kb',
-  'compress-image-under-100kb',
+  'compress-image-to-50kb',
+  'compress-image-to-20kb',
+  'compress-image-to-100kb',
   'upsc-photo-resizer',
   'passport-photo-maker',
 ]

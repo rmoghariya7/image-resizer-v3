@@ -4,8 +4,7 @@
  * Serves the comprehensive llms-full.txt manifest at /llms-full.txt.
  *
  * Contains the complete canonical URL index for the site, organised by
- * section. Noindex pages and duplicate routes are excluded (specifically,
- * /compress-image-to-* goals whose canonical is /compress-image-under-*).
+ * section. Noindex pages and duplicate/redirected routes are excluded.
  *
  * Statically generated at build time from the goal registry, size-preset
  * registry, category definitions, and guide registry. Adding or removing

@@ -148,9 +148,9 @@ export const howToCompressImagesToExactFileSizesArticle: LearnArticle = {
     'photo-requirements-for-online-applications',
   ],
   relatedTools: [
-    'compress-image-under-20kb',
-    'compress-image-under-50kb',
-    'compress-image-under-100kb',
+    'compress-image-to-20kb',
+    'compress-image-to-50kb',
+    'compress-image-to-100kb',
     'upsc-photo-resizer',
     'aadhaar-photo-resizer',
   ],

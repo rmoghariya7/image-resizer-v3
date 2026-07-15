@@ -200,7 +200,7 @@ export const commonImageUploadProblemsArticle: LearnArticle = {
   relatedTools: [
     'upsc-photo-resizer',
     'aadhaar-photo-resizer',
-    'compress-image-under-50kb',
+    'compress-image-to-50kb',
     'passport-photo-maker',
   ],
 

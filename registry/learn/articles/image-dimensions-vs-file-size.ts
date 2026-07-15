@@ -162,7 +162,7 @@ export const imageDimensionsVsFileSizeArticle: LearnArticle = {
   relatedTools: [
     'upsc-photo-resizer',
     'aadhaar-photo-resizer',
-    'compress-image-under-100kb',
+    'compress-image-to-100kb',
   ],
 
   readingTime: 6,

@@ -6,7 +6,7 @@ import type { CompressPresetKey } from '@/registry/presets/schema'
 export type SizeTarget = {
   readonly id: CompressPresetKey
   readonly sizeParam: string       // URL segment: "15kb", "1mb"
-  readonly slug: string            // Full slug: "compress-image-under-15kb"
+  readonly slug: string            // Full slug: "compress-image-to-15kb"
   readonly targetKB: number
   readonly displaySize: string     // "15 KB"
   readonly title: string           // "Compress Image to 15KB"
@@ -30,7 +30,7 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
   {
     id: 'compress-15kb',
     sizeParam: '15kb',
-    slug: 'compress-image-under-15kb',
+    slug: 'compress-image-to-15kb',
     targetKB: 15,
     displaySize: '15 KB',
     title: 'Compress Image to 15KB',
@@ -66,7 +66,7 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
   {
     id: 'compress-20kb',
     sizeParam: '20kb',
-    slug: 'compress-image-under-20kb',
+    slug: 'compress-image-to-20kb',
     targetKB: 20,
     displaySize: '20 KB',
     title: 'Compress Image to 20KB',
@@ -103,7 +103,7 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
   {
     id: 'compress-25kb',
     sizeParam: '25kb',
-    slug: 'compress-image-under-25kb',
+    slug: 'compress-image-to-25kb',
     targetKB: 25,
     displaySize: '25 KB',
     title: 'Compress Image to 25KB',
@@ -138,7 +138,7 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
   {
     id: 'compress-30kb',
     sizeParam: '30kb',
-    slug: 'compress-image-under-30kb',
+    slug: 'compress-image-to-30kb',
     targetKB: 30,
     displaySize: '30 KB',
     title: 'Compress Image to 30KB',
@@ -173,7 +173,7 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
   {
     id: 'compress-40kb',
     sizeParam: '40kb',
-    slug: 'compress-image-under-40kb',
+    slug: 'compress-image-to-40kb',
     targetKB: 40,
     displaySize: '40 KB',
     title: 'Compress Image to 40KB',
@@ -207,7 +207,7 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
   {
     id: 'compress-50kb',
     sizeParam: '50kb',
-    slug: 'compress-image-under-50kb',
+    slug: 'compress-image-to-50kb',
     targetKB: 50,
     displaySize: '50 KB',
     title: 'Compress Image to 50KB',
@@ -245,7 +245,7 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
   {
     id: 'compress-75kb',
     sizeParam: '75kb',
-    slug: 'compress-image-under-75kb',
+    slug: 'compress-image-to-75kb',
     targetKB: 75,
     displaySize: '75 KB',
     title: 'Compress Image to 75KB',
@@ -279,7 +279,7 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
   {
     id: 'compress-100kb',
     sizeParam: '100kb',
-    slug: 'compress-image-under-100kb',
+    slug: 'compress-image-to-100kb',
     targetKB: 100,
     displaySize: '100 KB',
     title: 'Compress Image to 100KB',
@@ -316,7 +316,7 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
   {
     id: 'compress-150kb',
     sizeParam: '150kb',
-    slug: 'compress-image-under-150kb',
+    slug: 'compress-image-to-150kb',
     targetKB: 150,
     displaySize: '150 KB',
     title: 'Compress Image to 150KB',
@@ -350,7 +350,7 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
   {
     id: 'compress-200kb',
     sizeParam: '200kb',
-    slug: 'compress-image-under-200kb',
+    slug: 'compress-image-to-200kb',
     targetKB: 200,
     displaySize: '200 KB',
     title: 'Compress Image to 200KB',
@@ -385,7 +385,7 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
   {
     id: 'compress-500kb',
     sizeParam: '500kb',
-    slug: 'compress-image-under-500kb',
+    slug: 'compress-image-to-500kb',
     targetKB: 500,
     displaySize: '500 KB',
     title: 'Compress Image to 500KB',
@@ -420,7 +420,7 @@ const SIZE_TARGETS_LIST: SizeTarget[] = [
   {
     id: 'compress-1mb',
     sizeParam: '1mb',
-    slug: 'compress-image-under-1mb',
+    slug: 'compress-image-to-1mb',
     targetKB: 1024,
     displaySize: '1 MB',
     title: 'Compress Image to 1MB',

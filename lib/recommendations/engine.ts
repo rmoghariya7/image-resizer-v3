@@ -19,14 +19,11 @@ import type { ToolDefinition } from '@/registry/tools/schema'
 // All link components must call this helper. Public URLs are /[slug] — the word
 // "goals" is an internal implementation detail and never appears in public URLs.
 //
-// Compress goals are noindex — their canonical URL is /compress-image-under-[size].
-// We route internal links there directly so PageRank flows to the indexable page.
+// Compress goals (/compress-image-to-[size]) are canonical and indexed. The
+// old /compress-image-under-[size] URLs 301-redirect to their /compress-image-to-*
+// equivalent — see next.config.ts.
 
 export function buildGoalHref(goal: GoalDefinition): string {
-  if (goal.category === 'compress') {
-    const target = getSizeTargetByPresetKey(goal.preset as CompressPresetKey)
-    if (target) return `/compress-image-under-${target.sizeParam}`
-  }
   return `/${goal.slug}`
 }
 

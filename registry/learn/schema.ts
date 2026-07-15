@@ -100,7 +100,7 @@ export const learnArticleSchema = z.object({
 
   // ── Internal linking
   relatedArticles: z.array(z.string()),   // learn slugs
-  relatedTools:    z.array(z.string()),   // goal slugs or /compress-image-under-* slugs
+  relatedTools:    z.array(z.string()),   // goal slugs, including compress-image-to-* slugs
 
   // ── Reading metadata
   readingTime: z.number().int().min(1).max(30),  // minutes

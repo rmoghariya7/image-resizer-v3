@@ -84,10 +84,8 @@ export function getGoalChunk(offset: number, size: number): readonly GoalDefinit
 /**
  * Returns sitemap entries for all active, indexable goals.
  * `indexable === false` marks a true content duplicate of another canonical
- * page (e.g. the compress-image-to-* goals duplicate the size-preset
- * compress-image-under-* pages) — excluded here so any future duplicate goal
- * is automatically kept out of the sitemap without a slug-pattern filter at
- * the call site.
+ * page — excluded here so any duplicate goal is automatically kept out of
+ * the sitemap without a slug-pattern filter at the call site.
  * Suitable for passing to next-sitemap or a custom sitemap route.
  */
 export function getSitemapEntries(): Array<{

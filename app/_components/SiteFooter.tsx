@@ -106,6 +106,12 @@ export function SiteFooter() {
             Presetly
           </Link>
           <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <Link href="/tools" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
+              All Tools
+            </Link>
+            <Link href="/guides" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
+              Guides
+            </Link>
             <Link href="/about" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
               About
             </Link>

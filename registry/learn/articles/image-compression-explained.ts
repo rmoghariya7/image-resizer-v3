@@ -180,9 +180,9 @@ export const imageCompressionExplainedArticle: LearnArticle = {
     'image-dimensions-vs-file-size',
   ],
   relatedTools: [
-    'compress-image-under-50kb',
-    'compress-image-under-100kb',
-    'compress-image-under-20kb',
+    'compress-image-to-50kb',
+    'compress-image-to-100kb',
+    'compress-image-to-20kb',
   ],
 
   readingTime: 7,

@@ -6,13 +6,6 @@ interface Props {
   toolSlugs: string[]
 }
 
-function resolveToolHref(slug: string): string {
-  // Size-preset slugs start with 'compress-image-under-'
-  if (slug.startsWith('compress-image-under-')) return `/${slug}`
-  // Goal slugs are direct paths
-  return `/${slug}`
-}
-
 function resolveToolTitle(slug: string): string | null {
   // Try size-preset first
   const sizeTarget = SIZE_TARGETS.find((t) => t.slug === slug)
@@ -42,7 +35,7 @@ export function RelatedToolsLearnSection({ toolSlugs }: Props) {
       if (!title) return null
       return {
         slug,
-        href:        resolveToolHref(slug),
+        href:        `/${slug}`,
         title,
         description: resolveToolDescription(slug) ?? '',
       }
