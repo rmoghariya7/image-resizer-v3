@@ -1,5 +1,6 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { MicrosoftClarity } from "./microsoft-clarity";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // Both integrations only load in production, and only when their env
 // variable is configured -- otherwise they render nothing.
@@ -17,6 +18,7 @@ export function Analytics() {
     <>
       {gaId && <GoogleAnalytics gaId={gaId} />}
       {clarityProjectId && <MicrosoftClarity projectId={clarityProjectId} />}
+      {isProduction && <SpeedInsights />}
     </>
   );
 }
