@@ -89,7 +89,7 @@ export const DEFAULT_DATE_SETTINGS_BASE: Omit<DateSettings, 'dateFormat'> = {
 }
 
 export const DEFAULT_FOOTER_SETTINGS: FooterSettings = {
-  heightPx: 72,
+  heightPx: 40,
   backgroundColor: '#FFFFFF',
   textColor: '#111827',
 }
