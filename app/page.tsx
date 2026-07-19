@@ -9,8 +9,7 @@ import { RecentlyAddedSection } from './_components/RecentlyAddedSection'
 import { WhyPresetlySection } from './_components/WhyPresetlySection'
 import { HomeFaqSection, HOME_FAQS } from './_components/HomeFaqSection'
 import { HomeLearnSection } from './_components/HomeLearnSection'
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
+import { BASE_URL } from '@/lib/metadata/generators'
 
 // ─── Structured data ──────────────────────────────────────────────────────────
 
@@ -43,7 +42,7 @@ const webPageSchema = {
   '@type': 'WebPage',
   name: 'Presetly: browser-based image, video and document toolkit',
   description:
-    'Compress, resize, crop and convert images, extract audio from video, and generate exact-spec photos for UPSC, GPSC, Aadhaar, PAN card, Passport and more Indian government portals. Browser-based, no uploads, no sign-up, completely free.',
+    'Compress, resize, crop and convert images, extract audio from video, and prepare exact-spec exam, ID, and passport photos — all in your browser. No uploads, no sign-up, completely free.',
   url: BASE_URL,
   isPartOf: { '@type': 'WebSite', url: BASE_URL, name: 'Presetly' },
   about: {

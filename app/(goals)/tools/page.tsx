@@ -3,28 +3,27 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { getAllGoals } from '@/registry/goals'
 import { getAllCategories } from '@/registry/categories'
-import { buildGoalHref } from '@/lib/recommendations/engine'
+import { buildGoalHref, getCoreToolPages } from '@/lib/recommendations/engine'
+import { BASE_URL } from '@/lib/metadata/generators'
 import type { GoalCategory } from '@/types/registry'
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
-
 export const metadata: Metadata = {
-  title: 'All photo and image tools | Presetly',
+  title: 'All Tools | Free Image, Video & Document Tools | Presetly',
   description:
-    'Browse all free tools on Presetly. UPSC, Aadhaar, PAN card, Passport, Railway, IBPS, signature resize, and file size compressors. Browser-based, no uploads.',
+    'Browse every free tool on Presetly: resize, compress, crop and convert images, extract audio from video, and generate exam, Aadhaar, PAN, Passport and signature photos. Browser-based, no uploads.',
   alternates: { canonical: `${BASE_URL}/tools` },
   openGraph: {
-    title: 'All image tools on Presetly — exam, ID, signature, compress',
+    title: 'All Tools on Presetly — Resize, Compress, Convert & More',
     description:
-      'Every portal photo tool in one place. Exam photos, Aadhaar, PAN, Passport, Voter ID, signature resize, and compression. Free, browser-only.',
+      'Every tool in one place: image resizing, compression, cropping, conversion, video-to-audio, plus exam, ID, and signature photo presets. Free, browser-only.',
     url: `${BASE_URL}/tools`,
     type: 'website',
     siteName: 'Presetly',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'All tools | Presetly',
-    description: 'Exam photos, Aadhaar, PAN, Passport, signature, compression. All free, browser-only.',
+    title: 'All Tools | Presetly',
+    description: 'Resize, compress, crop, convert, exam and ID photos, signature tools. All free, browser-only.',
   },
 }
 
@@ -47,6 +46,8 @@ const CATEGORY_ORDER: GoalCategory[] = ['exam', 'id-documents', 'signature', 'co
 export default function GoalsListingPage() {
   const allGoals = getAllGoals()
   const categories = getAllCategories()
+  const coreTools = getCoreToolPages()
+  const totalTools = allGoals.length + coreTools.length
 
   const goalsByCategory = CATEGORY_ORDER
     .map(catSlug => {
@@ -65,12 +66,39 @@ export default function GoalsListingPage() {
     ],
   }
 
+  // Describes every tool and goal page linked from this hub as a structured
+  // collection — helps search engines read the page as a directory, not a
+  // list of unrelated links.
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'All Presetly tools',
+    numberOfItems: totalTools,
+    itemListElement: [
+      ...coreTools.map((tool, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: tool.name,
+        url: `${BASE_URL}${tool.route}`,
+      })),
+      ...allGoals.map((goal, i) => ({
+        '@type': 'ListItem',
+        position: coreTools.length + i + 1,
+        name: goal.title,
+        url: `${BASE_URL}${buildGoalHref(goal)}`,
+      })),
+    ],
+  }
+
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+      {[breadcrumbSchema, itemListSchema].map((schema, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
     <article>
       {/* Header */}
       <header className="border-b border-border/50 bg-linear-to-b from-background to-muted/30 px-4 py-10 sm:px-6 sm:py-16">
@@ -86,11 +114,57 @@ export default function GoalsListingPage() {
             All tools
           </h1>
           <p className="mt-3 text-base leading-relaxed text-muted-foreground sm:text-lg">
-            {allGoals.length} free browser-based tools for Indian government portal photo requirements.
-            No uploads. No sign-up.
+            {totalTools} free browser-based tools: resize, compress, crop and convert images,
+            extract audio from video, and prepare exam, ID and signature photos. No uploads. No sign-up.
           </p>
         </div>
       </header>
+
+      {/* Core tools */}
+      <div className="mx-auto max-w-5xl px-4 pt-12 sm:px-6 sm:pt-16">
+        <section aria-labelledby="cat-core-tools">
+          <div className="mb-6">
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+              {coreTools.length} tool{coreTools.length !== 1 ? 's' : ''}
+            </p>
+            <h2
+              id="cat-core-tools"
+              className="mt-1 text-xl font-semibold tracking-tight text-foreground"
+            >
+              Image &amp; Video Tools
+            </h2>
+          </div>
+
+          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3" role="list">
+            {coreTools.map(tool => (
+              <li key={tool.key}>
+                <Link
+                  href={tool.route}
+                  className="group flex h-full flex-col rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:border-primary/30 hover:shadow-md"
+                >
+                  <span className="inline-flex w-fit rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-primary">
+                    Core Tool
+                  </span>
+                  <span className="mt-2.5 block text-sm font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
+                    {tool.name}
+                  </span>
+                  <span className="mt-1 block flex-1 text-xs leading-relaxed text-muted-foreground line-clamp-2">
+                    {tool.description}
+                  </span>
+                  <span className="mt-3 flex items-center gap-1 text-xs font-medium text-primary">
+                    Use tool
+                    <ArrowRight
+                      size={10}
+                      className="transition-transform group-hover:translate-x-0.5"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
 
       {/* Goals by category */}
       <div className="mx-auto max-w-5xl divide-y divide-border px-4 sm:px-6">

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { generateGoalMetadata } from '@/lib/metadata/generators'
+import { generateGoalMetadata, BASE_URL } from '@/lib/metadata/generators'
 import { getGoal, getGoalStaticParams, getRelatedGoals } from '@/registry/goals'
 import { getPreset } from '@/registry/presets'
 import { getRequirements } from '@/content/requirements'
@@ -21,8 +21,6 @@ import { RelatedSizesSection } from './_components/RelatedSizesSection'
 import { UsersAlsoVisitSection } from './_components/UsersAlsoVisitSection'
 import { ExploreMoreToolsSection } from './_components/ExploreMoreToolsSection'
 import { GoalStructuredData } from './_components/GoalStructuredData'
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 
 interface Props {
   params: Promise<{ slug: string }>

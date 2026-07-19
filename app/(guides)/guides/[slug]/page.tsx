@@ -4,8 +4,7 @@ import Link from 'next/link'
 import { getGuide, getGuideSlugs } from '@/content/guides'
 import { getGoal } from '@/registry/goals'
 import { buildGoalHref } from '@/lib/recommendations/engine'
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
+import { BASE_URL } from '@/lib/metadata/generators'
 
 interface Props {
   params: Promise<{ slug: string }>

@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BookOpen, Clock } from 'lucide-react'
 import { getAllGuides } from '@/content/guides'
+import { BASE_URL } from '@/lib/metadata/generators'
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 const canonical = `${BASE_URL}/guides`
 
 export const metadata: Metadata = {

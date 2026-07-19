@@ -18,20 +18,8 @@ import { getAllGoals } from '@/registry/goals'
 import { getAllCategories } from '@/registry/categories'
 import { getAllGuides } from '@/content/guides'
 import { getAllLearnArticles } from '@/registry/learn'
-import { getStandaloneTools } from '@/lib/recommendations/engine'
-
-// ─── Constants ────────────────────────────────────────────────────────────────
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
-
-// Core Tool pages that reuse the image-resizer engine but aren't backed by
-// their own ToolDefinition route, so getStandaloneTools() can't surface it
-// automatically (mirrors the same list in app/sitemap.ts). /convert-image has
-// its own 'image-converter' ToolDefinition now, so it's covered by
-// getStandaloneTools() and no longer needs a manual entry here.
-const EXTRA_CORE_TOOL_PAGES = [
-  { title: 'Compress Image', path: '/compress-image', description: 'Compress any image to a target file size.' },
-]
+import { getCoreToolPages } from '@/lib/recommendations/engine'
+import { BASE_URL } from '@/lib/metadata/generators'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -82,12 +70,13 @@ export function generateLlmsTxt(): string {
   // ── Header
   lines.push('# Presetly')
   lines.push('')
-  lines.push('> Goal-first document preparation platform for Indian government portals and ID applications.')
+  lines.push('> Goal-first online image, video, and document toolkit — no technical settings, ever.')
   lines.push('')
   lines.push(
-    'Presetly lets users prepare photos, signatures, and documents for Indian exam portals, ' +
-    'ID applications, and file-size targets without ever needing to know pixel dimensions, ' +
-    'DPI, or compression ratios. All processing runs in the browser — nothing is uploaded to any server.',
+    'Presetly lets users compress, resize, crop, and convert images, extract audio from video, ' +
+    'and prepare exam, ID, and passport photos for Indian government portals — all without ever ' +
+    'needing to know pixel dimensions, DPI, or compression ratios. All processing runs in the ' +
+    'browser — nothing is uploaded to any server.',
   )
   lines.push('')
 
@@ -105,13 +94,9 @@ export function generateLlmsTxt(): string {
   for (const goal of highPriorityGoals) {
     lines.push(link(goal.title, `/${goal.slug}`, goal.description))
   }
-  // Standalone tools (own route outside the goal registry, e.g. /video-to-audio)
-  for (const tool of getStandaloneTools()) {
-    lines.push(link(tool.name, tool.route!, tool.description))
-  }
-  // Extra Core Tool pages not tied to a ToolDefinition route
-  for (const page of EXTRA_CORE_TOOL_PAGES) {
-    lines.push(link(page.title, page.path, page.description))
+  // Core tool pages (own route outside the goal registry, e.g. /resize-image, /compress-image)
+  for (const tool of getCoreToolPages()) {
+    lines.push(link(tool.name, tool.route, tool.description))
   }
   lines.push('')
 
@@ -174,13 +159,14 @@ export function generateLlmsFullTxt(): string {
   // ── Header
   lines.push('# Presetly — Full URL Index')
   lines.push('')
-  lines.push('> Goal-first document preparation platform for Indian government portals and ID applications.')
+  lines.push('> Goal-first online image, video, and document toolkit — no technical settings, ever.')
   lines.push('')
   lines.push(
-    'Presetly provides browser-based tools for resizing photos and signatures to the exact ' +
+    'Presetly provides browser-based tools for compressing, resizing, cropping, and converting ' +
+    'images, extracting audio from video, and preparing photos and signatures to the exact ' +
     'specifications required by Indian government portals (UPSC, GPSC, SSC, IBPS, Aadhaar, PAN, ' +
-    'Passport, Voter ID, Driving Licence) and for compressing images to precise file-size targets. ' +
-    'All processing runs client-side — no uploads, no accounts, no server.',
+    'Passport, Voter ID, Driving Licence). All processing runs client-side — no uploads, no ' +
+    'accounts, no server.',
   )
   lines.push('')
   lines.push(
@@ -216,16 +202,13 @@ export function generateLlmsFullTxt(): string {
     lines.push('')
   }
 
-  // ── Standalone converter tools
-  const standaloneTools = getStandaloneTools()
-  if (standaloneTools.length > 0 || EXTRA_CORE_TOOL_PAGES.length > 0) {
-    lines.push('## Converter Tools')
+  // ── Core tool pages
+  const coreToolPages = getCoreToolPages()
+  if (coreToolPages.length > 0) {
+    lines.push('## Core Tools')
     lines.push('')
-    for (const tool of standaloneTools) {
-      lines.push(link(tool.name, tool.route!, tool.description))
-    }
-    for (const page of EXTRA_CORE_TOOL_PAGES) {
-      lines.push(link(page.title, page.path, page.description))
+    for (const tool of coreToolPages) {
+      lines.push(link(tool.name, tool.route, tool.description))
     }
     lines.push('')
   }

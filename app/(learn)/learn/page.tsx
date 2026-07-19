@@ -7,8 +7,8 @@ import {
 } from '@/registry/learn'
 import { LEARN_CATEGORY_LABELS, LEARN_CATEGORIES } from '@/registry/learn/schema'
 import type { LearnCategory } from '@/registry/learn/schema'
+import { BASE_URL } from '@/lib/metadata/generators'
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 const canonical = `${BASE_URL}/learn`
 
 export const metadata: Metadata = {

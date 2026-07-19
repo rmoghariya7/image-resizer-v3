@@ -539,33 +539,75 @@ export function generateFaqs(target: SizeTarget): SizeFaq[] {
         answer: `Yes. 100% free, no sign-up, no watermarks, no daily limits. The tool runs entirely in your browser using the Canvas API — nothing is uploaded to any server.`,
       }
 
+  // Best-way-to-compress FAQ — phrasing varies by size band so the 12
+  // generated pages don't read as one template with numbers swapped in.
+  const bestWayFaq: SizeFaq = target.targetKB <= 30
+    ? {
+        question: `What is the best way to compress an image to ${target.displaySize}?`,
+        answer: `Upload your image to Presetly's ${target.title} tool — built for strict limits like ${target.useCase}. It runs a binary-search compression pass to find the highest JPEG quality that still lands under ${target.displaySize}, so you don't have to guess a quality percentage yourself.`,
+      }
+    : target.targetKB <= 200
+      ? {
+          question: `What is the best way to compress an image to ${target.displaySize}?`,
+          answer: `Upload your image to Presetly's ${target.title} tool. It automatically finds the highest JPEG quality that keeps the file under ${target.displaySize} — no manual quality slider needed. Common use case: ${target.useCase}.`,
+        }
+      : {
+          question: `What is the best way to compress an image to ${target.displaySize}?`,
+          answer: `Upload your image to Presetly's ${target.title} tool and it compresses down to ${target.displaySize} automatically, picking the best quality-to-size trade-off via a binary-search pass. Typical for ${target.useCase}.`,
+        }
+
+  // Batch-processing FAQ — previously a single answer repeated byte-for-byte
+  // across all 12 pages; now varies by size band to reflect the different
+  // use case each band serves.
+  const batchFaq: SizeFaq = target.targetKB <= 30
+    ? {
+        question: 'Can I compress multiple images at once?',
+        answer: `Not yet — images are processed one at a time so the ${target.displaySize} target stays accurate for strict portals like exam and signature uploads. Click "Process another image" after downloading to start the next one. Batch processing for these smaller targets is on the roadmap.`,
+      }
+    : target.targetKB <= 200
+      ? {
+          question: 'Can I compress multiple images at once?',
+          answer: `Not yet — the tool processes one image at a time so each result hits ${target.displaySize} precisely. Click "Process another image" after downloading to compress the next one. Batch processing is planned for a future release.`,
+        }
+      : {
+          question: 'Can I compress multiple images at once?',
+          answer: `Not yet — images are processed one at a time. Download the result, then click "Process another image" to compress the next one. Batch processing for larger galleries and product photos is planned for a future release.`,
+        }
+
   return [
-    {
-      question: `What is the best way to compress an image to ${target.displaySize}?`,
-      answer: `Upload your image to Presetly's ${target.title} tool. It automatically finds the optimal JPEG quality setting using a binary search algorithm. No manual adjustment needed. Most images reach ${target.displaySize} while keeping detail crisp.`,
-    },
+    bestWayFaq,
     {
       question: `Will my image look blurry after compressing to ${target.displaySize}?`,
       answer: `It depends on your original image size. A 2 MB photo compressed to ${target.displaySize} will lose some detail — inevitable at a ${Math.round((1 - target.targetKB / 2048) * 100)}% reduction. A photo already close to ${target.displaySize} looks nearly identical. The tool always maximises quality within the size limit.`,
     },
     formatFaq,
     qualityFaq,
-    {
-      question: 'Can I compress multiple images at once?',
-      answer:
-        `Currently the tool processes one image at a time. After downloading, click "Process another image" to compress the next one. Batch processing is planned for a future release.`,
-    },
+    batchFaq,
   ]
 }
 
 export type SizeHowItWorksStep = { title: string; body: string }
 
 export function generateHowItWorks(target: SizeTarget): SizeHowItWorksStep[] {
+  // Step 1 body — varies by size band so the 12 generated pages don't share
+  // one identical, non-interpolated sentence.
+  const uploadStep: SizeHowItWorksStep = target.targetKB <= 30
+    ? {
+        title: 'Upload your image',
+        body: 'Drop your JPEG, PNG, or WebP image onto the upload area, or click to browse files. Camera capture is supported on mobile — useful for signature and photo uploads that need this size.',
+      }
+    : target.targetKB <= 200
+      ? {
+          title: 'Upload your image',
+          body: 'Drop your JPEG, PNG, or WebP image onto the upload area, or click to browse files. Camera capture is also supported on mobile.',
+        }
+      : {
+          title: 'Upload your image',
+          body: 'Drop your JPEG, PNG, or WebP image onto the upload area — large DSLR exports and high-resolution photos are both supported, up to 20 MB.',
+        }
+
   return [
-    {
-      title: 'Upload your image',
-      body: 'Drop your JPEG, PNG, or WebP image onto the upload area, or click to browse files. Camera capture is also supported on mobile.',
-    },
+    uploadStep,
     {
       title: `Compressed to under ${target.displaySize}`,
       body: `The tool automatically finds the highest quality setting that keeps the file under ${target.displaySize}. No sliders, no manual settings, done in seconds.`,
