@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { getGuide, getGuideSlugs } from '@/content/guides'
 import { getGoal } from '@/registry/goals'
 import { buildGoalHref } from '@/lib/recommendations/engine'
-import { BASE_URL } from '@/lib/metadata/generators'
+import { BASE_URL, generateGuideMetadata } from '@/lib/metadata/generators'
+import { organizationRef } from '@/lib/metadata/brand'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -20,28 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!guide) return {}
 
   const canonical = `${BASE_URL}/guides/${guide.slug}`
-  const description = guide.introduction.slice(0, 155).replace(/\.$/, '') + '.'
-
-  return {
-    title: `${guide.title} | Presetly`,
-    description,
-    alternates: { canonical },
-    openGraph: {
-      title: guide.title,
-      description: guide.introduction.slice(0, 200),
-      url: canonical,
-      type: 'article',
-      siteName: 'Presetly',
-      images: [{ url: `${BASE_URL}/opengraph-image`, width: 1200, height: 630, type: 'image/png' as const }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${guide.title} | Presetly`,
-      description: guide.introduction.slice(0, 120),
-      images: [`${BASE_URL}/opengraph-image`],
-    },
-    robots: { index: true, follow: true },
-  }
+  return generateGuideMetadata(guide, canonical)
 }
 
 export default async function GuidePage({ params }: Props) {
@@ -62,16 +42,8 @@ export default async function GuidePage({ params }: Props) {
     url: canonical,
     datePublished: guide.updatedAt,
     dateModified: guide.updatedAt,
-    author: {
-      '@type': 'Organization',
-      name: 'Presetly',
-      url: BASE_URL,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Presetly',
-      url: BASE_URL,
-    },
+    author: organizationRef(),
+    publisher: organizationRef(),
   }
 
   // Breadcrumb: Home → Guides → Guide Title

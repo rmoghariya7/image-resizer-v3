@@ -1,6 +1,7 @@
 import type { GoalDefinition } from '@/types/registry'
 import { stripGoalTokens } from '@/lib/linking/resolver'
 import { BASE_URL } from '@/lib/metadata/generators'
+import { organizationRef } from '@/lib/metadata/brand'
 
 const CATEGORY_NAMES: Record<string, string> = {
   'exam': 'Exam Photos',
@@ -73,10 +74,10 @@ export function GoalStructuredData({ goal, canonicalUrl }: Props) {
     })),
   }
 
-  // ── SoftwareApplication ──────────────────────────────────────────────────────
+  // ── WebApplication ────────────────────────────────────────────────────────────
   const softwareSchema = {
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
+    '@type': 'WebApplication',
     name: goal.title,
     description: goal.description,
     applicationCategory: 'MultimediaApplication',
@@ -93,11 +94,7 @@ export function GoalStructuredData({ goal, canonicalUrl }: Props) {
       price: '0',
       priceCurrency: 'USD',
     },
-    provider: {
-      '@type': 'Organization',
-      name: 'Presetly',
-      url: BASE_URL,
-    },
+    provider: organizationRef(),
   }
 
   return (

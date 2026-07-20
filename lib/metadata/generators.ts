@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import type { GoalDefinition } from '@/registry/goals/schema'
 import type { CategoryDefinition } from '@/registry/categories/schema'
 import type { SearchIntent } from '@/registry/shared/search-intent'
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
-const SITE_NAME = 'Presetly'
+import { getCategory } from '@/registry/categories'
+import { BASE_URL, SITE_NAME } from './brand'
 
 // --- Search intent helpers ---
 
@@ -40,12 +39,27 @@ const ROOT_OG_IMAGE = {
 }
 
 /**
- * Constructs the OG image descriptor for a page that owns an opengraph-image.tsx.
- * canonical must be the full absolute canonical URL.
+ * Constructs the OG image descriptor for a goal/tool page, rendered by the
+ * single shared `/og` route rather than a per-page opengraph-image.tsx file
+ * (see app/og/route.tsx for why — Next.js hashes the internal route id
+ * whenever multiple same-named opengraph-image.tsx files collide, which
+ * broke every page-specific OG image in production but this endpoint).
  */
-function routeOgImage(canonical: string) {
+function dynamicOgImage(params: {
+  badge: string
+  title: string
+  description: string
+  badges?: readonly string[]
+}) {
+  const qs = new URLSearchParams({
+    badge:       params.badge,
+    title:       params.title,
+    description: params.description,
+  })
+  if (params.badges?.length) qs.set('badges', params.badges.join('|'))
+
   return {
-    url:    `${canonical}/opengraph-image`,
+    url:    `${BASE_URL}/og?${qs.toString()}`,
     width:  1200,
     height: 630,
     type:   'image/png' as const,
@@ -63,8 +77,11 @@ export function generateGoalMetadata(
   const ogDesc = goal.ogDescription ?? goal.description
   const twitterDesc =
     goal.twitterDescription ?? (goal.ogDescription ?? goal.description).slice(0, 150)
-  // Goal pages have app/(goals)/[slug]/opengraph-image.tsx.
-  const ogImage = routeOgImage(canonical)
+  const ogImage = dynamicOgImage({
+    badge:       getCategory(goal.category)?.name ?? 'Tool',
+    title:       goal.title,
+    description: goal.description,
+  })
 
   return {
     title: pageTitle,
@@ -177,6 +194,115 @@ export function generateLearnMetadata(
     other: hints.primaryQuery
       ? { 'search:primaryQuery': hints.primaryQuery, 'search:cluster': hints.topicCluster ?? '' }
       : undefined,
+  }
+}
+
+// --- Core tool pages (/compress-image, /resize-image, etc.) ---
+
+export function generateToolMetadata(opts: {
+  pageTitle:    string
+  seoTitle:     string
+  description:  string
+  canonical:    string
+  primaryQuery?: string
+  /** Small OG-image pill, e.g. "Image Compressor". Defaults to pageTitle. */
+  ogBadge?:      string
+  ogBadges?:     readonly string[]
+}): Metadata {
+  const { pageTitle, seoTitle, description, canonical, primaryQuery } = opts
+  const ogImage = dynamicOgImage({
+    badge:       opts.ogBadge ?? pageTitle,
+    title:       pageTitle,
+    description,
+    badges:      opts.ogBadges,
+  })
+
+  return {
+    title:       seoTitle,
+    description,
+    alternates:  { canonical },
+    openGraph: {
+      title:       seoTitle,
+      description,
+      url:         canonical,
+      type:        'website',
+      siteName:    SITE_NAME,
+      images:      [ogImage],
+    },
+    twitter: {
+      card:        'summary_large_image',
+      title:       `${pageTitle} | ${SITE_NAME}`,
+      description: description.slice(0, 150),
+      images:      [ogImage.url],
+    },
+    robots: { index: true, follow: true },
+    other: primaryQuery ? { 'search:primaryQuery': primaryQuery } : undefined,
+  }
+}
+
+// --- Guide pages (/guides/[slug]) ---
+// No route-specific opengraph-image.tsx; falls back to the root OG image.
+
+export function generateGuideMetadata(
+  guide: { title: string; introduction: string; slug: string },
+  canonical: string,
+): Metadata {
+  const description = guide.introduction.slice(0, 155).replace(/\.$/, '') + '.'
+
+  return {
+    title:       `${guide.title} | ${SITE_NAME}`,
+    description,
+    alternates:  { canonical },
+    openGraph: {
+      title:       guide.title,
+      description: guide.introduction.slice(0, 200),
+      url:         canonical,
+      type:        'article',
+      siteName:    SITE_NAME,
+      images:      [ROOT_OG_IMAGE],
+    },
+    twitter: {
+      card:        'summary_large_image',
+      title:       `${guide.title} | ${SITE_NAME}`,
+      description: guide.introduction.slice(0, 120),
+      images:      [ROOT_OG_IMAGE.url],
+    },
+    robots: { index: true, follow: true },
+  }
+}
+
+// --- Legal / static pages (/about, /contact, /privacy-policy, /terms) ---
+// No route-specific opengraph-image.tsx; falls back to the root OG image.
+
+export function generateLegalMetadata(opts: {
+  title:               string // e.g. "Privacy Policy" — rendered as "{title} — Presetly"
+  description:         string
+  ogDescription?:      string
+  twitterDescription?: string
+  canonical:           string
+}): Metadata {
+  const { title, description, canonical } = opts
+  const ogDescription = opts.ogDescription ?? description
+  const twitterDescription = opts.twitterDescription ?? ogDescription
+
+  return {
+    title:       `${title} — ${SITE_NAME}`,
+    description,
+    alternates:  { canonical },
+    openGraph: {
+      title:       `${title} — ${SITE_NAME}`,
+      description: ogDescription,
+      url:         canonical,
+      type:        'website',
+      siteName:    SITE_NAME,
+      images:      [ROOT_OG_IMAGE],
+    },
+    twitter: {
+      card:        'summary_large_image',
+      title:       `${title} — ${SITE_NAME}`,
+      description: twitterDescription,
+      images:      [ROOT_OG_IMAGE.url],
+    },
   }
 }
 

@@ -1,13 +1,34 @@
 import { ImageResponse } from 'next/og'
-import { DESCRIPTION, PAGE_TITLE } from './content'
+import { SITE_NAME } from '@/lib/metadata/brand'
 
-export const runtime = 'edge'
-export const size = { width: 1200, height: 630 }
-export const contentType = 'image/png'
+/**
+ * One shared visual template for every opengraph-image.tsx route in the app
+ * (root, goal pages, and all core tool pages). Each route file stays a thin
+ * wrapper — Next.js requires the actual `opengraph-image.tsx` file convention
+ * per route, but the JSX and layout only need to live here once.
+ */
 
-export default async function AddNameAndDateOnPhotoOgImage() {
+export const OG_SIZE = { width: 1200, height: 630 }
+export const OG_CONTENT_TYPE = 'image/png'
+
+const DEFAULT_BADGES = ['Free', 'No uploads', 'Browser-based'] as const
+
+interface OgTemplateOptions {
+  /** Small pill top-right identifying the tool/category, e.g. "Image Compressor". */
+  badge: string
+  title: string
+  description: string
+  badges?: readonly string[]
+}
+
+export function renderOgImage({
+  badge,
+  title,
+  description,
+  badges = DEFAULT_BADGES,
+}: OgTemplateOptions) {
   const displayDesc =
-    DESCRIPTION.length > 100 ? DESCRIPTION.slice(0, 97) + '…' : DESCRIPTION
+    description.length > 100 ? description.slice(0, 97) + '…' : description
 
   return new ImageResponse(
     (
@@ -23,9 +44,10 @@ export default async function AddNameAndDateOnPhotoOgImage() {
           fontFamily: 'sans-serif',
         }}
       >
+        {/* Top: brand + category pill */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ fontSize: 28, fontWeight: 700, color: '#1e1b4b', letterSpacing: '-0.5px' }}>
-            Presetly
+            {SITE_NAME}
           </div>
           <div
             style={{
@@ -37,38 +59,33 @@ export default async function AddNameAndDateOnPhotoOgImage() {
               fontWeight: 600,
             }}
           >
-            Add Name & Date to Photo
+            {badge}
           </div>
         </div>
 
+        {/* Middle: title + description */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div
             style={{
-              fontSize: 52,
+              fontSize: title.length > 36 ? 40 : title.length > 24 ? 52 : 56,
               fontWeight: 800,
               color: '#1e1b4b',
               letterSpacing: '-2px',
               lineHeight: 1.1,
             }}
           >
-            {PAGE_TITLE}
+            {title}
           </div>
-          <div
-            style={{
-              fontSize: 24,
-              color: '#4b5563',
-              lineHeight: 1.5,
-              maxWidth: 900,
-            }}
-          >
+          <div style={{ fontSize: 24, color: '#4b5563', lineHeight: 1.5, maxWidth: 900 }}>
             {displayDesc}
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 12 }}>
-          {['Free', 'No uploads', 'Name · Date · Footer'].map(badge => (
+        {/* Bottom: trust badges */}
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          {badges.map((b) => (
             <div
-              key={badge}
+              key={b}
               style={{
                 background: '#4f46e5',
                 color: 'white',
@@ -78,12 +95,12 @@ export default async function AddNameAndDateOnPhotoOgImage() {
                 fontWeight: 600,
               }}
             >
-              {badge}
+              {b}
             </div>
           ))}
         </div>
       </div>
     ),
-    size,
+    OG_SIZE,
   )
 }

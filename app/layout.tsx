@@ -1,11 +1,19 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@/components/analytics/analytics";
 import { SearchProvider } from "@/features/search";
 import { GlobalSearch } from "@/features/search";
 import { buildSearchIndex } from "@/features/search";
-import { BASE_URL } from "@/lib/metadata/generators";
+import {
+  BASE_URL,
+  LOCALE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  THEME_COLOR,
+  organizationSchema,
+  websiteSchema,
+} from "@/lib/metadata/brand";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,28 +32,39 @@ const OG_IMAGE = {
   type: "image/png" as const,
 };
 
+export const viewport: Viewport = {
+  themeColor: THEME_COLOR,
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-  title: "Presetly: Free Online Image, Video & Document Tools",
-  description:
-    "Compress, resize, crop, and convert images, extract audio from video, and prepare exam, ID, and passport photos — all in your browser. No uploads, no sign-up, completely free.",
+  // NOTE: intentionally a plain string, not a `{ default, template }` object —
+  // every page in the app already sets its own full `metadata.title` string
+  // (including the "Presetly" suffix). A root template would double-suffix
+  // every one of them (e.g. "... | Presetly | Presetly").
+  title: `${SITE_NAME}: Free Online Image, Video & Document Tools`,
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
   alternates: {
     canonical: BASE_URL,
   },
   openGraph: {
     type: "website",
-    siteName: "Presetly",
-    title: "Free Online Image, Video & Document Tools | Presetly",
+    locale: LOCALE,
+    siteName: SITE_NAME,
+    title: `Free Online Image, Video & Document Tools | ${SITE_NAME}`,
     description:
-      "A complete browser-based toolkit: compress, resize, crop, and convert images, extract audio from video, and generate exam, ID, and passport photos to exact specs. Nothing is ever uploaded — free forever.",
+      "A complete browser-based toolkit: compress, resize, crop, and convert images, remove backgrounds, extract audio from video, and generate exam, ID, and passport photos to exact specs. Nothing is ever uploaded — free forever.",
     url: BASE_URL,
     images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Free Image, Video & Document Tools | Presetly",
+    title: `Free Image, Video & Document Tools | ${SITE_NAME}`,
     description:
-      "Compress, resize, crop, convert images, extract audio from video, and generate exam and ID photos to exact specs. All free, all browser-based.",
+      "Compress, resize, crop, convert images, remove backgrounds, extract audio from video, and generate exam and ID photos to exact specs. All free, all browser-based.",
     images: [OG_IMAGE.url],
   },
   robots: { index: true, follow: true },
@@ -54,9 +73,8 @@ export const metadata: Metadata = {
       { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon.svg", type: "image/svg+xml" },
     ],
-    apple: "/favicon.svg",
+    apple: "/apple-touch-icon.png",
   },
-  manifest: "/site.webmanifest",
 };
 
 // Compute the search index once at module load time (static registry data — never changes).
@@ -72,6 +90,16 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col" suppressHydrationWarning>
+        {/* Sitewide Organization + WebSite schema — rendered once here so no
+            page needs to redeclare Presetly's brand identity independently. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema()) }}
+        />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary"

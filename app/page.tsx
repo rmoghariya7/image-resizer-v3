@@ -12,30 +12,8 @@ import { HomeLearnSection } from './_components/HomeLearnSection'
 import { BASE_URL } from '@/lib/metadata/generators'
 
 // ─── Structured data ──────────────────────────────────────────────────────────
-
-const websiteSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'Presetly',
-  url: BASE_URL,
-  description:
-    'Free browser-based toolkit for preparing images, video and documents. Compress, resize, crop, convert, and extract audio — all processed locally, no upload, no sign-up.',
-}
-
-const organizationSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'Presetly',
-  url: BASE_URL,
-  description:
-    'Browser-based image compression and document preparation platform. Privacy-first: all processing runs locally in the browser.',
-  logo: {
-    '@type': 'ImageObject',
-    url: `${BASE_URL}/opengraph-image`,
-    width: 1200,
-    height: 630,
-  },
-}
+// Organization + WebSite schema are rendered once, sitewide, in app/layout.tsx —
+// this page only adds what's specific to the homepage (WebPage + FAQPage).
 
 const webPageSchema = {
   '@context': 'https://schema.org',
@@ -78,14 +56,6 @@ export default function HomePage() {
   return (
     <>
       {/* JSON-LD structured data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqSchema) }}

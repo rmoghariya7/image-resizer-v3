@@ -1,27 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { BASE_URL } from '@/lib/metadata/generators'
+import { BASE_URL, generateLegalMetadata } from '@/lib/metadata/generators'
 
-export const metadata: Metadata = {
-  title: 'Terms of Service — Presetly',
+export const metadata: Metadata = generateLegalMetadata({
+  title: 'Terms of Service',
   description:
-    'Terms of Service for Presetly, the free browser-based image resizer for Indian government portal applications.',
-  alternates: { canonical: `${BASE_URL}/terms` },
-  openGraph: {
-    title: 'Terms of Service — Presetly',
-    description: 'Terms governing your use of Presetly, a free browser-based image resizer.',
-    url: `${BASE_URL}/terms`,
-    type: 'website',
-    siteName: 'Presetly',
-    images: [{ url: `${BASE_URL}/opengraph-image`, width: 1200, height: 630, type: 'image/png' as const }],
-  },
-  twitter: {
-    card:        'summary_large_image',
-    title:       'Terms of Service — Presetly',
-    description: 'Terms governing your use of Presetly, a free browser-based image resizer.',
-    images:      [`${BASE_URL}/opengraph-image`],
-  },
-}
+    'Terms of Service for Presetly, the free browser-based toolkit for image, video, and document preparation.',
+  ogDescription: 'Terms governing your use of Presetly, a free browser-based toolkit.',
+  canonical: `${BASE_URL}/terms`,
+})
 
 
 const breadcrumbSchema = {

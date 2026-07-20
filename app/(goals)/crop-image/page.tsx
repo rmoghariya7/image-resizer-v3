@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { BASE_URL } from "@/lib/metadata/generators";
+import { BASE_URL, generateToolMetadata } from "@/lib/metadata/generators";
+import { organizationRef, SITE_NAME } from "@/lib/metadata/brand";
 import {
   getStandaloneToolPageGoals,
   getStandaloneTools,
@@ -22,38 +23,16 @@ import {
 } from "./content";
 
 const CANONICAL = `${BASE_URL}/crop-image`;
-const SITE_NAME = "Presetly";
 
-const OG_IMAGE = {
-  url: `${CANONICAL}/opengraph-image`,
-  width: 1200,
-  height: 630,
-  type: "image/png" as const,
-};
-
-export const metadata: Metadata = {
-  title: SEO_TITLE,
+export const metadata: Metadata = generateToolMetadata({
+  pageTitle: PAGE_TITLE,
+  seoTitle: SEO_TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: CANONICAL },
-  openGraph: {
-    title: SEO_TITLE,
-    description: DESCRIPTION,
-    url: CANONICAL,
-    type: "website",
-    siteName: SITE_NAME,
-    images: [OG_IMAGE],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${PAGE_TITLE} | ${SITE_NAME}`,
-    description: DESCRIPTION.slice(0, 150),
-    images: [OG_IMAGE.url],
-  },
-  robots: { index: true, follow: true },
-  other: {
-    "search:primaryQuery": "image cropper online free",
-  },
-};
+  canonical: CANONICAL,
+  primaryQuery: "image cropper online free",
+  ogBadge: "Image Cropper",
+  ogBadges: ["Free", "No uploads", "Passport · Instagram · YouTube · Custom"],
+});
 
 // ─── Structured data ──────────────────────────────────────────────────────────
 
@@ -68,7 +47,7 @@ const breadcrumbSchema = {
 
 const softwareSchema = {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
+  "@type": "WebApplication",
   name: PAGE_TITLE,
   description: DESCRIPTION,
   applicationCategory: "MultimediaApplication",
@@ -85,7 +64,7 @@ const softwareSchema = {
     "Free with no sign-up or watermarks",
   ],
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  provider: { "@type": "Organization", name: SITE_NAME, url: BASE_URL },
+  provider: organizationRef(),
 };
 
 const howToSchema = {

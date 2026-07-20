@@ -1,27 +1,16 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { BASE_URL } from '@/lib/metadata/generators'
+import { BASE_URL, generateLegalMetadata } from '@/lib/metadata/generators'
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy — Presetly',
+export const metadata: Metadata = generateLegalMetadata({
+  title: 'Privacy Policy',
   description:
-    'Presetly Privacy Policy. Learn how we handle your data — spoiler: your images are never uploaded, and we collect no personal information.',
-  alternates: { canonical: `${BASE_URL}/privacy-policy` },
-  openGraph: {
-    title: 'Privacy Policy — Presetly',
-    description: 'Your images are never uploaded. We collect no personal information.',
-    url: `${BASE_URL}/privacy-policy`,
-    type: 'website',
-    siteName: 'Presetly',
-    images: [{ url: `${BASE_URL}/opengraph-image`, width: 1200, height: 630, type: 'image/png' as const }],
-  },
-  twitter: {
-    card:        'summary_large_image',
-    title:       'Privacy Policy — Presetly',
-    description: 'Your images are never uploaded. Presetly processes everything in your browser with zero server contact.',
-    images:      [`${BASE_URL}/opengraph-image`],
-  },
-}
+    'Presetly Privacy Policy. Learn how we handle your data — spoiler: nothing is ever uploaded, and we collect no personal information.',
+  ogDescription: 'Nothing is ever uploaded. We collect no personal information.',
+  twitterDescription:
+    'Nothing is ever uploaded — Presetly processes everything in your browser with zero server contact.',
+  canonical: `${BASE_URL}/privacy-policy`,
+})
 
 
 const breadcrumbSchema = {

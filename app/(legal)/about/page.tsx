@@ -1,28 +1,15 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { BASE_URL } from '@/lib/metadata/generators'
+import { BASE_URL, generateLegalMetadata } from '@/lib/metadata/generators'
 
-export const metadata: Metadata = {
-  title: 'About Presetly — Free Image Resizer for Indian Government Documents',
+export const metadata: Metadata = generateLegalMetadata({
+  title: 'About',
   description:
-    'Presetly is a free browser-based tool that resizes and compresses photos for Indian government portals — UPSC, Aadhaar, PAN card, Passport, and more. No uploads. No sign-up.',
-  alternates: { canonical: `${BASE_URL}/about` },
-  openGraph: {
-    title: 'About Presetly',
-    description:
-      'Free browser-based image resizer for Indian government portal applications. No uploads, no sign-up, completely private.',
-    url: `${BASE_URL}/about`,
-    type: 'website',
-    siteName: 'Presetly',
-    images: [{ url: `${BASE_URL}/opengraph-image`, width: 1200, height: 630, type: 'image/png' as const }],
-  },
-  twitter: {
-    card:        'summary_large_image',
-    title:       'About Presetly',
-    description: 'Free browser-based image resizer for Indian government portal applications. No uploads, no sign-up.',
-    images:      [`${BASE_URL}/opengraph-image`],
-  },
-}
+    'Presetly is a free browser-based toolkit that prepares photos, videos, and documents for exams, IDs, passports, and everyday use. No uploads. No sign-up.',
+  ogDescription:
+    'A free, browser-based, privacy-first toolkit for photos, video, and documents — nothing is ever uploaded.',
+  canonical: `${BASE_URL}/about`,
+})
 
 const TOOLS = [
   { label: 'UPSC Photo Resizer', href: '/upsc-photo-resizer' },
@@ -31,6 +18,8 @@ const TOOLS = [
   { label: 'Passport Photo Maker', href: '/passport-photo-maker' },
   { label: 'Compress Image to 50 KB', href: '/compress-image-to-50kb' },
   { label: 'Signature Resize to 20 KB', href: '/signature-resize-20kb' },
+  { label: 'Background Remover', href: '/background-remover' },
+  { label: 'Video to Audio Converter', href: '/video-to-audio' },
 ]
 
 
