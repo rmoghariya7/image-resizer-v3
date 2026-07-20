@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { getGoal } from '@/registry/goals'
-import { buildGoalHref, getStandaloneTools } from '@/lib/recommendations/engine'
+import { buildGoalHref, getCoreToolPages } from '@/lib/recommendations/engine'
 
 const FOOTER_SECTIONS = [
   {
@@ -48,14 +48,36 @@ const FOOTER_SECTIONS = [
 ]
 
 export function SiteFooter() {
-  // Standalone tools (own route, no goal slug) — registry-driven column
-  const converterTools = getStandaloneTools()
+  // Core tool pages (resize, compress, crop, convert, video-to-audio, etc.) —
+  // registry-driven column, shown first so the footer reflects the full
+  // platform rather than only the government-photo goal pages below.
+  const coreTools = getCoreToolPages()
 
   return (
     <footer className="border-t border-border bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         {/* Top grid */}
         <div className="grid grid-cols-2 gap-8 md:grid-cols-5">
+          {coreTools.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-foreground">
+                Image &amp; Video Tools
+              </p>
+              <ul className="mt-4 space-y-2" role="list">
+                {coreTools.map(tool => (
+                  <li key={tool.key}>
+                    <Link
+                      href={tool.route}
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {tool.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {FOOTER_SECTIONS.map(section => (
             <div key={section.heading}>
               <p className="text-xs font-semibold uppercase tracking-wider text-foreground">
@@ -78,26 +100,6 @@ export function SiteFooter() {
               </ul>
             </div>
           ))}
-
-          {converterTools.length > 0 && (
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-foreground">
-                Converters
-              </p>
-              <ul className="mt-4 space-y-2" role="list">
-                {converterTools.map(tool => (
-                  <li key={tool.key}>
-                    <Link
-                      href={tool.route!}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      {tool.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
 
         {/* Bottom bar */}

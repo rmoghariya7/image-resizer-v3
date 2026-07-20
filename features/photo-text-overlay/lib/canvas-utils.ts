@@ -28,6 +28,16 @@ export const FOOTER_PADDING_X_DESIGN_PX = 24
 export const FOOTER_VERTICAL_PADDING_DESIGN_PX = 12
 export const FOOTER_LINE_GAP_DESIGN_PX = 6
 
+// Frame drawn around the photo + footer, both in the live CSS preview
+// (FooterPreviewStage) and baked into the canvas export below — sized as a
+// margin around the content (like a CSS border), never overlapping the
+// photo's own pixels. A thin light-coloured mat sits outside the border
+// itself, mimicking the white paper margin of a printed passport photo.
+export const BORDER_WIDTH_DESIGN_PX = 3
+export const BORDER_COLOR = '#111827'
+export const MARGIN_WIDTH_DESIGN_PX = 2
+export const MARGIN_COLOR = '#FFFFFF'
+
 export function scaleFactorFor(actualWidth: number): number {
   return actualWidth / REFERENCE_WIDTH
 }
@@ -106,7 +116,10 @@ function alignedX(alignment: Alignment, canvasWidth: number, paddingX: number): 
  * Draws the source photo onto a canvas UNCHANGED, then extends the canvas
  * downward with a footer band and prints Name and/or Date inside that band
  * only — the photo itself is never drawn on (this is a footer generator, not
- * a watermark/overlay tool).
+ * a watermark/overlay tool). The whole thing (photo + footer) is then matted
+ * inside a solid-colour border frame, sized as a margin so it never overlaps
+ * the photo's own pixels — the canvas equivalent of the CSS border drawn
+ * around FooterPreviewStage's live preview.
  */
 export async function composeFooterImage(
   imageSrc: string,
@@ -142,52 +155,68 @@ export async function composeFooterImage(
   )
 
   const hasFooter = mode !== 'empty'
+  const borderWidth = BORDER_WIDTH_DESIGN_PX * scale
+  const marginWidth = MARGIN_WIDTH_DESIGN_PX * scale
+  const frameInset = marginWidth + borderWidth
+  const contentWidth = image.naturalWidth
+  const contentHeight = image.naturalHeight + (hasFooter ? footerHeight : 0)
+
   const canvas = document.createElement('canvas')
-  canvas.width = image.naturalWidth
-  canvas.height = image.naturalHeight + (hasFooter ? footerHeight : 0)
+  canvas.width = contentWidth + frameInset * 2
+  canvas.height = contentHeight + frameInset * 2
   const ctx = getCanvasContext(canvas)
+
+  // Outer mat — fill the full canvas with the margin colour first, so the
+  // un-covered edge becomes a paper-like margin around the border.
+  ctx.fillStyle = MARGIN_COLOR
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+  // Border ring — inset by marginWidth, sized so only a borderWidth-thick
+  // strip stays visible once the content is drawn on top of it below.
+  ctx.fillStyle = BORDER_COLOR
+  ctx.fillRect(marginWidth, marginWidth, canvas.width - marginWidth * 2, canvas.height - marginWidth * 2)
 
   if (format === 'jpeg') {
     // JPEG has no alpha channel — fill white first so a transparent source
     // PNG composites against white instead of black.
     ctx.fillStyle = '#ffffff'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.fillRect(frameInset, frameInset, contentWidth, contentHeight)
   }
 
   // The photo itself — drawn exactly as uploaded, never modified.
-  ctx.drawImage(image, 0, 0)
+  ctx.drawImage(image, frameInset, frameInset)
 
   if (hasFooter) {
     ctx.fillStyle = footer.backgroundColor
-    ctx.fillRect(0, image.naturalHeight, canvas.width, footerHeight)
+    ctx.fillRect(frameInset, frameInset + image.naturalHeight, contentWidth, footerHeight)
 
     ctx.fillStyle = footer.textColor
     ctx.textBaseline = 'middle'
 
-    const rowCenterY = image.naturalHeight + footerHeight / 2
+    const rowCenterY = frameInset + image.naturalHeight + footerHeight / 2
 
     if (mode === 'name-only') {
       ctx.font = `600 ${nameFontSize}px Inter, system-ui, sans-serif`
       ctx.textAlign = name.alignment
-      ctx.fillText(nameText, alignedX(name.alignment, canvas.width, paddingX), rowCenterY)
+      ctx.fillText(nameText, frameInset + alignedX(name.alignment, contentWidth, paddingX), rowCenterY)
     } else if (mode === 'date-only') {
       ctx.font = `600 ${dateFontSize}px Inter, system-ui, sans-serif`
       ctx.textAlign = date.alignment
-      ctx.fillText(dateText, alignedX(date.alignment, canvas.width, paddingX), rowCenterY)
+      ctx.fillText(dateText, frameInset + alignedX(date.alignment, contentWidth, paddingX), rowCenterY)
     } else if (mode === 'row') {
       ctx.font = `600 ${nameFontSize}px Inter, system-ui, sans-serif`
       ctx.textAlign = name.alignment
-      ctx.fillText(nameText, alignedX(name.alignment, canvas.width, paddingX), rowCenterY)
+      ctx.fillText(nameText, frameInset + alignedX(name.alignment, contentWidth, paddingX), rowCenterY)
 
       ctx.font = `600 ${dateFontSize}px Inter, system-ui, sans-serif`
       ctx.textAlign = date.alignment
-      ctx.fillText(dateText, alignedX(date.alignment, canvas.width, paddingX), rowCenterY)
+      ctx.fillText(dateText, frameInset + alignedX(date.alignment, contentWidth, paddingX), rowCenterY)
     } else if (mode === 'stacked') {
       const totalHeight = nameFontSize + lineGap + dateFontSize
       const blockTop = rowCenterY - totalHeight / 2
       const nameY = blockTop + nameFontSize / 2
       const dateY = blockTop + nameFontSize + lineGap + dateFontSize / 2
-      const x = alignedX(name.alignment, canvas.width, paddingX)
+      const x = frameInset + alignedX(name.alignment, contentWidth, paddingX)
 
       ctx.textAlign = name.alignment
       ctx.font = `600 ${nameFontSize}px Inter, system-ui, sans-serif`

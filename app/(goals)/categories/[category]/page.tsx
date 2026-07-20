@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, GraduationCap, CreditCard, Minimize2, PenLine } from 'lucide-react'
-import { generateCategoryMetadata } from '@/lib/metadata/generators'
+import { generateCategoryMetadata, BASE_URL } from '@/lib/metadata/generators'
 import {
   getCategory,
   getCategoryStaticParams,
@@ -11,8 +11,6 @@ import { getGoalsByCategory } from '@/registry/goals'
 import { buildGoalHref } from '@/lib/recommendations/engine'
 import type { GoalCategory } from '@/types/registry'
 import type { ElementType } from 'react'
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
 
 const CATEGORY_META: Record<
   GoalCategory,
@@ -92,10 +90,24 @@ export default async function CategoryPage({ params }: Props) {
     ],
   }
 
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `${cat.name} tools`,
+    numberOfItems: goals.length,
+    itemListElement: goals.map((goal, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: goal.title,
+      url: `${BASE_URL}${buildGoalHref(goal)}`,
+    })),
+  }
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
 
       <article>
         {/* Header */}
@@ -246,29 +258,25 @@ export default async function CategoryPage({ params }: Props) {
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
-                href="/#tools"
-                className="rounded-full border border-border bg-background px-4 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
-              >
-                Popular size targets
-              </Link>
-              <Link
-                href="/#categories"
-                className="rounded-full border border-border bg-background px-4 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
-              >
-                All categories
-              </Link>
-              <Link
-                href="/#faq"
-                className="rounded-full border border-border bg-background px-4 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
-              >
-                Common questions
-              </Link>
-              <Link
                 href="/tools"
                 className="rounded-full border border-border bg-background px-4 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
               >
                 All tools
               </Link>
+              <Link
+                href="/categories/compress"
+                className="rounded-full border border-border bg-background px-4 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+              >
+                Compress an image
+              </Link>
+              {cat.faqs.length > 0 && (
+                <Link
+                  href="#faq"
+                  className="rounded-full border border-border bg-background px-4 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                >
+                  Common questions
+                </Link>
+              )}
             </div>
           </div>
         </section>

@@ -1,7 +1,6 @@
 import type { GoalDefinition } from '@/types/registry'
 import { stripGoalTokens } from '@/lib/linking/resolver'
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
+import { BASE_URL } from '@/lib/metadata/generators'
 
 const CATEGORY_NAMES: Record<string, string> = {
   'exam': 'Exam Photos',

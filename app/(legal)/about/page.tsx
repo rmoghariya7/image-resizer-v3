@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
+import { BASE_URL } from '@/lib/metadata/generators'
 
 export const metadata: Metadata = {
   title: 'About Presetly — Free Image Resizer for Indian Government Documents',

@@ -1,6 +1,5 @@
 import type { LearnArticle } from '@/registry/learn/schema'
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://presetly.app'
+import { BASE_URL } from '@/lib/metadata/generators'
 
 interface Props {
   article:  LearnArticle

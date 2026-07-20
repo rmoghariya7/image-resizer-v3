@@ -5,6 +5,7 @@ import { Analytics } from "@/components/analytics/analytics";
 import { SearchProvider } from "@/features/search";
 import { GlobalSearch } from "@/features/search";
 import { buildSearchIndex } from "@/features/search";
+import { BASE_URL } from "@/lib/metadata/generators";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,8 +17,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://presetly.app";
-
 const OG_IMAGE = {
   url: `${BASE_URL}/opengraph-image`,
   width: 1200,
@@ -27,26 +26,26 @@ const OG_IMAGE = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-  title: "Presetly: Free Browser-Based Image, Video & Document Tools",
+  title: "Presetly: Free Online Image, Video & Document Tools",
   description:
-    "Compress, resize, crop and convert images, extract audio from video, and generate exam and ID photos for UPSC, GPSC, Aadhaar, PAN card, Passport and more. Browser-based, no uploads, no sign-up, completely free.",
+    "Compress, resize, crop, and convert images, extract audio from video, and prepare exam, ID, and passport photos — all in your browser. No uploads, no sign-up, completely free.",
   alternates: {
     canonical: BASE_URL,
   },
   openGraph: {
     type: "website",
     siteName: "Presetly",
-    title: "Compress, Resize, Crop, Convert & More — All Free | Presetly",
+    title: "Free Online Image, Video & Document Tools | Presetly",
     description:
-      "A complete browser-based toolkit: image compression, resizing, cropping, format conversion, video-to-audio, and government ID photo presets for UPSC, Aadhaar, PAN, Passport and more. Runs in your browser, no upload.",
+      "A complete browser-based toolkit: compress, resize, crop, and convert images, extract audio from video, and generate exam, ID, and passport photos to exact specs. Nothing is ever uploaded — free forever.",
     url: BASE_URL,
     images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Image, Video & Document Tools, Free | Presetly",
+    title: "Free Image, Video & Document Tools | Presetly",
     description:
-      "Compress, resize, crop, convert images, extract audio from video, and generate government ID photos. All free, all browser-only.",
+      "Compress, resize, crop, convert images, extract audio from video, and generate exam and ID photos to exact specs. All free, all browser-based.",
     images: [OG_IMAGE.url],
   },
   robots: { index: true, follow: true },
@@ -72,7 +71,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col" suppressHydrationWarning>
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary"

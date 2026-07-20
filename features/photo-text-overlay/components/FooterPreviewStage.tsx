@@ -9,6 +9,10 @@ import {
   FOOTER_PADDING_X_DESIGN_PX,
   FOOTER_VERTICAL_PADDING_DESIGN_PX,
   FOOTER_LINE_GAP_DESIGN_PX,
+  BORDER_WIDTH_DESIGN_PX,
+  BORDER_COLOR,
+  MARGIN_WIDTH_DESIGN_PX,
+  MARGIN_COLOR,
 } from '../lib/canvas-utils'
 import type { NameSettings, DateSettings, FooterSettings } from '../types'
 
@@ -41,6 +45,11 @@ export function FooterPreviewStage({ imageSrc, nameSettings, dateSettings, foote
   }, [])
 
   const scale = renderedWidth > 0 ? scaleFactorFor(renderedWidth) : 0
+  // Falls back to scale 1 before the first ResizeObserver measurement so the
+  // border/margin are visible immediately instead of flashing in at zero width.
+  const previewScale = scale > 0 ? scale : 1
+  const borderWidth = BORDER_WIDTH_DESIGN_PX * previewScale
+  const marginWidth = MARGIN_WIDTH_DESIGN_PX * previewScale
 
   const nameText = nameSettings.enabled ? nameSettings.text.trim() : ''
   const dateText = dateSettings.enabled ? getDateDisplayText(dateSettings) : ''
@@ -76,57 +85,63 @@ export function FooterPreviewStage({ imageSrc, nameSettings, dateSettings, foote
   }
 
   return (
-    <div ref={containerRef} className="overflow-hidden rounded-xl border border-border bg-white">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={imageSrc} alt="Your photo preview" className="block w-full" />
+    <div className="mx-auto w-full max-w-[280px]" style={{ padding: marginWidth, backgroundColor: MARGIN_COLOR }}>
+      <div
+        ref={containerRef}
+        className="overflow-hidden"
+        style={{ border: `${borderWidth}px solid ${BORDER_COLOR}` }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={imageSrc} alt="Your photo preview" className="block w-full" />
 
-      {mode !== 'empty' && renderedWidth > 0 && (
-        <div
-          style={{ height: footerHeight, backgroundColor: footerSettings.backgroundColor }}
-          className="flex w-full items-center px-0"
-        >
-          {mode === 'name-only' && (
-            <span
-              style={{ ...textStyleBase, fontSize: nameFontSize, width: '100%', textAlign: nameSettings.alignment, padding: `0 ${paddingX}px` }}
-            >
-              {nameText}
-            </span>
-          )}
-
-          {mode === 'date-only' && (
-            <span
-              style={{ ...textStyleBase, fontSize: dateFontSize, width: '100%', textAlign: dateSettings.alignment, padding: `0 ${paddingX}px` }}
-            >
-              {dateText}
-            </span>
-          )}
-
-          {mode === 'row' && (
-            <div className="grid w-full grid-cols-3 items-center" style={{ padding: `0 ${paddingX}px` }}>
-              <span style={{ ...textStyleBase, fontSize: nameFontSize, gridColumn: gridColumnFor(nameSettings.alignment), justifySelf: nameSettings.alignment }}>
+        {mode !== 'empty' && renderedWidth > 0 && (
+          <div
+            style={{ height: footerHeight, backgroundColor: footerSettings.backgroundColor }}
+            className="flex w-full items-center px-0"
+          >
+            {mode === 'name-only' && (
+              <span
+                style={{ ...textStyleBase, fontSize: nameFontSize, width: '100%', textAlign: nameSettings.alignment, padding: `0 ${paddingX}px` }}
+              >
                 {nameText}
               </span>
-              <span style={{ ...textStyleBase, fontSize: dateFontSize, gridColumn: gridColumnFor(dateSettings.alignment), justifySelf: dateSettings.alignment }}>
+            )}
+
+            {mode === 'date-only' && (
+              <span
+                style={{ ...textStyleBase, fontSize: dateFontSize, width: '100%', textAlign: dateSettings.alignment, padding: `0 ${paddingX}px` }}
+              >
                 {dateText}
               </span>
-            </div>
-          )}
+            )}
 
-          {mode === 'stacked' && (
-            <div
-              className="flex w-full flex-col"
-              style={{
-                gap: lineGap,
-                alignItems: nameSettings.alignment === 'left' ? 'flex-start' : nameSettings.alignment === 'right' ? 'flex-end' : 'center',
-                padding: `0 ${paddingX}px`,
-              }}
-            >
-              <span style={{ ...textStyleBase, fontSize: nameFontSize, textAlign: nameSettings.alignment }}>{nameText}</span>
-              <span style={{ ...textStyleBase, fontSize: dateFontSize, textAlign: nameSettings.alignment }}>{dateText}</span>
-            </div>
-          )}
-        </div>
-      )}
+            {mode === 'row' && (
+              <div className="grid w-full grid-cols-3 items-center" style={{ padding: `0 ${paddingX}px` }}>
+                <span style={{ ...textStyleBase, fontSize: nameFontSize, gridColumn: gridColumnFor(nameSettings.alignment), justifySelf: nameSettings.alignment }}>
+                  {nameText}
+                </span>
+                <span style={{ ...textStyleBase, fontSize: dateFontSize, gridColumn: gridColumnFor(dateSettings.alignment), justifySelf: dateSettings.alignment }}>
+                  {dateText}
+                </span>
+              </div>
+            )}
+
+            {mode === 'stacked' && (
+              <div
+                className="flex w-full flex-col"
+                style={{
+                  gap: lineGap,
+                  alignItems: nameSettings.alignment === 'left' ? 'flex-start' : nameSettings.alignment === 'right' ? 'flex-end' : 'center',
+                  padding: `0 ${paddingX}px`,
+                }}
+              >
+                <span style={{ ...textStyleBase, fontSize: nameFontSize, textAlign: nameSettings.alignment }}>{nameText}</span>
+                <span style={{ ...textStyleBase, fontSize: dateFontSize, textAlign: nameSettings.alignment }}>{dateText}</span>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

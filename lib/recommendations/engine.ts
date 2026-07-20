@@ -198,6 +198,39 @@ export function getStandaloneTools(): ToolDefinition[] {
   return getAllTools().filter(t => t.route !== undefined && t.status === 'active')
 }
 
+export type CoreToolPage = {
+  key: string
+  name: string
+  description: string
+  route: string
+}
+
+/**
+ * All core (non-goal) tool pages, for surfacing on /tools, the footer, and
+ * the llms.txt manifests. Includes /compress-image, which reuses the
+ * image-resizer engine under its own SEO landing page and so has no
+ * dedicated ToolDefinition route of its own (see registry/tools/image-resizer.ts).
+ */
+export function getCoreToolPages(): CoreToolPage[] {
+  const standalone: CoreToolPage[] = getStandaloneTools().map(t => ({
+    key: t.key,
+    name: t.name,
+    description: t.description,
+    route: t.route!,
+  }))
+
+  return [
+    ...standalone,
+    {
+      key: 'compress-image',
+      name: 'Compress Image',
+      description:
+        'Compress any JPEG, PNG or WebP to an exact file size — 15 KB, 50 KB, 100 KB and more — right in your browser.',
+      route: '/compress-image',
+    },
+  ]
+}
+
 /**
  * Cross-category discovery links for standalone tool pages, which have no
  * goal slug to seed getGoalPageRecommendations with.
